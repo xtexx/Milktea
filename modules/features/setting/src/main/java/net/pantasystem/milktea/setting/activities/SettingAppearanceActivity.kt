@@ -24,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import coil.compose.rememberAsyncImagePainter
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.app_store.account.AccountStore
@@ -38,7 +40,6 @@ import net.pantasystem.milktea.common_navigation.EXTRA_SELECTED_FILE_PROPERTY_ID
 import net.pantasystem.milktea.model.drive.DriveFileRepository
 import net.pantasystem.milktea.model.drive.FileProperty
 import net.pantasystem.milktea.model.setting.AvatarIconShapeType
-import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.setting.Theme
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.SettingSection
@@ -51,6 +52,7 @@ data class ThemeUiState(
     @StringRes val label: Int,
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class SettingAppearanceActivity : AppCompatActivity() {
 
@@ -117,7 +119,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                     Log.d("SettingAppearance", "save error", it)
                 }
             }
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
                 Scaffold(
                     topBar = {
                         TopAppBar(

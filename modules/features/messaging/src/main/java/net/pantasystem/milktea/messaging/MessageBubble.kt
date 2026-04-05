@@ -48,7 +48,7 @@ fun SelfMessageBubble(
             Surface(
                 shape = RoundedCornerShape(20.dp, 4.dp, 20.dp, 20.dp),
                 color = MaterialTheme.colorScheme.primary,
-                elevation = 4.dp
+                shadowElevation = 4.dp
             ) {
                 Column(
                     Modifier.padding(8.dp),
@@ -104,7 +104,7 @@ fun RecipientMessageBubble(
             Surface(
                 shape = RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp),
                 color = MaterialTheme.colorScheme.surface,
-                elevation = 4.dp
+                shadowElevation = 4.dp
             ) {
                 Column(
                     Modifier.padding(8.dp)

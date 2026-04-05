@@ -51,31 +51,31 @@ fun NoteEditorUserActionMenuLayout(
                 expanded = isShowFilePickerDropDownMenu,
                 onDismissRequest = { isShowFilePickerDropDownMenu = false }
             ) {
-                DropdownMenuItem(onClick = {
-                    isShowFilePickerDropDownMenu = false
-                    onPickImageFromLocalButtonClicked()
-                }) {
-                    Icon(Icons.Default.Image, contentDescription = null)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(stringResource(id = R.string.pick_image))
-                }
-                DropdownMenuItem(onClick = {
-                    isShowFilePickerDropDownMenu = false
-                    onPickFileFromLocalButtonCLicked()
-                }) {
-                    Icon(Icons.Default.UploadFile, contentDescription = null)
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(stringResource(id = R.string.pick_file_from_device))
-                }
-                if (isEnableDrive) {
-                    DropdownMenuItem(onClick = {
+                DropdownMenuItem(
+                    text = { Text(stringResource(id = R.string.pick_image)) },
+                    leadingIcon = { Icon(Icons.Default.Image, contentDescription = null) },
+                    onClick = {
                         isShowFilePickerDropDownMenu = false
-                        onPickFileFromDriveButtonClicked()
-                    }) {
-                        Icon(Icons.Default.Cloud, contentDescription = null)
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(stringResource(id = R.string.pick_image_from_drive))
+                        onPickImageFromLocalButtonClicked()
                     }
+                )
+                DropdownMenuItem(
+                    text = { Text(stringResource(id = R.string.pick_file_from_device)) },
+                    leadingIcon = { Icon(Icons.Default.UploadFile, contentDescription = null) },
+                    onClick = {
+                        isShowFilePickerDropDownMenu = false
+                        onPickFileFromLocalButtonCLicked()
+                    }
+                )
+                if (isEnableDrive) {
+                    DropdownMenuItem(
+                        text = { Text(stringResource(id = R.string.pick_image_from_drive)) },
+                        leadingIcon = { Icon(Icons.Default.Cloud, contentDescription = null) },
+                        onClick = {
+                            isShowFilePickerDropDownMenu = false
+                            onPickFileFromDriveButtonClicked()
+                        }
+                    )
                 }
             }
             IconButton(

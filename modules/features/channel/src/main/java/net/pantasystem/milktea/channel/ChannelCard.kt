@@ -42,7 +42,8 @@ fun ChannelCard(
     isPaged: Boolean,
     onAction: (ChannelCardAction) -> Unit = {},
 ) {
-    Card(elevation = 4.dp,
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(8.dp),
         onClick = {

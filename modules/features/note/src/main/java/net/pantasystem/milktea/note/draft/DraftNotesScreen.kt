@@ -21,6 +21,7 @@ import net.pantasystem.milktea.model.note.draft.DraftNote
 import net.pantasystem.milktea.model.note.draft.DraftNoteFile
 import net.pantasystem.milktea.note.draft.viewmodel.DraftNotesViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DraftNotesScreen(
     isPickMode: Boolean,
@@ -47,8 +48,7 @@ fun DraftNotesScreen(
                         Text(text = stringResource(id = net.pantasystem.milktea.common_resource.R.string.draft_notes))
                     }
                 },
-                backgroundColor = MaterialTheme.colorScheme.surface,
-                elevation = 0.dp
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         }
     ) { paddingValues ->

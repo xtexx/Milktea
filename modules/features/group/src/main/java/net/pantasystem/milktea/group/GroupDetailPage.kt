@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import net.pantasystem.milktea.model.group.Group
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupDetailPage(uiState: GroupDetailUiState, onAction: (GroupDetailPageAction) -> Unit,) {
     if (uiState.type is GroupDetailUiStateType.Editing) {
@@ -51,7 +52,7 @@ fun GroupDetailPage(uiState: GroupDetailUiState, onAction: (GroupDetailPageActio
                         Icon(Icons.Default.ArrowBack, null)
                     }
                 },
-                backgroundColor = MaterialTheme.colorScheme.surface,
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
                 actions = {
                     if (uiState.isOwner) {
                         IconButton(onClick = {

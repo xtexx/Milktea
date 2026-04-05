@@ -22,6 +22,7 @@ import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.userlist.R
 import net.pantasystem.milktea.userlist.viewmodel.UserListsUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserListCardScreen(
     uiState: UserListsUiState,
@@ -70,6 +71,7 @@ fun UserListCardScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CollapsingTopAppBar(
     modifier: Modifier,
@@ -84,7 +86,7 @@ private fun CollapsingTopAppBar(
 
     val density = LocalDensity.current
 
-    val defaultFontSize = MaterialTheme.typography.h6.fontSize
+    val defaultFontSize = MaterialTheme.typography.titleLarge.fontSize
 
     var fontSize by remember {
         mutableStateOf(defaultFontSize)
@@ -106,7 +108,7 @@ private fun CollapsingTopAppBar(
         title = {
             Text(
                 text = stringResource(id = R.string.user_list),
-                style = MaterialTheme.typography.h6.copy(fontSize = fontSize)
+                style = MaterialTheme.typography.titleLarge.copy(fontSize = fontSize)
             )
         },
         navigationIcon = {
@@ -114,7 +116,7 @@ private fun CollapsingTopAppBar(
                 Icon(Icons.Default.ArrowBack, contentDescription = null)
             }
         },
-        backgroundColor = MaterialTheme.colorScheme.surface,
+        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
         modifier = modifier.height(toolbarHeight)
     )
 }

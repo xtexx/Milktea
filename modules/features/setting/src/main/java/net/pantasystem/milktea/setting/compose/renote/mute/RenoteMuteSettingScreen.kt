@@ -22,6 +22,7 @@ import net.pantasystem.milktea.model.user.renote.mute.RenoteMute
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.viewmodel.RenoteMuteSettingUiState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RenoteMuteSettingScreen(
     uiState: RenoteMuteSettingUiState,
@@ -92,7 +93,7 @@ fun RemovableSimpleUserCard(
         onClick = onClick,
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.padding(0.5.dp),
-        backgroundColor = MaterialTheme.colorScheme.surface
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

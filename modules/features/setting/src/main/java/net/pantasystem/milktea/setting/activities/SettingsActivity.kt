@@ -19,8 +19,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import net.pantasystem.milktea.common.ui.ApplyTheme
@@ -28,11 +30,15 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.compose.SettingListTileLayout
 import javax.inject.Inject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
 
     @Inject
     lateinit var applyTheme: ApplyTheme
+
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
 
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +46,7 @@ class SettingsActivity : AppCompatActivity() {
         applyTheme()
 
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
                     topBar = {
                         TopAppBar(

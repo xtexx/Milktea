@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +37,6 @@ import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.model.setting.DefaultConfig
-import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.setting.MediaDisplayMode
 import net.pantasystem.milktea.model.setting.RememberVisibility
 import net.pantasystem.milktea.setting.R
@@ -44,6 +45,7 @@ import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class SettingMovementActivity : AppCompatActivity() {
 
@@ -94,7 +96,7 @@ class SettingMovementActivity : AppCompatActivity() {
             }
 
 
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
                 Scaffold(
                     topBar = {
                         TopAppBar(
@@ -278,13 +280,14 @@ class SettingMovementActivity : AppCompatActivity() {
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     MediaDisplayMode.values().forEach {
-                                        DropdownMenuItem(onClick = {
-                                            currentConfigState =
-                                                currentConfigState.copy(mediaDisplayMode = it)
-                                            isVisibleDropdown = false
-                                        }) {
-                                            Text(stringFromDisplayMode(displayMode = it))
-                                        }
+                                        DropdownMenuItem(
+                                            text = { Text(stringFromDisplayMode(displayMode = it)) },
+                                            onClick = {
+                                                currentConfigState =
+                                                    currentConfigState.copy(mediaDisplayMode = it)
+                                                isVisibleDropdown = false
+                                            }
+                                        )
                                     }
                                 }
                             }

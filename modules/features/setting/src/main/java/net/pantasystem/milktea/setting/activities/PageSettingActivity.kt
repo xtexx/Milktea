@@ -11,8 +11,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import net.pantasystem.milktea.common.ui.ApplyTheme
@@ -49,6 +50,9 @@ class PageSettingActivity : AppCompatActivity() {
 
     @Inject
     internal lateinit var applyTheme: ApplyTheme
+
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
 
     @Inject
     internal lateinit var searchAndSelectUserNavigation: SearchAndSelectUserNavigation
@@ -143,7 +147,7 @@ class PageSettingActivity : AppCompatActivity() {
 
 
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 val pageTypes by mPageSettingViewModel.pageTypesGroupedByAccount.collectAsState()
                 val list by mPageSettingViewModel.selectedPages.collectAsState()
                 val scope = rememberCoroutineScope()

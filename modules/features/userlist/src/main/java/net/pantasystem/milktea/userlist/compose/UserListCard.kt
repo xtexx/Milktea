@@ -31,7 +31,7 @@ fun UserListCard(userList: UserListBindingModel, onAction: (UserListCardAction) 
         Modifier
             .fillMaxWidth()
             .padding(0.5.dp),
-        backgroundColor = if (userList.isTargetUserAdded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface
+        colors = CardDefaults.cardColors(containerColor = if (userList.isTargetUserAdded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

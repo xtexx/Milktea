@@ -80,7 +80,7 @@ fun FollowFollowerRoute(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun FollowFollowerScreen(
     uiState: FollowFollowerUiState,
@@ -112,7 +112,7 @@ fun FollowFollowerScreen(
     }
 
     Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             FollowFollowerTopBar(
                 modifier = Modifier.fillMaxWidth(),
@@ -181,7 +181,7 @@ private fun Pager(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun FollowFollowerTopBar(
     modifier: Modifier,
@@ -193,8 +193,7 @@ private fun FollowFollowerTopBar(
 ) {
     Column(modifier.fillMaxWidth()) {
         TopAppBar(
-            elevation = 0.dp,
-            backgroundColor = MaterialTheme.colorScheme.surface,
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
             navigationIcon = {
                 IconButton(onClick = onNavigateUp) {
                     Icon(Icons.Default.ArrowBack, contentDescription = null)
@@ -223,7 +222,7 @@ private fun FollowFollowerTopBar(
         )
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             tabTitles.forEachIndexed { index, s ->
                 Tab(

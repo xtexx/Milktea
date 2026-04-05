@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.pantasystem.milktea.model.group.GroupWithMember
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Stable
 fun GroupCardListPage(uiState: GroupListUiState, onAction: (GroupCardListAction) -> Unit) {
@@ -28,7 +29,7 @@ fun GroupCardListPage(uiState: GroupListUiState, onAction: (GroupCardListAction)
                 title = {
                     Text(stringResource(R.string.groups))
                 },
-                backgroundColor = MaterialTheme.colorScheme.surface
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         },
         floatingActionButton = {

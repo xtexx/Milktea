@@ -26,7 +26,7 @@ import net.pantasystem.milktea.model.list.UserList
 import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.userlist.R
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UserListDetailScreen(
     listId: UserList.Id,
@@ -64,8 +64,7 @@ fun UserListDetailScreen(
                     title = {
                         Text(userList?.name ?: "")
                     },
-                    backgroundColor = MaterialTheme.colorScheme.surface,
-                    elevation = 0.dp,
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
                     actions = {
                         IconButton(onClick = onAddUserButtonClicked) {
                             Icon(Icons.Default.PersonAdd, contentDescription = null)
@@ -93,7 +92,7 @@ fun UserListDetailScreen(
                 )
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = MaterialTheme.colorScheme.surface,
+                    containerColor = MaterialTheme.colorScheme.surface,
                 ) {
                     titles.forEachIndexed { index, s ->
                         Tab(

@@ -4,8 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.common_navigation.AuthorizationArgs
 import net.pantasystem.milktea.common_navigation.AuthorizationNavigation
 import javax.inject.Inject
@@ -16,10 +17,13 @@ class JoinMilkteaActivity : AppCompatActivity() {
     @Inject
     lateinit var authorizationNavigation: AuthorizationNavigation
 
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 JoinMilkteaScreen(
                     onCreateAccountButtonClicked = {
                         startActivity(

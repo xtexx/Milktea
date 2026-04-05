@@ -6,8 +6,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigationArgs
@@ -22,6 +23,9 @@ class RenoteMuteSettingActivity : AppCompatActivity() {
     internal lateinit var applyTheme: ApplyTheme
 
     @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
+    @Inject
     internal lateinit var userDetailNavigation: UserDetailNavigation
 
     private val viewModel: RenoteMuteSettingViewModel by viewModels()
@@ -31,7 +35,7 @@ class RenoteMuteSettingActivity : AppCompatActivity() {
         applyTheme()
 
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 val uiState by viewModel.uiState.collectAsState()
 
                 RenoteMuteSettingScreen(

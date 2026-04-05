@@ -227,80 +227,74 @@ fun FilePreviewActionDropDown(
         modifier = Modifier.wrapContentWidth(),
     ) {
         DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.remove_attachment)) },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.RemoveCircle,
+                    contentDescription = stringResource(id = R.string.remove_attachment),
+                    modifier = Modifier.size(24.dp)
+                )
+            },
             onClick = {
                 onDetach()
                 onDismissRequest()
             }
-        ) {
-            Icon(
-                Icons.Filled.RemoveCircle,
-                contentDescription = stringResource(id = R.string.remove_attachment),
-                modifier = Modifier.size(24.dp)
-            )
-            Text(stringResource(id = R.string.remove_attachment))
-        }
+        )
 
         if (isMisskey) {
             DropdownMenuItem(
+                text = { Text(if (isSensitive) stringResource(id = R.string.drive_undo_nsfw) else stringResource(id = R.string.drive_mark_as_nsfw)) },
+                leadingIcon = {
+                    Icon(
+                        if (isSensitive) Icons.Filled.Image else Icons.Filled.HideImage,
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp)
+                    )
+                },
                 onClick = {
                     onToggleSensitive(!isSensitive)
                     onDismissRequest()
                 }
-            ) {
-
-                Icon(
-                    if (isSensitive)
-                        Icons.Filled.Image
-                    else
-                        Icons.Filled.HideImage,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp)
-                )
-                Text(
-                    if (isSensitive) stringResource(id = R.string.drive_undo_nsfw) else stringResource(id = R.string.drive_mark_as_nsfw)
-                )
-            }
+            )
         }
 
         DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.show)) },
+            leadingIcon = {
+                Icon(
+                    Icons.Filled.Details,
+                    contentDescription = stringResource(id = R.string.show),
+                    modifier = Modifier.size(24.dp)
+                )
+            },
             onClick = {
                 onShow()
                 onDismissRequest()
             }
-        ) {
-            Icon(
-                Icons.Filled.Details,
-                contentDescription = stringResource(id = R.string.show),
-                modifier = Modifier.size(24.dp)
-            )
-            Text(
-                stringResource(id = R.string.show)
-            )
-        }
+        )
 
         if (isMisskey) {
             if (onEditFileName != null) {
-
-                DropdownMenuItem(onClick = {
-                    onEditFileName()
-                    onDismissRequest()
-                }) {
-                    Icon(Icons.Filled.Edit, contentDescription = stringResource(id = R.string.edit_file_name), modifier = Modifier.size(24.dp))
-                    Text(stringResource(R.string.edit_file_name))
-                }
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.edit_file_name)) },
+                    leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = stringResource(id = R.string.edit_file_name), modifier = Modifier.size(24.dp)) },
+                    onClick = {
+                        onEditFileName()
+                        onDismissRequest()
+                    }
+                )
             }
         }
 
         if (onEditFileCaption != null) {
             DropdownMenuItem(
+                text = { Text(stringResource(id = R.string.edit_file_caption)) },
+                leadingIcon = { Icon(Icons.Filled.Comment, contentDescription = stringResource(id = R.string.edit_file_caption)) },
                 onClick = {
                     onEditFileCaption()
                     onDismissRequest()
                 }
-            ) {
-                Icon(Icons.Filled.Comment, contentDescription = stringResource(id = R.string.edit_file_caption))
-                Text(stringResource(id = R.string.edit_file_caption))
-            }
+            )
         }
     }
 }

@@ -72,12 +72,11 @@ dependencies {
     implementation libs.compose.ui.ui.tooling
 
     implementation libs.compose.foundation.foundation
-    implementation libs.compose.material.material
+    implementation libs.compose.material3
     implementation libs.compose.material.material.icons.core
     implementation libs.compose.material.material.icons.extended
     androidTestImplementation libs.compose.ui.ui.test.junit4
     implementation libs.compose.runtime.runtime.livedata
-    implementation libs.android.material.compose.theme.adapter
     implementation libs.accompanist.swiperefresh
     implementation libs.activity.compose
     implementation libs.accompanist.pager

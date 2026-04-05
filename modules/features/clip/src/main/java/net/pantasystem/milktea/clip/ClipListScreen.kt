@@ -17,6 +17,7 @@ import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.common_navigation.ClipListNavigationArgs
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ClipListScreen(
     uiState: ClipListUiState,

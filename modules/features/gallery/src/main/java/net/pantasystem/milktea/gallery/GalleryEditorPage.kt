@@ -26,6 +26,7 @@ sealed interface GalleryEditorPageAction {
     object OnSave : GalleryEditorPageAction
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryEditorPage(
     galleryEditorViewModel: GalleryEditorViewModel,

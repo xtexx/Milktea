@@ -9,7 +9,9 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -28,6 +30,7 @@ import androidx.fragment.app.FragmentManager
 import net.pantasystem.milktea.common_compose.rememberFragment
 import net.pantasystem.milktea.model.channel.Channel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelDetailScreen(
     onNavigateUp: () -> Unit,
@@ -61,8 +64,7 @@ fun ChannelDetailScreen(
                 title = {
                     Text(channel?.name ?: "")
                 },
-                backgroundColor = MaterialTheme.colorScheme.surface,
-                elevation = 0.dp,
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
             )
         },
         floatingActionButton = {

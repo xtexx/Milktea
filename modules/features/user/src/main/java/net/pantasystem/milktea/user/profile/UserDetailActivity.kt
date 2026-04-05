@@ -16,7 +16,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.app.TaskStackBuilder
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.*
-import com.google.android.material.composethemeadapter.MdcTheme
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
@@ -150,7 +150,7 @@ class UserDetailActivity : AppCompatActivity() {
         binding.badgeRoles.apply {
             setContent {
                 val userDetail by mViewModel.userState.collectAsState()
-                MdcTheme {
+                MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                     ProfileBadgeRoles(
                         (userDetail?.badgeRoles ?: emptyList()).map {
                             ProfileBadgeRoleData(
@@ -169,7 +169,7 @@ class UserDetailActivity : AppCompatActivity() {
                 val userDetail by mViewModel.userState.collectAsState()
                 val isMine by mViewModel.isMine.collectAsState()
                 val feedback = rememberHapticFeedback()
-                MdcTheme {
+                MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                     FollowButton(
                         userState = userDetail?.followState,
                         isMine = isMine,

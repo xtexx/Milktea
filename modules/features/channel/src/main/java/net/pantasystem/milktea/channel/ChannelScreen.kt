@@ -25,7 +25,7 @@ data class ChannelTypeWithTitle(
     val title: String,
 )
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelScreen(
     onNavigateUp: () -> Unit,
@@ -62,7 +62,6 @@ fun ChannelScreen(
                     title = {
                         Text(stringResource(id = R.string.channel))
                     },
-                    elevation = 0.dp
                 )
                 if (currentAccount != null) {
                     TabRow(selectedTabIndex = pagerState.currentPage) {

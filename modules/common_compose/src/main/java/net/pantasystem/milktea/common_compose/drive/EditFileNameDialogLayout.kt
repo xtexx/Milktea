@@ -19,7 +19,7 @@ fun EditFileNameDialogLayout(
     Surface(
         shape = MaterialTheme.shapes.medium,
         color = MaterialTheme.colorScheme.surface,
-        elevation = 24.dp
+        shadowElevation = 24.dp
     ) {
         Column(
             modifier = Modifier.padding(16.dp)
