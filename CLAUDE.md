@@ -24,7 +24,7 @@
 - [x] `MdcTheme { }` → `MaterialTheme(colorScheme = ...) { }` に置き換え
 - [x] `libs.versions.toml` に `compose-material3 = "1.3.1"` を追加
 - [x] `common_compose/build.gradle` で material2 → material3 に差し替え、MdcTheme アダプター削除
-- [ ] ビルド確認（Phase 2 の import 置き換え前なのでコンパイルエラーが大量に出る想定）
+- [x] ビルド確認（Phase 2 の import 置き換え前なのでコンパイルエラーが大量に出る想定）
 
 ---
 
