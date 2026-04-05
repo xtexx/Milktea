@@ -1,9 +1,9 @@
 package net.pantasystem.milktea.setting
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -27,7 +27,7 @@ fun SettingSection(
         ) {
             Text(
                 title,
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             Spacer(modifier = Modifier.height(8.dp))
@@ -35,7 +35,7 @@ fun SettingSection(
 
         }
         if (isNeedUnderDivider) {
-            Divider(Modifier.fillMaxWidth())
+            HorizontalDivider(Modifier.fillMaxWidth())
         }
     }
 

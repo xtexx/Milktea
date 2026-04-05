@@ -3,7 +3,7 @@ package net.pantasystem.milktea.search
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
@@ -16,7 +16,7 @@ import net.pantasystem.milktea.model.search.SearchHistory
 import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.user.compose.ItemSimpleUserCard
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchSuggestionsLayout(
     modifier: Modifier = Modifier,
@@ -54,7 +54,7 @@ fun SearchSuggestionsLayout(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchHistoryCard(history: SearchHistory, onDelete: () -> Unit, onClick: () -> Unit) {
     Card(

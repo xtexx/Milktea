@@ -13,10 +13,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
@@ -122,7 +122,7 @@ fun AccountTile(
 @Stable
 private fun CircleCheckbox(modifier: Modifier = Modifier, selected: Boolean) {
 
-    val color = MaterialTheme.colors
+    val color = MaterialTheme.colorScheme
     val imageVector = if (selected) Icons.Filled.CheckCircle else Icons.Outlined.Circle
     val tint = color.primary
     val background = if (selected) Color.White else Color.Transparent

@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
@@ -47,7 +47,7 @@ fun SelfMessageBubble(
         ) {
             Surface(
                 shape = RoundedCornerShape(20.dp, 4.dp, 20.dp, 20.dp),
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 elevation = 4.dp
             ) {
                 Column(
@@ -103,7 +103,7 @@ fun RecipientMessageBubble(
             )
             Surface(
                 shape = RoundedCornerShape(4.dp, 20.dp, 20.dp, 20.dp),
-                color = MaterialTheme.colors.surface,
+                color = MaterialTheme.colorScheme.surface,
                 elevation = 4.dp
             ) {
                 Column(

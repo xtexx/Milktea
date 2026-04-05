@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
@@ -194,7 +194,7 @@ private fun FollowFollowerTopBar(
     Column(modifier.fillMaxWidth()) {
         TopAppBar(
             elevation = 0.dp,
-            backgroundColor = MaterialTheme.colors.surface,
+            backgroundColor = MaterialTheme.colorScheme.surface,
             navigationIcon = {
                 IconButton(onClick = onNavigateUp) {
                     Icon(Icons.Default.ArrowBack, contentDescription = null)
@@ -223,7 +223,7 @@ private fun FollowFollowerTopBar(
         )
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colors.surface
+            backgroundColor = MaterialTheme.colorScheme.surface
         ) {
             tabTitles.forEachIndexed { index, s ->
                 Tab(

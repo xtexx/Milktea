@@ -3,7 +3,7 @@ package net.pantasystem.milktea.note.editor
 import android.content.Context
 import android.util.TypedValue
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.EditNote
@@ -96,7 +96,7 @@ fun NoteEditorUserActionMenuLayout(
                     Icons.Default.Poll,
                     contentDescription = null,
                     tint = if (isPoll) {
-                        MaterialTheme.colors.primary
+                        MaterialTheme.colorScheme.primary
                     } else {
                         iconColor
                     }
@@ -109,7 +109,7 @@ fun NoteEditorUserActionMenuLayout(
                     Icons.Default.VisibilityOff,
                     contentDescription = null,
                     tint = if (isCw) {
-                        MaterialTheme.colors.primary
+                        MaterialTheme.colorScheme.primary
                     } else {
                         iconColor
                     }

@@ -2,7 +2,7 @@ package net.pantasystem.milktea.userlist.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -114,7 +114,7 @@ private fun CollapsingTopAppBar(
                 Icon(Icons.Default.ArrowBack, contentDescription = null)
             }
         },
-        backgroundColor = MaterialTheme.colors.surface,
+        backgroundColor = MaterialTheme.colorScheme.surface,
         modifier = modifier.height(toolbarHeight)
     )
 }
@@ -183,7 +183,7 @@ fun CreateUserListDialog(
         Dialog(onDismissRequest = onDismiss) {
             Surface(
                 shape = MaterialTheme.shapes.medium,
-                color = MaterialTheme.colors.surface,
+                color = MaterialTheme.colorScheme.surface,
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp)

@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +21,7 @@ import net.pantasystem.milktea.setting.viewmodel.page.PageCandidate
 import net.pantasystem.milktea.setting.viewmodel.page.PageCandidateGroup
 
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 internal fun TabItemSelectionDialog(
     modifier: Modifier = Modifier,
@@ -35,7 +35,7 @@ internal fun TabItemSelectionDialog(
             stickyHeader {
                 Surface(
                     Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colors.surface,
+                    color = MaterialTheme.colorScheme.surface,
                 ) {
                     Text(
                         "@${group.relatedAccount.userName}@${group.relatedAccount.getHost()}",

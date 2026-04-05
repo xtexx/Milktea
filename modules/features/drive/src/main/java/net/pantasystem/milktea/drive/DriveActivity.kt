@@ -11,7 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,7 +59,7 @@ class DriveActivity : AppCompatActivity() {
 
     @OptIn(
         ExperimentalPagerApi::class,
-        ExperimentalMaterialApi::class,
+        ExperimentalMaterial3Api::class,
         ExperimentalCoroutinesApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -2,7 +2,7 @@ package net.pantasystem.milktea.drive
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -52,7 +52,7 @@ fun FileActionDropdownMenu(
             }
         }
 
-        Divider()
+        HorizontalDivider()
         DropdownMenuItem(
             onClick = {
                 onAction(FileCardDropdownMenuAction.OnDeleteMenuItemClicked)
@@ -65,7 +65,7 @@ fun FileActionDropdownMenu(
             )
             Text(text = stringResource(R.string.delete))
         }
-        Divider()
+        HorizontalDivider()
         DropdownMenuItem(onClick = {
             onAction(FileCardDropdownMenuAction.OnEditFileCaption)
         }) {
@@ -76,7 +76,7 @@ fun FileActionDropdownMenu(
             )
             Text(text = stringResource(R.string.edit_caption))
         }
-        Divider()
+        HorizontalDivider()
         DropdownMenuItem(onClick = {
             onAction(FileCardDropdownMenuAction.OnEditFileName)
         }) {

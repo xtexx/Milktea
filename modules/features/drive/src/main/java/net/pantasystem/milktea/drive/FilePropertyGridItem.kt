@@ -6,7 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
@@ -122,7 +122,7 @@ fun FilePropertyGridItem(
 @Stable
 private fun CircleCheckbox(modifier: Modifier = Modifier, selected: Boolean, enabled: Boolean = true, onChecked: () -> Unit) {
 
-    val color = MaterialTheme.colors
+    val color = MaterialTheme.colorScheme
     val imageVector = if (selected) Icons.Filled.CheckCircle else Icons.Outlined.Circle
     val tint = color.primary
     val background = if (selected) Color.White else Color.Transparent

@@ -3,7 +3,7 @@ package net.pantasystem.milktea.setting.compose.renote.mute
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -79,7 +79,7 @@ fun RenoteMuteSettingScreen(
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RemovableSimpleUserCard(
     user: User?,
@@ -92,7 +92,7 @@ fun RemovableSimpleUserCard(
         onClick = onClick,
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.padding(0.5.dp),
-        backgroundColor = MaterialTheme.colors.surface
+        backgroundColor = MaterialTheme.colorScheme.surface
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

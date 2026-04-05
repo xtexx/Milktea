@@ -10,17 +10,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddAPhoto
@@ -51,7 +51,7 @@ import net.pantasystem.milktea.model.drive.FileProperty
 
 @ExperimentalPagerApi
 @ExperimentalCoroutinesApi
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun DriveScreen(
     driveViewModel: DriveViewModel,
@@ -109,7 +109,7 @@ fun DriveScreen(
                         }
                     },
                     elevation = 0.dp,
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colorScheme.surface
 
                 )
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -123,7 +123,7 @@ fun DriveScreen(
 
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = MaterialTheme.colors.surface
+                    backgroundColor = MaterialTheme.colorScheme.surface
                 ) {
                     tabTitles.forEachIndexed { index, s ->
                         Tab(
@@ -192,7 +192,7 @@ fun PathHorizontalView(
 
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colors.surface,
+        color = MaterialTheme.colorScheme.surface,
     ) {
         LazyRow(
             Modifier

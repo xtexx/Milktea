@@ -2,7 +2,7 @@ package net.pantasystem.milktea.group
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -51,7 +51,7 @@ fun GroupDetailPage(uiState: GroupDetailUiState, onAction: (GroupDetailPageActio
                         Icon(Icons.Default.ArrowBack, null)
                     }
                 },
-                backgroundColor = MaterialTheme.colors.surface,
+                backgroundColor = MaterialTheme.colorScheme.surface,
                 actions = {
                     if (uiState.isOwner) {
                         IconButton(onClick = {

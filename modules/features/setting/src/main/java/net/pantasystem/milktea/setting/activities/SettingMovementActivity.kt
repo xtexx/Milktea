@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -154,7 +154,7 @@ class SettingMovementActivity : AppCompatActivity() {
                                 checked = currentConfigState.isEnableSafeSearch.isEnabled,
                                 modifier = Modifier.then(
                                     if (isHighlightSafeSearch)
-                                        Modifier.background(MaterialTheme.colors.primary.copy(alpha = 0.2f))
+                                        Modifier.background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
                                     else Modifier
                                 ),
                                 onChanged = {

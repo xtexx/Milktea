@@ -1,7 +1,7 @@
 package net.pantasystem.milktea.group
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
@@ -21,7 +21,7 @@ fun GroupEditorDialog(
     Dialog(onDismissRequest = { onAction(GroupEditorDialogAction.OnDismiss) }) {
         Surface(
             shape = MaterialTheme.shapes.medium,
-            color = MaterialTheme.colors.surface,
+            color = MaterialTheme.colorScheme.surface,
         ) {
             Column(
                 modifier = Modifier.padding(16.dp)

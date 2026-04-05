@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,7 +33,7 @@ import net.pantasystem.milktea.drive.viewmodel.FileViewData
 import net.pantasystem.milktea.model.drive.FileProperty
 
 @ExperimentalCoroutinesApi
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun FilePropertyListScreen(
     driveViewModel: DriveViewModel,
@@ -152,7 +152,7 @@ fun FilePropertyListScreen(
     }
 }
 
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun FileViewDataListView(
     list: List<FileViewData>,

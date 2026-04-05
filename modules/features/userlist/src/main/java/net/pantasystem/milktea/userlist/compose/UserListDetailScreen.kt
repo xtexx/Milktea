@@ -4,7 +4,7 @@ import android.widget.FrameLayout
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
@@ -64,7 +64,7 @@ fun UserListDetailScreen(
                     title = {
                         Text(userList?.name ?: "")
                     },
-                    backgroundColor = MaterialTheme.colors.surface,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
                     elevation = 0.dp,
                     actions = {
                         IconButton(onClick = onAddUserButtonClicked) {
@@ -93,7 +93,7 @@ fun UserListDetailScreen(
                 )
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = MaterialTheme.colors.surface,
+                    backgroundColor = MaterialTheme.colorScheme.surface,
                 ) {
                     titles.forEachIndexed { index, s ->
                         Tab(

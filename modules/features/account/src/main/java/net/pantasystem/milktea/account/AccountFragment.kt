@@ -9,10 +9,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -91,7 +91,7 @@ class AccountFragment : Fragment() {
 
                                                             .border(
                                                                 1.dp,
-                                                                MaterialTheme.colors.primary,
+                                                                MaterialTheme.colorScheme.primary,
                                                                 RoundedCornerShape(8.dp)
                                                             )
                                                     ) {
@@ -151,7 +151,7 @@ class AccountFragment : Fragment() {
                                                 Modifier
                                                     .border(
                                                         1.dp,
-                                                        MaterialTheme.colors.primary,
+                                                        MaterialTheme.colorScheme.primary,
                                                         RoundedCornerShape(8.dp)
                                                     )
                                             ) {

@@ -11,7 +11,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToPhotos
 import androidx.compose.material.icons.filled.ArrowBack
@@ -141,7 +141,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                             Text(
                                 stringResource(id = R.string.settings_app_restart_required),
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                color = MaterialTheme.colors.error,
+                                color = MaterialTheme.colorScheme.error,
                                 fontSize = 14.sp
                             )
                             for (theme in themes) {
@@ -316,7 +316,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(
@@ -341,7 +341,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(
@@ -368,7 +368,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(
@@ -394,7 +394,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(

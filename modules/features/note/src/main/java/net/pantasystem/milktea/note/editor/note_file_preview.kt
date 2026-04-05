@@ -3,8 +3,8 @@ package net.pantasystem.milktea.note.editor
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,7 +42,7 @@ fun NoteFilePreview(
                     id = R.string.note_editor_file_max_size_validation_error_message,
                     maxFileCount
                 ),
-                color = MaterialTheme.colors.error,
+                color = MaterialTheme.colorScheme.error,
                 modifier = Modifier.padding(horizontal = 4.dp),
                 fontSize = 18.sp
             )
@@ -69,7 +69,7 @@ fun NoteFilePreview(
                 Text(
                     "${uiState.files.size}/${maxFileCount}",
                     color = if (uiState.files.size > maxFileCount) {
-                        MaterialTheme.colors.error
+                        MaterialTheme.colorScheme.error
                     } else {
                         Color.Unspecified
                     }
