@@ -5,30 +5,94 @@
 
 ---
 
-## Phase 1: Material3 テーマ移行
+## Phase 1: M3 テーマ基盤の構築
 
-Compose 画面の Edge-to-edge 対応の前提条件。
+**全 Compose 作業の前提条件。最初に完了させる。**
 
-- [ ] `app/src/main/res/values-v23/themes.xml` の `Theme.MaterialComponents` → `Theme.Material3` に変更
-- [ ] `app/src/main/res/values-v27/themes.xml` の `Theme.MaterialComponents` → `Theme.Material3` に変更
-- [ ] `modules/common_resource/src/main/res/values/themes.xml` の `Theme.MaterialComponents` → `Theme.Material3` に変更
-- [ ] `app/src/main/res/values-v21/styles.xml` の古いスタイル整理
-- [ ] Material3 移行後のビルドエラー・クラッシュ確認
+### 1-1. XML テーマを Material3 に移行
+- [ ] `app/src/main/res/values-v23/themes.xml` — `Theme.MaterialComponents` → `Theme.Material3`、システムバー色属性を削除
+- [ ] `app/src/main/res/values-v27/themes.xml` — 同上
+- [ ] `modules/common_resource/src/main/res/values/themes.xml` — 同上（Dark/Black/Bread/ElephantDark テーマ）
+- [ ] `app/src/main/res/values-v21/styles.xml` — 古いスタイル整理
 
----
-
-## Phase 2: enableEdgeToEdge() 追加 + テーマのシステムバー色設定を削除
-
-`enableEdgeToEdge()` がシステムバー色を管理するため、テーマ側の設定と競合する。
-
-- [ ] テーマから `android:navigationBarColor` を削除（values-v23, v27, common_resource）
-- [ ] テーマから `android:statusBarColor` を削除
-- [ ] テーマから `android:windowLightNavigationBar` を削除（enableEdgeToEdge が自動制御）
-- [ ] 全 Activity に `enableEdgeToEdge()` を追加（onCreate の setContentView より前）
+### 1-2. Compose M3 テーマラッパーの作成
+現在 `MdcTheme`（Material2 ブリッジ）を使用中 → M3 の `MaterialTheme` に置き換える。
+- [ ] `modules/common_compose/MilkteaTheme.kt` に M3 用 `ColorScheme` を 5テーマ分定義
+  - White（ライト）/ Dark / Black / Bread / ElephantDark
+- [ ] `MdcTheme { }` → `MaterialTheme(colorScheme = ...) { }` に置き換え
+- [ ] `libs.versions.toml` に `compose-material3` を追加（または Compose BOM 経由）
+- [ ] ビルド確認（コンパイルエラーがこの時点で大量に出るが想定内）
 
 ---
 
-## Phase 3: 簡単な Activity の個別 Insets 対応
+## Phase 2: Compose 全体の M3 移行
+
+**ビルドエラーを潰しながら進める。一気にやらず機能モジュール単位で対応。**
+
+### 2-1. 全ファイルの import 置き換え
+- [ ] `androidx.compose.material.` → `androidx.compose.material3.` に一括置換（注意: API が変わるものがある）
+
+### 2-2. API 変更対応（M2 → M3 で変わる主要コンポーネント）
+
+| M2 | M3 | 対応ファイル数 |
+|----|-----|------------|
+| `MaterialTheme.colors.*` | `MaterialTheme.colorScheme.*` | 多数 |
+| `TopAppBar(backgroundColor=)` | `TopAppBar(colors=TopAppBarDefaults.*)` | 多数 |
+| `ModalBottomSheetLayout` | `ModalBottomSheet` | 3ファイル |
+| `Scaffold(backgroundColor=)` | `Scaffold(containerColor=)` | 33ファイル |
+| `Card(backgroundColor=)` | `Card(colors=CardDefaults.*)` | 多数 |
+| `Divider` | `HorizontalDivider` | 複数 |
+| `TabRow` | `TabRow`（ほぼ同じだが色指定が変わる） | 複数 |
+
+### 2-3. `ModalBottomSheetLayout` → `ModalBottomSheet` の書き換え（API が別物）
+- [ ] `SearchAndSelectUserScreen.kt`
+- [ ] `TabItemsListScreen.kt`
+- [ ] `AccountSettingScreen.kt`
+
+### 2-4. モジュール別動作確認
+- [ ] `features/auth` — AuthScreen, SignUpScreen 等
+- [ ] `features/setting` — 22ファイル（最多）
+- [ ] `features/note` — エディタ周り
+- [ ] `features/channel` — ChannelScreen
+- [ ] `features/drive` — DriveScreen
+- [ ] `features/user` — ユーザー画面
+- [ ] `features/messaging` — MessageScreen
+- [ ] `features/gallery` — GalleryEditorPage
+- [ ] `features/clip`, `group`, `userlist`, `search`, `account`
+- [ ] `common_compose`, `common_android_ui` — 共通コンポーネント
+
+---
+
+## Phase 3: Accompanist 廃止ライブラリの置き換え
+
+M3 移行後に対応（M3 の PullToRefreshBox を使うため）。
+
+- [ ] `accompanist-swiperefresh`（0.25.1）→ Material3 `PullToRefreshBox` に置き換え（`user/followrequests/FollowRequestsScreen.kt` 等）
+- [ ] `accompanist-pager`（0.14.0）→ Compose Foundation の `HorizontalPager` / `VerticalPager` に置き換え
+  - `ChannelScreen.kt`（`ExperimentalPagerApi` 使用中）
+  - `DriveScreen.kt`（`ExperimentalPagerApi` 使用中）
+
+---
+
+## Phase 4: enableEdgeToEdge() 追加 + テーマのシステムバー色設定を削除
+
+`enableEdgeToEdge()` がシステムバー色を管理するため、テーマ側の設定と競合する（Phase 1 で XML テーマから削除済みのはず）。
+
+- [ ] 全 Activity に `enableEdgeToEdge()` を追加（`onCreate` の `setContentView` より前）
+
+---
+
+## Phase 5: Compose 画面の Insets 対応
+
+Phase 4 で `enableEdgeToEdge()` が有効になった後、Compose 側の Insets を整備する。
+
+- [ ] 全 `Scaffold` に `contentWindowInsets = WindowInsets.safeDrawing` を設定（33ファイル）
+- [ ] `AuthScreen.kt` — 既存の `windowInsetsPadding` を `safeDrawing` に統一
+- [ ] `MessageScreen.kt` — 同上
+
+---
+
+## Phase 6: 簡単な Android View Activity の個別 Insets 対応
 
 `adjustResize` → `adjustNothing` への変更 + `ViewCompat.setOnApplyWindowInsetsListener` で Insets を手動適用。
 
@@ -39,7 +103,9 @@ Compose 画面の Edge-to-edge 対応の前提条件。
 
 ---
 
-## Phase 4: MainActivity（DrawerLayout）対応
+## Phase 7: MainActivity（DrawerLayout）対応
+
+DrawerLayout は `fitsSystemWindows` の挙動が変わるため個別対応が必要。
 
 > **注意: ViewPager2 の Insets 非伝播問題**
 > ViewPager2 は内部の `RecyclerView` が Window Insets を子 View に伝播しない既知の問題がある。
@@ -66,18 +132,16 @@ Compose 画面の Edge-to-edge 対応の前提条件。
 > - `ReactionHistoryPagerDialog` — リアクション履歴
 > - `BottomSheetViewPager` — ボトムシート内 ViewPager
 
-DrawerLayout は `fitsSystemWindows` の挙動が変わるため個別対応が必要。
-
-- [ ] `activity_main.xml` の DrawerLayout から `android:fitsSystemWindows="true"` を削除
-- [ ] `activity_main.xml` の NavigationView から `android:fitsSystemWindows="true"` を削除
-- [ ] `MainActivity` に `enableEdgeToEdge()` 追加
+- [ ] `activity_main.xml` の DrawerLayout / NavigationView から `android:fitsSystemWindows="true"` を削除
+- [ ] `MainActivity` に `enableEdgeToEdge()` 追加（Phase 4 で対応済みなら不要）
 - [ ] `MainActivity` のルートビューに `WindowInsetsCompat` で top/bottom padding を適用
-- [ ] ナビゲーションドロワーの表示確認（システムバーに重ならないか）
+- [ ] ナビゲーションドロワーの表示確認
 - [ ] `windowSoftInputMode="adjustPan"` → `adjustNothing` への変更検討
+- [ ] `TabFragment` の ViewPager2 に Insets dispatch ワークアラウンドを追加
 
 ---
 
-## Phase 5: キーボード絡みの Activity 対応
+## Phase 8: キーボード絡みの Activity 対応
 
 IME（ソフトキーボード）表示時のレイアウト調整が必要な Activity。
 
@@ -86,24 +150,7 @@ IME（ソフトキーボード）表示時のレイアウト調整が必要な A
 
 ---
 
-## Phase 6: Compose 画面の Insets 対応
-
-- [ ] `AuthScreen.kt` — `Scaffold` の `contentWindowInsets = WindowInsets.safeDrawing` に変更
-- [ ] `MessageScreen.kt` — `Scaffold` の `contentWindowInsets = WindowInsets.safeDrawing` に変更
-- [ ] その他 Scaffold 使用画面の確認・統一
-- [ ] `windowInsetsPadding` で `statusBars` が漏れている箇所の修正
-
----
-
-## Phase 7: ライブラリの非推奨対応
-
-### Accompanist 廃止ライブラリの置き換え
-- [ ] `accompanist-swiperefresh`（0.25.1）→ Material3 の `PullToRefreshBox` に置き換え
-- [ ] `accompanist-pager`（0.14.0）→ `HorizontalPager` / `VerticalPager`（Compose Foundation）に置き換え
-
----
-
-## Phase 8: SDK・ライブラリバージョン更新
+## Phase 9: SDK・ライブラリバージョン更新
 
 ### SDK
 - [ ] `compileSdk` 34 → 35
@@ -124,7 +171,7 @@ IME（ソフトキーボード）表示時のレイアウト調整が必要な A
 - [ ] Firebase BOM `32.2.2` → `33.x`
 - [ ] kotlinx.datetime `0.4.0` → `0.6.x`
 - [ ] kotlinx.serialization `1.6.3` → `1.7.x`
-- [ ] `swiperefreshlayout` のアルファ版（`1.2.0-alpha01`）→ 安定版 `1.1.0` またはComposeに移行
+- [ ] `swiperefreshlayout` アルファ版（`1.2.0-alpha01`）→ 安定版 `1.1.0` または Compose に移行
 
 ### benchmark モジュール
 - [ ] `benchmark/build.gradle` の Java バージョンを `1.8` → `17` に統一
@@ -138,6 +185,8 @@ IME（ソフトキーボード）表示時のレイアウト調整が必要な A
 | アプリ build.gradle | `app/build.gradle` |
 | バージョンカタログ | `libs.versions.toml` |
 | AndroidManifest | `app/src/main/AndroidManifest.xml` |
+| Compose テーマ | `modules/common_compose/src/main/java/net/pantasystem/milktea/common_compose/MilkteaTheme.kt` |
+| テーマユーティリティ | `app/src/main/java/jp/panta/misskeyandroidclient/ThemeUtil.kt` |
 | MainActivity | `app/src/main/java/jp/panta/misskeyandroidclient/MainActivity.kt` |
 | メインレイアウト | `app/src/main/res/layout/activity_main.xml` |
 | テーマ（v23） | `app/src/main/res/values-v23/themes.xml` |
@@ -145,3 +194,6 @@ IME（ソフトキーボード）表示時のレイアウト調整が必要な A
 | 共通テーマ | `modules/common_resource/src/main/res/values/themes.xml` |
 | AuthScreen | `modules/features/auth/src/main/java/net/pantasystem/milktea/auth/AuthScreen.kt` |
 | MessageScreen | `modules/features/messaging/src/main/java/net/pantasystem/milktea/messaging/MessageScreen.kt` |
+| ChannelScreen | `modules/features/channel/src/main/java/net/pantasystem/milktea/channel/ChannelScreen.kt` |
+| DriveScreen | `modules/features/drive/src/main/java/net/pantasystem/milktea/drive/DriveScreen.kt` |
+| 設定 Compose | `modules/features/setting/src/main/java/net/pantasystem/milktea/setting/` |
