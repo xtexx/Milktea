@@ -10,18 +10,21 @@
 **全 Compose 作業の前提条件。最初に完了させる。**
 
 ### 1-1. XML テーマを Material3 に移行
-- [ ] `app/src/main/res/values-v23/themes.xml` — `Theme.MaterialComponents` → `Theme.Material3`、システムバー色属性を削除
-- [ ] `app/src/main/res/values-v27/themes.xml` — 同上
-- [ ] `modules/common_resource/src/main/res/values/themes.xml` — 同上（Dark/Black/Bread/ElephantDark テーマ）
-- [ ] `app/src/main/res/values-v21/styles.xml` — 古いスタイル整理
+- [x] `app/src/main/res/values-v23/themes.xml` — `Theme.MaterialComponents` → `Theme.Material3`、システムバー色属性を削除
+- [x] `app/src/main/res/values-v27/themes.xml` — 同上
+- [x] `modules/common_resource/src/main/res/values/themes.xml` — 同上（Dark/Black/Bread/ElephantDark テーマ）
+- [x] `app/src/main/res/values-v21/styles.xml` — 古いスタイル整理
+- [x] `modules/common_resource/src/main/res/values/styles.xml` — Widget.MaterialComponents.* → Widget.Material3.* に更新
 
 ### 1-2. Compose M3 テーマラッパーの作成
 現在 `MdcTheme`（Material2 ブリッジ）を使用中 → M3 の `MaterialTheme` に置き換える。
-- [ ] `modules/common_compose/MilkteaTheme.kt` に M3 用 `ColorScheme` を 5テーマ分定義
-  - White（ライト）/ Dark / Black / Bread / ElephantDark
-- [ ] `MdcTheme { }` → `MaterialTheme(colorScheme = ...) { }` に置き換え
-- [ ] `libs.versions.toml` に `compose-material3` を追加（または Compose BOM 経由）
-- [ ] ビルド確認（コンパイルエラーがこの時点で大量に出るが想定内）
+- [x] `modules/common_compose/MilkteaTheme.kt` に M3 用 `ColorScheme` を 5テーマ分定義
+  - White / Dark / Black / Bread / ElephantDark
+  - `Theme.toColorScheme()` 拡張関数で ThemeUtil.kt の Theme enum と同期
+- [x] `MdcTheme { }` → `MaterialTheme(colorScheme = ...) { }` に置き換え
+- [x] `libs.versions.toml` に `compose-material3 = "1.3.1"` を追加
+- [x] `common_compose/build.gradle` で material2 → material3 に差し替え、MdcTheme アダプター削除
+- [ ] ビルド確認（Phase 2 の import 置き換え前なのでコンパイルエラーが大量に出る想定）
 
 ---
 
