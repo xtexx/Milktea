@@ -33,7 +33,7 @@
 **ビルドエラーを潰しながら進める。一気にやらず機能モジュール単位で対応。**
 
 ### 2-1. 全ファイルの import 置き換え
-- [ ] `androidx.compose.material.` → `androidx.compose.material3.` に一括置換（注意: API が変わるものがある）
+- [x] `androidx.compose.material.` → `androidx.compose.material3.` に一括置換（注意: API が変わるものがある）
 
 ### 2-2. API 変更対応（M2 → M3 で変わる主要コンポーネント）
 
@@ -48,21 +48,24 @@
 | `TabRow` | `TabRow`（ほぼ同じだが色指定が変わる） | 複数 |
 
 ### 2-3. `ModalBottomSheetLayout` → `ModalBottomSheet` の書き換え（API が別物）
-- [ ] `SearchAndSelectUserScreen.kt`
-- [ ] `TabItemsListScreen.kt`
-- [ ] `AccountSettingScreen.kt`
+- [x] `SearchAndSelectUserScreen.kt`
+- [x] `TabItemsListScreen.kt`
+- [x] `AccountSettingScreen.kt`
 
 ### 2-4. モジュール別動作確認
-- [ ] `features/auth` — AuthScreen, SignUpScreen 等
-- [ ] `features/setting` — 22ファイル（最多）
-- [ ] `features/note` — エディタ周り
-- [ ] `features/channel` — ChannelScreen
-- [ ] `features/drive` — DriveScreen
-- [ ] `features/user` — ユーザー画面
-- [ ] `features/messaging` — MessageScreen
-- [ ] `features/gallery` — GalleryEditorPage
-- [ ] `features/clip`, `group`, `userlist`, `search`, `account`
-- [ ] `common_compose`, `common_android_ui` — 共通コンポーネント
+- [x] `features/auth` — AuthScreen, SignUpScreen 等
+- [x] `features/setting` — 22ファイル（最多）
+- [x] `features/note` — エディタ周り
+- [x] `features/channel` — ChannelScreen
+- [x] `features/drive` — DriveScreen
+- [x] `features/user` — ユーザー画面
+- [x] `features/messaging` — MessageScreen
+- [x] `features/gallery` — GalleryEditorPage
+- [x] `features/clip`, `group`, `userlist`, `search`, `account`
+- [x] `common_compose`, `common_android_ui` — 共通コンポーネント
+
+### ビルド確認
+- [x] `./gradlew :app:assembleDebug` BUILD SUCCESSFUL
 
 ---
 
