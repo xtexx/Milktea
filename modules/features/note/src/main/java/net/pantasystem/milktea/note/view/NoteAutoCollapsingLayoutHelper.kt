@@ -51,6 +51,7 @@ object NoteAutoCollapsingLayoutHelper {
                             setHeightAndInvalidate(ViewGroup.LayoutParams.WRAP_CONTENT)
                         }
                         doOnCancel {
+                            button?.alpha = 1.0f
                             setHeightAndInvalidate(ViewGroup.LayoutParams.WRAP_CONTENT)
                         }
                     }

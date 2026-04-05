@@ -140,17 +140,6 @@
             app:layout_constraintStart_toEndOf="@id/avatarIcon"
             app:layout_constraintTop_toBottomOf="@id/subName">
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/autoExpandableButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal|bottom"
-                android:text="@string/expand"
-                app:cornerRadius="8dp"
-                app:emojiCompatEnabled="false"
-                android:hapticFeedbackEnabled="true"
-                />
-
             <LinearLayout
                 android:id="@+id/expandableBase"
                 android:layout_width="match_parent"
@@ -384,6 +373,17 @@
 
 
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/autoExpandableButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal|bottom"
+                android:text="@string/expand"
+                app:cornerRadius="8dp"
+                app:emojiCompatEnabled="false"
+                android:hapticFeedbackEnabled="true"
+                />
 
         </net.pantasystem.milktea.common_android.ui.AutoCollapsingLayout>
 

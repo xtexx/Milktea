@@ -118,18 +118,6 @@
                 onExpandedChanged="@{note::expand}"
                 >
 
-            <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/expand"
-                    android:layout_gravity="center_horizontal|bottom"
-                    app:cornerRadius="24dp"
-                    android:id="@+id/autoExpandableButton"
-                    android:visibility="@{ note.expanded ? View.GONE : View.VISIBLE}"
-                    app:emojiCompatEnabled="false"
-
-                    />
-
             <LinearLayout
                     android:id="@+id/expandableBase"
                     android:layout_width="match_parent"
@@ -377,6 +365,17 @@
 
 
             </LinearLayout>
+
+            <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/expand"
+                    android:layout_gravity="center_horizontal|bottom"
+                    app:cornerRadius="24dp"
+                    android:id="@+id/autoExpandableButton"
+                    android:visibility="@{ note.expanded ? View.GONE : View.VISIBLE}"
+                    app:emojiCompatEnabled="false"
+                    />
 
         </net.pantasystem.milktea.common_android.ui.AutoCollapsingLayout>
 

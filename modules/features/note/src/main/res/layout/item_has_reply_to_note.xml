@@ -34,16 +34,6 @@
 
                     >
 
-                <com.google.android.material.button.MaterialButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/expand"
-                        android:layout_gravity="center_horizontal|bottom"
-                        android:id="@+id/replyAutoExpandableButton"
-                        android:visibility="@{ hasReplyToNote.expanded ? View.GONE : View.VISIBLE}"
-                        app:emojiCompatEnabled="false"
-                        app:cornerRadius="24dp"
-                        />
                 <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -136,6 +126,17 @@
                     </RelativeLayout>
 
                 </RelativeLayout>
+
+                <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/expand"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:id="@+id/replyAutoExpandableButton"
+                        android:visibility="@{ hasReplyToNote.expanded ? View.GONE : View.VISIBLE}"
+                        app:emojiCompatEnabled="false"
+                        app:cornerRadius="24dp"
+                        />
             </net.pantasystem.milktea.common_android.ui.AutoCollapsingLayout>
 
             <include layout="@layout/item_simple_note"
