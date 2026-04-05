@@ -43,6 +43,9 @@
         <item name="android:windowBackground">@color/colorDarkWindowBackground</item>
 
         <item name="colorSurface">#1E1E1E</item>
+        <item name="colorSurfaceContainer">#1E1E1E</item>
+
+        <item name="bottomNavigationStyle">@style/BottomNavigationView4Dark</item>
 
         <item name="normalIconTint">@color/colorDarkTextColor</item>
         <item name="actionBarSize">53dp</item>
@@ -58,12 +61,16 @@
         <item name="colorDotTabSelected">@color/colorDarkAccent</item>
         <item name="colorDotTabNormal">@color/colorDarkTextColor</item>
 
+        <item name="colorBottomNavigationSelected">@color/colorDarkBottomNavSelected</item>
+        <item name="colorBottomNavigationNotSelect">@color/colorDarkBottomNavNormal</item>
+
         <item name="emojiPickerRippleColor">#66FFFFFF</item>
     </style>
 
     <style name="AppThemeBlack" parent="AppThemeDark">
         <item name="android:windowBackground">@color/colorBlackPrimary</item>
         <item name="colorSurface">#000000</item>
+        <item name="colorSurfaceContainer">#000000</item>
 
         <item name="normalIconTint">@color/colorItemNotSelected</item>
         <item name="actionBarSize">53dp</item>
@@ -75,15 +82,18 @@
         <item name="colorPrimary">@color/colorBreadPrimary</item>
         <item name="colorPrimaryDark">@color/colorBreadPrimaryDark</item>
         <item name="colorSurface">@color/colorBreadSurface</item>
+        <item name="colorSurfaceContainer">@color/colorBreadSurface</item>
         <item name="colorSecondary">#8BC34A</item>
         <item name="colorSelectedReactionCounterBackground">#FFCA28</item>
         <item name="colorNormalReactionCounterBackground">#EAE691</item>
+        <item name="colorBottomNavigationSelected">@color/colorBreadBottomNavSelected</item>
     </style>
 
     <style name="AppThemeMastodonDark" parent="AppThemeDark">
         <item name="colorPrimary">#FF8C8DFE</item>
         <item name="colorPrimaryDark">#FF282c37</item>
         <item name="colorSurface">#FF282C37</item>
+        <item name="colorSurfaceContainer">#FF282C37</item>
         <item name="colorSecondary">#FF595aff</item>
         <item name="colorSelectedReactionCounterBackground">#FF8C8DFE</item>
         <item name="colorNormalReactionCounterBackground">#FF424859</item>
