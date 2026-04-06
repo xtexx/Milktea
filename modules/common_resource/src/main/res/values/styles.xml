@@ -61,6 +61,7 @@
     </style>
 
     <style name="BottomNavigationViewCompact" parent="Widget.Material3.BottomNavigationView">
+        <item name="android:minHeight">56dp</item>
         <item name="itemPaddingTop">8dp</item>
         <item name="itemPaddingBottom">8dp</item>
     </style>
