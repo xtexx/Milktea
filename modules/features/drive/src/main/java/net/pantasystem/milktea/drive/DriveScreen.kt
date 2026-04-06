@@ -47,6 +47,8 @@ import kotlinx.coroutines.launch
 import net.pantasystem.milktea.drive.viewmodel.DriveViewModel
 import net.pantasystem.milktea.model.drive.Directory
 import net.pantasystem.milktea.model.drive.FileProperty
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 
 @ExperimentalCoroutinesApi
@@ -79,6 +81,7 @@ fun DriveScreen(
 
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
 
             Column {

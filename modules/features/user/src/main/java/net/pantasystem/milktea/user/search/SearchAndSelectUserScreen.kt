@@ -41,6 +41,7 @@ fun SearchAndSelectUserScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 navigationIcon = {

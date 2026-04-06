@@ -123,6 +123,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
             }
             MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {

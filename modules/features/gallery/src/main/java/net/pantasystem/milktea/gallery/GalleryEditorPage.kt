@@ -36,6 +36,7 @@ fun GalleryEditorPage(
     val state by galleryEditorViewModel.state.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 title = {

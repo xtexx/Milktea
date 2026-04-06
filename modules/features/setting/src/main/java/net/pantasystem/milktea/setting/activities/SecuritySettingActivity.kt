@@ -34,6 +34,8 @@ import net.pantasystem.milktea.setting.SettingSection
 import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -68,6 +70,7 @@ class SecuritySettingActivity : AppCompatActivity() {
             MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
 
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             navigationIcon = {

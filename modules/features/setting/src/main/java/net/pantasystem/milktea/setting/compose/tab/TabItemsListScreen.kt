@@ -19,6 +19,8 @@ import net.pantasystem.milktea.model.account.page.Page
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.viewmodel.page.PageCandidate
 import net.pantasystem.milktea.setting.viewmodel.page.PageCandidateGroup
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,6 +38,7 @@ internal fun TabItemsListScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 title = {

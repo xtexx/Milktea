@@ -37,6 +37,8 @@ import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.common.ui.isScrolledToTheEnd
 import net.pantasystem.milktea.model.instance.InstanceInfoType
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -61,6 +63,7 @@ fun SignUpScreen(
         }
     }
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopAppBar(

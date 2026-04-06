@@ -22,6 +22,7 @@ fun JoinMilkteaScreen(
     onLoginButtonClicked: () -> Unit,
 ) {
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Box(modifier = Modifier

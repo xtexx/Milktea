@@ -50,6 +50,7 @@ class AboutMilkteaActivity : AppCompatActivity() {
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             navigationIcon = {

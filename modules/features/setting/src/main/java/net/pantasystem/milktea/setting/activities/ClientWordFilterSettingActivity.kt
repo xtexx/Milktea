@@ -52,6 +52,7 @@ class ClientWordFilterSettingActivity : AppCompatActivity() {
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {

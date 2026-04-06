@@ -31,6 +31,8 @@ import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -68,6 +70,7 @@ class ClipDetailActivity : AppCompatActivity() {
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {

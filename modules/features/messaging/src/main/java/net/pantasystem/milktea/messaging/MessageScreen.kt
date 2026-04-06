@@ -45,6 +45,7 @@ fun MessageScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -57,10 +58,7 @@ fun MessageScreen(
                 }
             )
         },
-        modifier = Modifier.windowInsetsPadding(
-            WindowInsets
-                .navigationBars
-                .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top))
+        modifier = Modifier
     ) {
         Column(
             Modifier

@@ -62,7 +62,7 @@ class AccountFragment : Fragment() {
                 MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                     val uiState by accountViewModel.uiState.collectAsState()
 
-                    Scaffold() { paddingValues ->
+                    Scaffold(contentWindowInsets = WindowInsets.safeDrawing) { paddingValues ->
                         LazyColumn(
                             modifier = Modifier
                                 .fillMaxSize()
