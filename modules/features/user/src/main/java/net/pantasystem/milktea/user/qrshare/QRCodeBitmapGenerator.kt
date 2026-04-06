@@ -76,7 +76,7 @@ class QRCodeBitmapGenerator @Inject constructor(
         val result = Bitmap.createBitmap(
             qrCode.width,
             qrCode.height,
-            qrCode.config
+            qrCode.config ?: Bitmap.Config.ARGB_8888
         )
 
         val canvas = Canvas(result)

@@ -160,28 +160,41 @@ IME（ソフトキーボード）表示時のレイアウト調整が必要な A
 ## Phase 9: SDK・ライブラリバージョン更新
 
 ### SDK
-- [ ] `compileSdk` 34 → 35
-- [ ] `targetSdk` 34 → 35
+- [x] `compileSdk` 34 → 35
+- [x] `targetSdk` 34 → 35
 
 ### AGP・ビルドツール
-- [ ] AGP `8.1.3` → `8.7.x` 以上
-- [ ] Google Services Plugin `4.3.15` → `4.4.x`
+- [x] AGP `8.1.3` → `8.7.3` / Gradle `8.4` → `8.9`
+- [x] Google Services Plugin `4.3.15` → `4.4.2`
+- [x] Firebase Crashlytics Gradle `2.9.7` → `3.0.3`
 
 ### ライブラリ
-- [ ] Kotlin `2.0.0` → `2.1.x`
+- [ ] Kotlin `2.0.0` → `2.1.x`（**要 kapt → KSP 移行**。Dagger/Hilt の kapt が Kotlin 2.1.x メタデータ形式未対応）
 - [ ] Compose BOM 最新化（現在 `1.7.1`）
-- [ ] Hilt `2.48.1` → `2.52.x`
-- [ ] Room `2.6.0` → `2.7.x`
+- [x] Hilt `2.48.1` → `2.56` / hilt-work, hilt-compiler `1.0.0` → `1.2.0`
+- [x] Room `2.6.0` → `2.7.0`
 - [ ] Coil `2.4.0` → `3.x`（API 変更あり、要注意）
-- [ ] OkHttp `4.10.0` → `4.12.x`
-- [ ] Retrofit `2.9.0` → `2.11.x`
-- [ ] Firebase BOM `32.2.2` → `33.x`
-- [ ] kotlinx.datetime `0.4.0` → `0.6.x`
-- [ ] kotlinx.serialization `1.6.3` → `1.7.x`
-- [ ] `swiperefreshlayout` アルファ版（`1.2.0-alpha01`）→ 安定版 `1.1.0` または Compose に移行
+- [x] OkHttp `4.10.0` → `4.12.0`
+- [x] Retrofit `2.9.0` → `2.11.0`
+- [x] Firebase BOM `32.2.2` → `33.12.0`
+- [x] kotlinx.datetime `0.4.0` → `0.6.1`
+- [x] kotlinx.serialization `1.6.3` → `1.7.3`
+- [x] coroutines `1.7.3` → `1.8.1`（新たに libs.versions.toml 管理へ）
+- [x] `swiperefreshlayout` `1.2.0-alpha01` → `1.1.0`（安定版）
+- [x] desugar_jdk_libs `1.1.5` → `2.1.3`
 
 ### benchmark モジュール
-- [ ] `benchmark/build.gradle` の Java バージョンを `1.8` → `17` に統一
+- [x] `benchmark/build.gradle` の Java バージョンを `1.8` → `17` に統一
+
+### その他対応
+- [x] バージョン定義を `libs.versions.toml` に一元化（room/retrofit/coroutines/nav/firebase-bom を ext ブロックから移行）
+- [x] SDK 35 対応: `Bitmap.Config` nullable 化 (`QRCodeBitmapGenerator.kt`)
+- [x] Firebase BOM 33.x 対応: `play-services-base` を data module に明示追加
+
+### 残タスク（Phase 10 候補）
+- [ ] Kotlin `2.1.x` 移行（kapt → KSP への全モジュール移行が必要）
+- [ ] Coil `3.x` 移行（アーティファクト ID 変更 + API 変更）
+- [ ] Compose BOM 最新化
 
 ---
 

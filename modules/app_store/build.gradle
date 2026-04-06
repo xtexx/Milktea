@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -58,8 +58,8 @@ dependencies {
     testImplementation libs.hilt.android.testing
     kaptTest libs.hilt.compiler
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
     implementation libs.kotlin.datetime
 
     testImplementation libs.junit.jupiter.api
