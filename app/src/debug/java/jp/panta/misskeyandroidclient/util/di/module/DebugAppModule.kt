@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.panta.misskeyandroidclient.util.DebuggerSetupManager
-import jp.panta.misskeyandroidclient.util.FlipperSetupManagerImpl
+import jp.panta.misskeyandroidclient.util.EmptyDebuggerSetupManagerImpl
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
@@ -14,5 +14,5 @@ abstract class DebugAppModule {
 
     @Binds
     @Singleton
-    abstract fun bindFlipperSetupManager(impl: FlipperSetupManagerImpl): DebuggerSetupManager
+    abstract fun bindDebuggerSetupManager(impl: EmptyDebuggerSetupManagerImpl): DebuggerSetupManager
 }
