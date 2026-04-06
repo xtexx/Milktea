@@ -19,6 +19,9 @@ import net.pantasystem.milktea.note.editor.viewmodel.NoteEditorSavedStateKey
 import net.pantasystem.milktea.note.editor.viewmodel.NoteEditorViewModel
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 
 @AndroidEntryPoint
@@ -94,6 +97,16 @@ class NoteEditorActivity : AppCompatActivity() {
         applyTheme()
         enableEdgeToEdge()
         setContentView(R.layout.activity_note_editor)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+            binding.root.updatePadding(
+                top = systemBarsInsets.top,
+                bottom = maxOf(systemBarsInsets.bottom, imeInsets.bottom)
+            )
+            windowInsets
+        }
 
         binding.lifecycleOwner = this
 

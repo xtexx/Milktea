@@ -45,7 +45,7 @@ fun MessageScreen(
     }
 
     Scaffold(
-        contentWindowInsets = WindowInsets.safeDrawing,
+        contentWindowInsets = WindowInsets.safeContent,
         topBar = {
             TopAppBar(
                 navigationIcon = {
