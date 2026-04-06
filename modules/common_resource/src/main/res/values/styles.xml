@@ -60,7 +60,12 @@
         <item name="android:textColor">@color/colorTextColorPrimary</item>
     </style>
 
-    <style name="BottomNavigationView4Dark" parent="Widget.Material3.BottomNavigationView">
+    <style name="BottomNavigationViewCompact" parent="Widget.Material3.BottomNavigationView">
+        <item name="itemPaddingTop">8dp</item>
+        <item name="itemPaddingBottom">8dp</item>
+    </style>
+
+    <style name="BottomNavigationView4Dark" parent="BottomNavigationViewCompact">
         <item name="elevation">0dp</item>
     </style>
     <style name="TabLayout4Light" parent="Widget.Material3.TabLayout">

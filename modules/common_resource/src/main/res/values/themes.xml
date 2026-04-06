@@ -24,6 +24,7 @@
         <item name="colorDotTabNormal">@color/colorItemNotSelected</item>
 
         <item name="emojiPickerRippleColor">#5C000000</item>
+        <item name="bottomNavigationStyle">@style/BottomNavigationViewCompact</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
