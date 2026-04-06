@@ -115,6 +115,7 @@ class AutoCollapsingLayout : FrameLayout {
     }
 
     fun setExpandedAndInvalidate(value: Boolean) {
+        currentAnimator?.cancel()
         this.isExpanded = value
         isNeedExpandedButtonVisible = false
 
@@ -215,8 +216,11 @@ class AutoCollapsingLayout : FrameLayout {
                             childLeft + width,
                             childTop + height
                         )
+                        child.alpha = 1.0f
+                        child.refreshDrawableState()
                     } else {
                         child.layout(0, 0, 0, 0)
+                        child.alpha = 1.0f
                     }
 
                 } else {

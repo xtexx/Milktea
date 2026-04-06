@@ -9,7 +9,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
@@ -19,31 +19,40 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.viewmodel.muteword.ClientWordFilterSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class ClientWordFilterSettingActivity : AppCompatActivity() {
 
     @Inject
     lateinit var applyTheme: ApplyTheme
 
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
     private val viewModel by viewModels<ClientWordFilterSettingViewModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         applyTheme()
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {

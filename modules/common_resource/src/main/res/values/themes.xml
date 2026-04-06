@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
 
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorSecondary">#575DAE</item>
@@ -19,14 +18,7 @@
 
         <item name="colorSeparator">@color/colorSeparator</item>
 
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.Toolbar</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar</item>
-        <item name="tabStyle">@style/TabLayout4Light</item>
-
-
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
-
-
 
         <item name="colorDotTabSelected">#575DAE</item>
         <item name="colorDotTabNormal">@color/colorItemNotSelected</item>
@@ -43,21 +35,17 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-
-
-    <style name="AppThemeDark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-
+    <style name="AppThemeDark" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="colorPrimary">#9FA8DA</item>
         <item name="colorSecondary">#6D7FE1</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.PrimarySurface</item>
-        <item name="bottomNavigationStyle">@style/BottomNavigationView4Dark</item>
 
         <item name="android:windowBackground">@color/colorDarkWindowBackground</item>
 
         <item name="colorSurface">#1E1E1E</item>
+        <item name="colorSurfaceContainer">#1E1E1E</item>
+
+        <item name="bottomNavigationStyle">@style/BottomNavigationView4Dark</item>
 
         <item name="normalIconTint">@color/colorDarkTextColor</item>
         <item name="actionBarSize">53dp</item>
@@ -69,10 +57,12 @@
         <item name="colorMessageRecipient">@color/colorMessageRecipientDark</item>
         <item name="colorSeparator">@color/colorSeparatorDark</item>
 
-        <item name="android:navigationBarColor">#1E1E1E</item>
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
         <item name="colorDotTabSelected">@color/colorDarkAccent</item>
         <item name="colorDotTabNormal">@color/colorDarkTextColor</item>
+
+        <item name="colorBottomNavigationSelected">@color/colorDarkBottomNavSelected</item>
+        <item name="colorBottomNavigationNotSelect">@color/colorDarkBottomNavNormal</item>
 
         <item name="emojiPickerRippleColor">#66FFFFFF</item>
     </style>
@@ -80,47 +70,34 @@
     <style name="AppThemeBlack" parent="AppThemeDark">
         <item name="android:windowBackground">@color/colorBlackPrimary</item>
         <item name="colorSurface">#000000</item>
+        <item name="colorSurfaceContainer">#000000</item>
 
         <item name="normalIconTint">@color/colorItemNotSelected</item>
         <item name="actionBarSize">53dp</item>
-        
+
         <item name="colorSeparator">@color/colorSeparator</item>
-        <item name="android:navigationBarColor">@color/colorBlackPrimary</item>
-
-
     </style>
 
     <style name="AppThemeBread" parent="AppTheme">
         <item name="colorPrimary">@color/colorBreadPrimary</item>
         <item name="colorPrimaryDark">@color/colorBreadPrimaryDark</item>
         <item name="colorSurface">@color/colorBreadSurface</item>
+        <item name="colorSurfaceContainer">@color/colorBreadSurface</item>
         <item name="colorSecondary">#8BC34A</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.Toolbar.Primary</item>
-        <item name="bottomNavigationStyle">@style/Widget.MaterialComponents.BottomNavigationView.PrimarySurface</item>
         <item name="colorSelectedReactionCounterBackground">#FFCA28</item>
         <item name="colorNormalReactionCounterBackground">#EAE691</item>
-        <item name="android:navigationBarColor">@color/colorBreadPrimary</item>
-
+        <item name="colorBottomNavigationSelected">@color/colorBreadBottomNavSelected</item>
     </style>
-
 
     <style name="AppThemeMastodonDark" parent="AppThemeDark">
         <item name="colorPrimary">#FF8C8DFE</item>
         <item name="colorPrimaryDark">#FF282c37</item>
         <item name="colorSurface">#FF282C37</item>
+        <item name="colorSurfaceContainer">#FF282C37</item>
         <item name="colorSecondary">#FF595aff</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.PrimarySurface</item>
-        <item name="bottomNavigationStyle">@style/BottomNavigationView4Dark</item>
         <item name="colorSelectedReactionCounterBackground">#FF8C8DFE</item>
         <item name="colorNormalReactionCounterBackground">#FF424859</item>
         <item name="android:windowBackground">#FF191B22</item>
-
-<!--        <item name="android:navigationBarColor">@color/colorBreadPrimary</item>-->
-
     </style>
 
 </resources>

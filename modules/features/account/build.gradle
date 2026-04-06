@@ -8,11 +8,11 @@ plugins {
 
 android {
     namespace 'net.pantasystem.milktea.account'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -75,16 +75,12 @@ dependencies {
     implementation libs.compose.ui.ui.tooling
 
     implementation libs.compose.foundation.foundation
-    implementation libs.compose.material.material
+    implementation libs.compose.material3
     implementation libs.compose.material.material.icons.core
     implementation libs.compose.material.material.icons.extended
     androidTestImplementation libs.compose.ui.ui.test.junit4
     implementation libs.compose.runtime.runtime.livedata
-    implementation libs.android.material.compose.theme.adapter
-    implementation libs.accompanist.swiperefresh
     implementation libs.activity.compose
-    implementation libs.accompanist.pager
-    implementation libs.accompanist.pager.indicators
     implementation libs.coil.compose
 
     // hilt

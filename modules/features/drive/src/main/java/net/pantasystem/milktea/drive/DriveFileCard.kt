@@ -12,10 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +31,7 @@ import net.pantasystem.milktea.model.drive.FileProperty
 
 
 @OptIn(ExperimentalFoundationApi::class)
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun FilePropertySimpleCard(
     file: FileViewData,
@@ -51,11 +52,13 @@ fun FilePropertySimpleCard(
                 onAction(FilePropertyCardAction.OnLongClicked(file.fileProperty))
             }
         ),
-        backgroundColor = if (file.isSelected) {
-            MaterialTheme.colors.primary
-        } else {
-            MaterialTheme.colors.surface
-        },
+        colors = CardDefaults.cardColors(
+            containerColor = if (file.isSelected) {
+                MaterialTheme.colorScheme.primary
+            } else {
+                MaterialTheme.colorScheme.surface
+            }
+        ),
     ) {
         Column(
             modifier = Modifier

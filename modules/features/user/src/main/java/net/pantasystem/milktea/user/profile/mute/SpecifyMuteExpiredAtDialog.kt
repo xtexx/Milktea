@@ -9,7 +9,8 @@ import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.activityViewModels
-import com.google.android.material.composethemeadapter.MdcTheme
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.datetime.TimeZone
@@ -24,6 +25,9 @@ class SpecifyMuteExpiredAtDialog : AppCompatDialogFragment() {
         const val FRAGMENT_TAG = "SpecifyMuteExpiredAtDialog"
     }
 
+    @javax.inject.Inject
+    lateinit var configRepository: LocalConfigRepository
+
     val userDetailViewModel by activityViewModels<UserDetailViewModel>()
     val viewModel by activityViewModels<MuteUserViewModel>()
 
@@ -33,7 +37,7 @@ class SpecifyMuteExpiredAtDialog : AppCompatDialogFragment() {
             .setTitle(R.string.mute)
             .setView(ComposeView(requireContext()).apply {
                 setContent {
-                    MdcTheme {
+                    MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                         SpecifyMuteExpiredAtDialogContent(
                             state = viewModel.state,
                             onAction = { action ->

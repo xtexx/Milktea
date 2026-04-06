@@ -26,6 +26,10 @@ import net.pantasystem.milktea.model.file.AboutMediaType
 import net.pantasystem.milktea.model.file.FilePreviewSource
 import java.io.Serializable
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 class MediaNavigationImpl @Inject constructor(
     val activity: Activity
@@ -87,9 +91,16 @@ class MediaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_media)
         setSupportActionBar(mBinding.mediaToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            mBinding.mediaToolbar.updatePadding(top = insets.top)
+            mBinding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 

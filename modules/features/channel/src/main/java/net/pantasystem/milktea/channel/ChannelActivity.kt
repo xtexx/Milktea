@@ -16,8 +16,9 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common.ui.ApplyTheme
@@ -32,6 +33,7 @@ import net.pantasystem.milktea.note.NoteEditorActivity
 import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 @AndroidEntryPoint
@@ -49,6 +51,9 @@ class ChannelActivity : AppCompatActivity() {
     @Inject
     internal lateinit var settingStore: SettingStore
 
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
 
     private val channelViewModel: ChannelViewModel by viewModels()
 
@@ -58,6 +63,7 @@ class ChannelActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
 
         NoteActionHandler(
@@ -69,7 +75,7 @@ class ChannelActivity : AppCompatActivity() {
 
         setContent {
             val navController = rememberNavController()
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 NavHost(navController = navController, startDestination = "/channels") {
                     composable("/channels") {
                         ChannelScreen(

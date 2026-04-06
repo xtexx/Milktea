@@ -2,7 +2,7 @@ package net.pantasystem.milktea.group
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
@@ -11,11 +11,15 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import net.pantasystem.milktea.model.group.GroupWithMember
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Stable
 fun GroupCardListPage(uiState: GroupListUiState, onAction: (GroupCardListAction) -> Unit) {
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -28,7 +32,7 @@ fun GroupCardListPage(uiState: GroupListUiState, onAction: (GroupCardListAction)
                 title = {
                     Text(stringResource(R.string.groups))
                 },
-                backgroundColor = MaterialTheme.colors.surface
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         },
         floatingActionButton = {

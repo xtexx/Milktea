@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -23,8 +23,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -35,15 +37,18 @@ import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.model.setting.DefaultConfig
-import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.setting.MediaDisplayMode
 import net.pantasystem.milktea.model.setting.RememberVisibility
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.SettingSection
 import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class SettingMovementActivity : AppCompatActivity() {
 
@@ -68,6 +73,7 @@ class SettingMovementActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         val isHighlightSafeSearch = intent.getBooleanExtra(EXTRA_HIGHLIGHT_SAFE_SEARCH, false)
         setContent {
@@ -94,8 +100,9 @@ class SettingMovementActivity : AppCompatActivity() {
             }
 
 
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             navigationIcon = {
@@ -154,7 +161,7 @@ class SettingMovementActivity : AppCompatActivity() {
                                 checked = currentConfigState.isEnableSafeSearch.isEnabled,
                                 modifier = Modifier.then(
                                     if (isHighlightSafeSearch)
-                                        Modifier.background(MaterialTheme.colors.primary.copy(alpha = 0.2f))
+                                        Modifier.background(MaterialTheme.colorScheme.primary.copy(alpha = 0.2f))
                                     else Modifier
                                 ),
                                 onChanged = {
@@ -278,13 +285,14 @@ class SettingMovementActivity : AppCompatActivity() {
                                     modifier = Modifier.fillMaxWidth()
                                 ) {
                                     MediaDisplayMode.values().forEach {
-                                        DropdownMenuItem(onClick = {
-                                            currentConfigState =
-                                                currentConfigState.copy(mediaDisplayMode = it)
-                                            isVisibleDropdown = false
-                                        }) {
-                                            Text(stringFromDisplayMode(displayMode = it))
-                                        }
+                                        DropdownMenuItem(
+                                            text = { Text(stringFromDisplayMode(displayMode = it)) },
+                                            onClick = {
+                                                currentConfigState =
+                                                    currentConfigState.copy(mediaDisplayMode = it)
+                                                isVisibleDropdown = false
+                                            }
+                                        )
                                     }
                                 }
                             }

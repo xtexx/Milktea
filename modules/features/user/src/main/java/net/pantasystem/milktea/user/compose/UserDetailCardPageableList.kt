@@ -10,8 +10,8 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -39,7 +39,7 @@ sealed interface UserDetailCardPageableListAction {
     object Refresh : UserDetailCardPageableListAction
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailCardPageableList(
     pageableState: PageableState<List<User.Id>>,
@@ -62,8 +62,8 @@ fun UserDetailCardPageableList(
 
     when (pageableState.content) {
         is StateContent.Exist -> {
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing = pageableState is PageableState.Loading.Init),
+            PullToRefreshBox(
+                isRefreshing = pageableState is PageableState.Loading.Init,
                 onRefresh = { onAction(UserDetailCardPageableListAction.Refresh) },
                 modifier = Modifier
                     .nestedScroll(rememberNestedScrollInteropConnection())

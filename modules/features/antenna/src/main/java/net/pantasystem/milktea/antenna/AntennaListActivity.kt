@@ -23,6 +23,10 @@ import net.pantasystem.milktea.common_navigation.AntennaNavigation
 import net.pantasystem.milktea.common_navigation.AntennaNavigationArgs
 import net.pantasystem.milktea.model.antenna.Antenna
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @AndroidEntryPoint
 class AntennaListActivity : AppCompatActivity() {
@@ -39,9 +43,16 @@ class AntennaListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_antenna_list)
         setSupportActionBar(mBinding.antennaListToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            mBinding.antennaListToolbar.updatePadding(top = insets.top)
+            mBinding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 

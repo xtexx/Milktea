@@ -17,8 +17,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.whenResumed
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.launch
@@ -32,6 +33,7 @@ import net.pantasystem.milktea.data.infrastructure.auth.custom.CustomAuthStore
 import net.pantasystem.milktea.data.infrastructure.auth.from
 import java.util.Locale
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 const val EXTRA_HOST = "EXTRA_HOST"
@@ -67,9 +69,13 @@ class AuthorizationActivity : AppCompatActivity() {
     @Inject
     lateinit var applyTheme: ApplyTheme
 
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 //        setContentView(R.layout.activity_authorization)
 
         lifecycleScope.launch {
@@ -106,7 +112,7 @@ class AuthorizationActivity : AppCompatActivity() {
 
 
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 AuthScreen(authViewModel = appAuthViewModel,
                     onCopyToClipboard = {
                         (getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager)?.also { clipboardManager ->

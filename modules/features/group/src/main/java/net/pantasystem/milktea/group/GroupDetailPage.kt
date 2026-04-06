@@ -2,7 +2,7 @@ package net.pantasystem.milktea.group
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
@@ -11,8 +11,11 @@ import androidx.compose.material.icons.filled.Message
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import net.pantasystem.milktea.model.group.Group
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupDetailPage(uiState: GroupDetailUiState, onAction: (GroupDetailPageAction) -> Unit,) {
     if (uiState.type is GroupDetailUiStateType.Editing) {
@@ -39,6 +42,7 @@ fun GroupDetailPage(uiState: GroupDetailUiState, onAction: (GroupDetailPageActio
         )
     }
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 title = {
@@ -51,7 +55,7 @@ fun GroupDetailPage(uiState: GroupDetailUiState, onAction: (GroupDetailPageActio
                         Icon(Icons.Default.ArrowBack, null)
                     }
                 },
-                backgroundColor = MaterialTheme.colors.surface,
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
                 actions = {
                     if (uiState.isOwner) {
                         IconButton(onClick = {

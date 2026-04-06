@@ -1,9 +1,9 @@
 package net.pantasystem.milktea.group
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import net.pantasystem.milktea.common_compose.AvatarIcon
 import net.pantasystem.milktea.model.user.User
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Stable
 fun GroupMemberCard(

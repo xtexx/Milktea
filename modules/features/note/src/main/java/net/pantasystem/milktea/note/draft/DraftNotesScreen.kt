@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -20,7 +20,10 @@ import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.model.note.draft.DraftNote
 import net.pantasystem.milktea.model.note.draft.DraftNoteFile
 import net.pantasystem.milktea.note.draft.viewmodel.DraftNotesViewModel
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DraftNotesScreen(
     isPickMode: Boolean,
@@ -33,6 +36,7 @@ fun DraftNotesScreen(
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -47,8 +51,7 @@ fun DraftNotesScreen(
                         Text(text = stringResource(id = net.pantasystem.milktea.common_resource.R.string.draft_notes))
                     }
                 },
-                backgroundColor = MaterialTheme.colors.surface,
-                elevation = 0.dp
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
             )
         }
     ) { paddingValues ->

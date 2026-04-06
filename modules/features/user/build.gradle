@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -68,8 +68,8 @@ dependencies {
     implementation project(path: ':modules:common_navigation')
 
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
 
     implementation libs.lifecycle.runtime
     kapt libs.lifecycle.compiler
@@ -90,17 +90,13 @@ dependencies {
     implementation libs.compose.ui.ui.tooling
 
     implementation libs.compose.foundation.foundation
-    implementation libs.compose.material.material
+    implementation libs.compose.material3
     implementation libs.compose.material.material.icons.core
     implementation libs.compose.material.material.icons.extended
 
     androidTestImplementation libs.compose.ui.ui.test.junit4
     implementation libs.compose.runtime.runtime.livedata
-    implementation libs.android.material.compose.theme.adapter
-    implementation libs.accompanist.swiperefresh
     implementation libs.activity.compose
-    implementation libs.accompanist.pager
-    implementation libs.accompanist.pager.indicators
     implementation libs.coil.compose
     implementation libs.coil.svg
     implementation libs.compose.constraintlayout
@@ -116,7 +112,7 @@ dependencies {
 
     implementation libs.flexbox
     implementation libs.recyclerview
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation libs.retrofit
 
     implementation libs.glide.glide
     kapt libs.glide.compiler

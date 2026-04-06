@@ -11,12 +11,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.Divider
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -51,7 +51,7 @@ internal fun TabItemsList(
                             } ?: 0f
                     }
                     .fillMaxWidth()
-                    .background(MaterialTheme.colors.surface)
+                    .background(MaterialTheme.colorScheme.surface)
                     .zIndex(if (index == dragDropState.currentIndexOfDraggedItem) 1f else 0f)
             ) {
                 TabItem(
@@ -60,7 +60,7 @@ internal fun TabItemsList(
                     item = item,
                     onOptionButtonClicked = onOptionButtonClicked
                 )
-                Divider(modifier = Modifier.fillMaxWidth())
+                HorizontalDivider(modifier = Modifier.fillMaxWidth())
             }
         }
     }
@@ -102,7 +102,7 @@ private fun TabItem(
             Text(
                 item.title,
                 fontSize = 18.sp,
-                color = MaterialTheme.colors.contentColorFor(MaterialTheme.colors.surface)
+                color = MaterialTheme.colorScheme.contentColorFor(MaterialTheme.colorScheme.surface)
             )
         }
 

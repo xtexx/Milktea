@@ -10,17 +10,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Surface
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
-import androidx.compose.material.TopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.AddAPhoto
@@ -39,19 +40,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.drive.viewmodel.DriveViewModel
 import net.pantasystem.milktea.model.drive.Directory
 import net.pantasystem.milktea.model.drive.FileProperty
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 
-@ExperimentalPagerApi
 @ExperimentalCoroutinesApi
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun DriveScreen(
     driveViewModel: DriveViewModel,
@@ -74,12 +75,13 @@ fun DriveScreen(
     val selectableMaxCount = uiState.maxSelectableSize
 
     val selectedFileIds: Set<FileProperty.Id> = uiState.selectedFilePropertyIds.toSet()
-    val pagerState = rememberPagerState(pageCount = tabTitles.size)
+    val pagerState = rememberPagerState { tabTitles.size }
     val scope = rememberCoroutineScope()
 
 
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
 
             Column {
@@ -108,8 +110,7 @@ fun DriveScreen(
                             }
                         }
                     },
-                    elevation = 0.dp,
-                    backgroundColor = MaterialTheme.colors.surface
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface)
 
                 )
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
@@ -123,7 +124,7 @@ fun DriveScreen(
 
                 TabRow(
                     selectedTabIndex = pagerState.currentPage,
-                    backgroundColor = MaterialTheme.colors.surface
+                    containerColor = MaterialTheme.colorScheme.surface
                 ) {
                     tabTitles.forEachIndexed { index, s ->
                         Tab(
@@ -192,7 +193,7 @@ fun PathHorizontalView(
 
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colors.surface,
+        color = MaterialTheme.colorScheme.surface,
     ) {
         LazyRow(
             Modifier

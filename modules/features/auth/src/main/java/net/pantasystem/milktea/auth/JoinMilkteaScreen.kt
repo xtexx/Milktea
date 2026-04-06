@@ -2,10 +2,10 @@ package net.pantasystem.milktea.auth
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.OutlinedButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -22,6 +22,7 @@ fun JoinMilkteaScreen(
     onLoginButtonClicked: () -> Unit,
 ) {
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         modifier = Modifier.fillMaxSize()
     ) { paddingValues ->
         Box(modifier = Modifier

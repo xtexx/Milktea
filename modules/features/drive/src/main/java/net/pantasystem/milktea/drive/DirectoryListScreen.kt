@@ -13,9 +13,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -26,8 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -37,6 +37,7 @@ import net.pantasystem.milktea.common.ui.isScrolledToTheEnd
 import net.pantasystem.milktea.drive.viewmodel.DriveViewModel
 import net.pantasystem.milktea.model.drive.Directory
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DirectoryListScreen(driveViewModel: DriveViewModel) {
     val uiState by driveViewModel.uiState.collectAsState()
@@ -44,7 +45,6 @@ fun DirectoryListScreen(driveViewModel: DriveViewModel) {
 
     val directories = ((state.content as? StateContent.Exist)?.rawContent?: emptyList())
     val isLoading: Boolean = uiState.directoriesState is PageableState.Loading.Init
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isLoading)
     val listState = rememberLazyListState()
 
     LaunchedEffect(Unit) {
@@ -57,12 +57,12 @@ fun DirectoryListScreen(driveViewModel: DriveViewModel) {
         }.launchIn(this)
     }
 
-    SwipeRefresh(
-        state = swipeRefreshState,
+    PullToRefreshBox(
+        isRefreshing = isLoading,
         onRefresh = {
             driveViewModel.onDirectoryListRefreshed()
         },
-        Modifier.fillMaxHeight()
+        modifier = Modifier.fillMaxHeight()
     ) {
         DirectoryListView(
             uiState.canFileMove,

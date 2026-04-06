@@ -8,7 +8,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -19,8 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -33,7 +32,7 @@ import net.pantasystem.milktea.drive.viewmodel.FileViewData
 import net.pantasystem.milktea.model.drive.FileProperty
 
 @ExperimentalCoroutinesApi
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun FilePropertyListScreen(
     driveViewModel: DriveViewModel,
@@ -42,9 +41,6 @@ fun FilePropertyListScreen(
     val uiState by driveViewModel.uiState.collectAsState()
     val filesState = uiState.driveFilesState
 
-    val swipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = filesState is PageableState.Loading.Init || filesState is PageableState.Loading.Future
-    )
     val isSelectMode: Boolean = uiState.isSelectMode
     val files = (filesState.content as? StateContent.Exist)?.rawContent ?: emptyList()
 
@@ -123,8 +119,8 @@ fun FilePropertyListScreen(
         }
     }
 
-    SwipeRefresh(
-        state = swipeRefreshState,
+    PullToRefreshBox(
+        isRefreshing = filesState is PageableState.Loading.Init || filesState is PageableState.Loading.Future,
         onRefresh = {
             driveViewModel.onFileListRefreshed()
         }
@@ -152,7 +148,7 @@ fun FilePropertyListScreen(
     }
 }
 
-@ExperimentalMaterialApi
+@ExperimentalMaterial3Api
 @Composable
 fun FileViewDataListView(
     list: List<FileViewData>,

@@ -8,11 +8,13 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.auth.viewmodel.SignUpViewModel
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -20,14 +22,18 @@ class SignUpActivity : AppCompatActivity() {
     @Inject
     internal lateinit var applyTheme: ApplyTheme
 
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
     private val signUpViewModel by viewModels<SignUpViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 val uiState by signUpViewModel.uiState.collectAsState()
                 val keyword by signUpViewModel.keyword.collectAsState()
                 SignUpScreen(

@@ -8,6 +8,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.messaging.databinding.ActivityMessagingListBinding
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @AndroidEntryPoint
 class MessagingListActivity : AppCompatActivity() {
@@ -19,9 +23,16 @@ class MessagingListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_messaging_list)
         setSupportActionBar(mBinding.messagingListToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            mBinding.messagingListToolbar.updatePadding(top = insets.top)
+            mBinding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val ft = supportFragmentManager.beginTransaction()

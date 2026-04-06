@@ -2,7 +2,7 @@ package net.pantasystem.milktea.userlist.compose
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -14,7 +14,7 @@ import net.pantasystem.milktea.common_compose.CustomEmojiText
 import net.pantasystem.milktea.model.user.User
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RemovableSimpleUserCard(
     user: User,
@@ -29,7 +29,7 @@ fun RemovableSimpleUserCard(
         },
         shape = RoundedCornerShape(0.dp),
         modifier = Modifier.padding(0.5.dp),
-        backgroundColor = MaterialTheme.colors.surface
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

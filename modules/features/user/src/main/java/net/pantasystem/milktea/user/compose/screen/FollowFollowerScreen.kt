@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.*
@@ -15,10 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -31,6 +30,8 @@ import net.pantasystem.milktea.user.followlist.FollowFollowerUiState
 import net.pantasystem.milktea.user.followlist.FollowFollowerViewModel
 import net.pantasystem.milktea.user.followlist.LoadType
 import net.pantasystem.milktea.user.viewmodel.ToggleFollowViewModel
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @Composable
 fun FollowFollowerRoute(
@@ -80,7 +81,7 @@ fun FollowFollowerRoute(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowFollowerScreen(
     uiState: FollowFollowerUiState,
@@ -91,7 +92,7 @@ fun FollowFollowerScreen(
     onCardAction: (UserDetailCardAction) -> Unit,
     snackBarHostState: SnackbarHostState,
 ) {
-    val pagerState = rememberPagerState(pageCount = 2, initialPage = initialTabIndex)
+    val pagerState = rememberPagerState(initialPage = initialTabIndex) { 2 }
     val tabTitles = remember {
         listOf(FollowFollowerTabItem(R.string.follow, LoadType.Follow), FollowFollowerTabItem(R.string.follower, LoadType.Follower))
     }
@@ -112,7 +113,8 @@ fun FollowFollowerScreen(
     }
 
     Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackBarHostState),
+        contentWindowInsets = WindowInsets.safeDrawing,
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             FollowFollowerTopBar(
                 modifier = Modifier.fillMaxWidth(),
@@ -137,7 +139,6 @@ fun FollowFollowerScreen(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Pager(
     modifier: Modifier,
@@ -181,7 +182,7 @@ private fun Pager(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FollowFollowerTopBar(
     modifier: Modifier,
@@ -193,8 +194,7 @@ private fun FollowFollowerTopBar(
 ) {
     Column(modifier.fillMaxWidth()) {
         TopAppBar(
-            elevation = 0.dp,
-            backgroundColor = MaterialTheme.colors.surface,
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
             navigationIcon = {
                 IconButton(onClick = onNavigateUp) {
                     Icon(Icons.Default.ArrowBack, contentDescription = null)
@@ -223,7 +223,7 @@ private fun FollowFollowerTopBar(
         )
         TabRow(
             selectedTabIndex = pagerState.currentPage,
-            backgroundColor = MaterialTheme.colors.surface
+            containerColor = MaterialTheme.colorScheme.surface
         ) {
             tabTitles.forEachIndexed { index, s ->
                 Tab(

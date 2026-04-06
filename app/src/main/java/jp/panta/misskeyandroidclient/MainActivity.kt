@@ -54,6 +54,10 @@ import net.pantasystem.milktea.note.renote.RenoteViewModel
 import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 
 @AndroidEntryPoint
@@ -107,7 +111,14 @@ class MainActivity : AppCompatActivity(), ToolbarSetter {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme.invoke()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.appBarMain.bottomNavigation.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
 
         intentToAddAccountHandler.create(lifecycleScope, mainViewModel).invoke(intent)
 

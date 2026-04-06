@@ -4,20 +4,21 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import net.pantasystem.milktea.common.PageableState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.user.R
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowRequestsScreen(
     uiState: FollowRequestsUiState,
@@ -30,10 +31,8 @@ fun FollowRequestsScreen(
     LaunchedEffect(null) {
         onRefresh()
     }
-    SwipeRefresh(
-        state = rememberSwipeRefreshState(
-            isRefreshing = uiState.pagingState is PageableState.Loading.Init
-        ),
+    PullToRefreshBox(
+        isRefreshing = uiState.pagingState is PageableState.Loading.Init,
         onRefresh = onRefresh
     ) {
         LazyColumn(modifier) {

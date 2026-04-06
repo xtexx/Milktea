@@ -2,8 +2,8 @@ package net.pantasystem.milktea.note.option
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Divider
-import androidx.compose.material.Surface
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Surface
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.filled.BookmarkRemove
@@ -83,7 +83,7 @@ fun NoteOptionDialogLayout(
                 icon = Icons.Default.Share,
                 text = stringResource(id = R.string.share)
             )
-            Divider()
+            HorizontalDivider()
             if (uiState.noteId != null) {
                 NormalBottomSheetDialogSelectionLayout(
                     onClick = {
@@ -93,7 +93,7 @@ fun NoteOptionDialogLayout(
                     text = stringResource(id = R.string.translate)
                 )
             }
-            Divider()
+            HorizontalDivider()
             if (uiState.note?.isMisskey == true) {
                 if (uiState.noteState?.isFavorited == true) {
                     if (uiState.noteId != null) {
@@ -187,7 +187,7 @@ fun NoteOptionDialogLayout(
             }
 
             if (uiState.isMyNote) {
-                Divider()
+                HorizontalDivider()
                 NormalBottomSheetDialogSelectionLayout(
                     onClick = {
                         onDeleteAndEditButtonClicked(uiState.noteRelation)
@@ -204,7 +204,7 @@ fun NoteOptionDialogLayout(
                 )
             }
             if (!uiState.isMyNote) {
-                Divider()
+                HorizontalDivider()
                 NormalBottomSheetDialogSelectionLayout(
                     onClick = {
                         onReportButtonClicked(uiState.noteRelation)

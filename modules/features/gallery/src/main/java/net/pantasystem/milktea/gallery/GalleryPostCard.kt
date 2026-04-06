@@ -1,21 +1,23 @@
-@file:OptIn(ExperimentalPagerApi::class)
-
 package net.pantasystem.milktea.gallery
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.ui.draw.clip
 import kotlinx.datetime.Clock
 import net.pantasystem.milktea.common_compose.AvatarIcon
 import net.pantasystem.milktea.common_compose.FavoriteButton
@@ -41,18 +43,17 @@ sealed interface GalleryPostCardAction {
         GalleryPostCardAction
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun GalleryPostCard(
     galleryState: GalleryPostUiState,
     visibleFileIds: Set<FileProperty.Id>,
     onAction: (GalleryPostCardAction) -> Unit,
 ) {
-    val pagerState = rememberPagerState(pageCount = galleryState.files.size)
+    val pagerState = rememberPagerState(pageCount = { galleryState.files.size })
 
 
     Card(
-        elevation = 4.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(16.dp),
     ) {
@@ -109,14 +110,24 @@ fun GalleryPostCard(
                     )
                 }
             }
-            Box(
-                Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 4.dp, bottom = 4.dp),
+                horizontalArrangement = Arrangement.Center,
             ) {
-                HorizontalPagerIndicator(
-                    pagerState = pagerState,
-                    modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-                )
+                repeat(pagerState.pageCount) { index ->
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 2.dp)
+                            .size(8.dp)
+                            .clip(CircleShape)
+                            .background(
+                                if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                            )
+                    )
+                }
             }
             Row(
                 Modifier

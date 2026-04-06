@@ -10,9 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +72,7 @@ fun AccountInfoLayout(
             url = userDetail.avatarUrl,
             size = 64.dp,
             borderStrokeWidth = 2.dp,
-            borderStrokeColor = MaterialTheme.colors.surface,
+            borderStrokeColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier
                 .size(64.dp)
                 .constrainAs(avatarIconRef) {
@@ -139,7 +139,7 @@ fun AccountInfoLayout(
                 val field = userDetail.info.fields[i]
 
                 if (i == 0) {
-                    Divider(modifier = Modifier.fillMaxWidth())
+                    HorizontalDivider(modifier = Modifier.fillMaxWidth())
                 }
                 Row(
                     Modifier.fillMaxWidth(),
@@ -148,7 +148,7 @@ fun AccountInfoLayout(
                     Text(field.name, modifier = Modifier.weight(0.2f))
                     Text(field.value, modifier = Modifier.weight(0.8f))
                 }
-                Divider(modifier = Modifier.fillMaxWidth())
+                HorizontalDivider(modifier = Modifier.fillMaxWidth())
             }
         }
 
@@ -165,14 +165,14 @@ fun AccountInfoLayout(
         ) {
             Text(
                 "${userDetail.info.notesCount ?: 0} ${stringResource(id = R.string.post)}",
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(2.dp)
             )
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 "${userDetail.info.followingCount ?: 0} ${stringResource(id = R.string.following)}",
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(2.dp)
                     .clickable {
@@ -183,7 +183,7 @@ fun AccountInfoLayout(
             Spacer(modifier = Modifier.width(4.dp))
             Text(
                 "${userDetail.info.followersCount ?: 0} ${stringResource(id = R.string.follower)}",
-                color = MaterialTheme.colors.primary,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier
                     .padding(2.dp)
                     .clickable {

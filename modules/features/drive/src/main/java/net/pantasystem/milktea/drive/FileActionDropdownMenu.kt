@@ -2,7 +2,7 @@ package net.pantasystem.milktea.drive
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
@@ -30,63 +30,35 @@ fun FileActionDropdownMenu(
         modifier = Modifier.wrapContentWidth(),
     ) {
         DropdownMenuItem(
-            onClick = {
-                onAction(FileCardDropdownMenuAction.OnNsfwMenuItemClicked)
-            }
-        ) {
-            if (property.isSensitive) {
-                Icon(
-                    Icons.Default.Image,
-                    contentDescription = stringResource(R.string.drive_undo_nsfw),
-                    modifier = Modifier.size(24.dp)
-
-                )
-                Text(stringResource(R.string.drive_undo_nsfw))
-            } else {
-                Icon(
-                    Icons.Default.HideImage,
-                    contentDescription = stringResource(R.string.drive_mark_as_nsfw),
-                    modifier = Modifier.size(24.dp)
-                )
-                Text(stringResource(R.string.drive_mark_as_nsfw))
-            }
-        }
-
-        Divider()
-        DropdownMenuItem(
-            onClick = {
-                onAction(FileCardDropdownMenuAction.OnDeleteMenuItemClicked)
+            text = {
+                if (property.isSensitive) Text(stringResource(R.string.drive_undo_nsfw))
+                else Text(stringResource(R.string.drive_mark_as_nsfw))
             },
-        ) {
-            Icon(
-                Icons.Default.Delete,
-                modifier = Modifier.size(24.dp),
-                contentDescription = stringResource(R.string.delete)
-            )
-            Text(text = stringResource(R.string.delete))
-        }
-        Divider()
-        DropdownMenuItem(onClick = {
-            onAction(FileCardDropdownMenuAction.OnEditFileCaption)
-        }) {
-            Icon(
-                Icons.Default.Comment,
-                modifier = Modifier.size(24.dp),
-                contentDescription = stringResource(R.string.edit_caption)
-            )
-            Text(text = stringResource(R.string.edit_caption))
-        }
-        Divider()
-        DropdownMenuItem(onClick = {
-            onAction(FileCardDropdownMenuAction.OnEditFileName)
-        }) {
-            Icon(
-                Icons.Default.Edit,
-                modifier = Modifier.size(24.dp),
-                contentDescription = stringResource(id = R.string.edit_file_name)
-            )
-            Text(text = stringResource(id = R.string.edit_file_name))
-        }
+            leadingIcon = {
+                if (property.isSensitive) Icon(Icons.Default.Image, contentDescription = stringResource(R.string.drive_undo_nsfw), modifier = Modifier.size(24.dp))
+                else Icon(Icons.Default.HideImage, contentDescription = stringResource(R.string.drive_mark_as_nsfw), modifier = Modifier.size(24.dp))
+            },
+            onClick = { onAction(FileCardDropdownMenuAction.OnNsfwMenuItemClicked) }
+        )
+
+        HorizontalDivider()
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.delete)) },
+            leadingIcon = { Icon(Icons.Default.Delete, modifier = Modifier.size(24.dp), contentDescription = stringResource(R.string.delete)) },
+            onClick = { onAction(FileCardDropdownMenuAction.OnDeleteMenuItemClicked) }
+        )
+        HorizontalDivider()
+        DropdownMenuItem(
+            text = { Text(stringResource(R.string.edit_caption)) },
+            leadingIcon = { Icon(Icons.Default.Comment, modifier = Modifier.size(24.dp), contentDescription = stringResource(R.string.edit_caption)) },
+            onClick = { onAction(FileCardDropdownMenuAction.OnEditFileCaption) }
+        )
+        HorizontalDivider()
+        DropdownMenuItem(
+            text = { Text(stringResource(id = R.string.edit_file_name)) },
+            leadingIcon = { Icon(Icons.Default.Edit, modifier = Modifier.size(24.dp), contentDescription = stringResource(id = R.string.edit_file_name)) },
+            onClick = { onAction(FileCardDropdownMenuAction.OnEditFileName) }
+        )
     }
 
 

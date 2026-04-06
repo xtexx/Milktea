@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.Text
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -14,13 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.messaging.viewmodel.MessageHistoryViewModel
 import net.pantasystem.milktea.model.messaging.messagingId
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageHistoryScreen(
     historyViewModel: MessageHistoryViewModel,
@@ -34,13 +35,11 @@ fun MessageHistoryScreen(
         historyViewModel.loadGroupAndUser()
     }
 
-    SwipeRefresh(
+    PullToRefreshBox(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(rememberNestedScrollInteropConnection()),
-        state = rememberSwipeRefreshState(
-                isRefreshing = isRefreshing
-        ),
+        isRefreshing = isRefreshing,
         onRefresh = { historyViewModel.loadGroupAndUser() }
     ) {
 

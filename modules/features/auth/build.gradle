@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -59,11 +59,12 @@ dependencies {
     implementation project(path: ':modules:api')
     implementation project(path: ':modules:common_navigation')
     implementation project(path: ':modules:common_android')
+    implementation project(path: ':modules:common_compose')
     testImplementation libs.junit
     androidTestImplementation libs.androidx.test.ext.junit
     androidTestImplementation libs.androidx.test.espresso.core
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
     testImplementation libs.arch.core.testing
 
     implementation libs.androidx.emoji2
@@ -104,8 +105,8 @@ dependencies {
 
 
 
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation libs.retrofit
+    implementation libs.retrofit.serialization.converter
     implementation libs.activity.ktx
 
     // compose
@@ -113,16 +114,12 @@ dependencies {
     implementation libs.compose.ui.ui.tooling
 
     implementation libs.compose.foundation.foundation
-    implementation libs.compose.material.material
+    implementation libs.compose.material3
     implementation libs.compose.material.material.icons.core
     implementation libs.compose.material.material.icons.extended
     androidTestImplementation libs.compose.ui.ui.test.junit4
     implementation libs.compose.runtime.runtime.livedata
-    implementation libs.android.material.compose.theme.adapter
-    implementation libs.accompanist.swiperefresh
     implementation libs.activity.compose
-    implementation libs.accompanist.pager
-    implementation libs.accompanist.pager.indicators
     implementation libs.coil.compose
     implementation libs.compose.constraintlayout
     testImplementation libs.junit.jupiter.api

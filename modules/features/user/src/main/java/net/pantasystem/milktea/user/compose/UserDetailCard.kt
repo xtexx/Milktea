@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,7 +35,7 @@ sealed interface UserDetailCardAction {
     data class OnCardClicked(override val userId: User.Id) : UserDetailCardAction
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailCard(
     userDetail: User.Detail,
@@ -118,7 +118,7 @@ fun UserDetailCard(
                     start.linkTo(parent.start, margin = 8.dp)
                     bottom.linkTo(subNameRef.bottom)
                 },
-                borderStrokeColor = MaterialTheme.colors.surface,
+                borderStrokeColor = MaterialTheme.colorScheme.surface,
                 borderStrokeWidth = 2.dp
             )
 
@@ -178,7 +178,7 @@ fun UserDetailCard(
             ) {
                 Text(
                     "${userDetail.info.notesCount ?: 0} ${stringResource(id = R.string.post)}",
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(2.dp)
                         .clickable {
@@ -188,7 +188,7 @@ fun UserDetailCard(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     "${userDetail.info.followingCount ?: 0} ${stringResource(id = R.string.following)}",
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(2.dp)
                         .clickable {
@@ -199,7 +199,7 @@ fun UserDetailCard(
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     "${userDetail.info.followersCount ?: 0} ${stringResource(id = R.string.follower)}",
-                    color = MaterialTheme.colors.primary,
+                    color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(2.dp)
                         .clickable {

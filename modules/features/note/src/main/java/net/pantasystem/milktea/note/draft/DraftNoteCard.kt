@@ -3,7 +3,8 @@ package net.pantasystem.milktea.note.draft
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -18,7 +19,7 @@ import net.pantasystem.milktea.model.note.draft.DraftNoteFile
 import net.pantasystem.milktea.note.R
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DraftNoteCard(
     draftNote: DraftNote,
@@ -51,7 +52,7 @@ fun DraftNoteCard(
         )
     }
     Card(
-        elevation = 4.dp,
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .padding(8.dp)
             .fillMaxWidth(),
@@ -153,7 +154,7 @@ fun DraftNotePollChoice(text: String) {
     ) {
         Surface(
             Modifier.fillMaxWidth(),
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colorScheme.primary,
             shape = RoundedCornerShape(8.dp),
         ) {
             Text(

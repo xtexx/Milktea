@@ -1,7 +1,7 @@
 package net.pantasystem.milktea.common_compose.drive
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -18,8 +18,8 @@ fun EditFileNameDialogLayout(
 ) {
     Surface(
         shape = MaterialTheme.shapes.medium,
-        color = MaterialTheme.colors.surface,
-        elevation = 24.dp
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 24.dp
     ) {
         Column(
             modifier = Modifier.padding(16.dp)

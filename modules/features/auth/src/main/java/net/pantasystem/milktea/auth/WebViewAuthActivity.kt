@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.filterNot
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.auth.databinding.ActivityWebViewAuthBinding
+import androidx.activity.enableEdgeToEdge
 
 const val EXTRA_AUTH_URL = "EXTRA_AUTH_URL"
 
@@ -37,6 +38,7 @@ class WebViewAuthActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_web_view_auth)
 
         WebStorage.getInstance().deleteAllData()

@@ -2,7 +2,7 @@ package net.pantasystem.milktea.channel
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -12,20 +12,21 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.data.infrastructure.channel.ChannelListType
 import net.pantasystem.milktea.model.channel.Channel
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 data class ChannelTypeWithTitle(
     val type: ChannelListType,
     val title: String,
 )
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelScreen(
     onNavigateUp: () -> Unit,
@@ -41,12 +42,13 @@ fun ChannelScreen(
         ChannelTypeWithTitle(ChannelListType.OWNED, stringResource(id = R.string.channel_owned))
     )
 
-    val pagerState = rememberPagerState(pageCount = channelTypeWithTitleList.size)
+    val pagerState = rememberPagerState { channelTypeWithTitleList.size }
     val coroutine = rememberCoroutineScope()
 
     val uiState by channelViewModel.uiState.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             Column {
                 TopAppBar(
@@ -62,7 +64,6 @@ fun ChannelScreen(
                     title = {
                         Text(stringResource(id = R.string.channel))
                     },
-                    elevation = 0.dp
                 )
                 if (currentAccount != null) {
                     TabRow(selectedTabIndex = pagerState.currentPage) {

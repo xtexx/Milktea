@@ -11,7 +11,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddToPhotos
 import androidx.compose.material.icons.filled.ArrowBack
@@ -24,8 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import coil.compose.rememberAsyncImagePainter
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.app_store.account.AccountStore
@@ -38,19 +40,20 @@ import net.pantasystem.milktea.common_navigation.EXTRA_SELECTED_FILE_PROPERTY_ID
 import net.pantasystem.milktea.model.drive.DriveFileRepository
 import net.pantasystem.milktea.model.drive.FileProperty
 import net.pantasystem.milktea.model.setting.AvatarIconShapeType
-import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.setting.Theme
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.SettingSection
 import net.pantasystem.milktea.setting.compose.SettingRadioTile
 import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 data class ThemeUiState(
     val type: Theme,
     @StringRes val label: Int,
 )
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class SettingAppearanceActivity : AppCompatActivity() {
 
@@ -103,6 +106,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             val configState by settingStore.configState.collectAsState()
@@ -117,8 +121,9 @@ class SettingAppearanceActivity : AppCompatActivity() {
                     Log.d("SettingAppearance", "save error", it)
                 }
             }
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {
@@ -141,7 +146,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                             Text(
                                 stringResource(id = R.string.settings_app_restart_required),
                                 modifier = Modifier.padding(horizontal = 16.dp),
-                                color = MaterialTheme.colors.error,
+                                color = MaterialTheme.colorScheme.error,
                                 fontSize = 14.sp
                             )
                             for (theme in themes) {
@@ -316,7 +321,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(
@@ -341,7 +346,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(
@@ -368,7 +373,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(
@@ -394,7 +399,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
                                 Text(
                                     stringResource(id = R.string.settings_app_restart_required),
                                     modifier = Modifier.padding(horizontal = 16.dp),
-                                    color = MaterialTheme.colors.error,
+                                    color = MaterialTheme.colorScheme.error,
                                     fontSize = 14.sp
                                 )
                                 Slider(

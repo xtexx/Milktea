@@ -11,8 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.ExperimentalMaterialApi
-import com.google.accompanist.pager.ExperimentalPagerApi
+import androidx.compose.material3.ExperimentalMaterial3Api
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.pantasystem.milktea.common.ui.ApplyTheme
@@ -27,6 +26,7 @@ import net.pantasystem.milktea.common_navigation.EXTRA_SELECTED_FILE_PROPERTY_ID
 import net.pantasystem.milktea.drive.viewmodel.DriveViewModel
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 class DriveNavigationImpl @Inject constructor(
     val activity: Activity
@@ -58,12 +58,12 @@ class DriveActivity : AppCompatActivity() {
     internal lateinit var userActionAPpGlobalErrorListener: UserActionAppGlobalErrorListener
 
     @OptIn(
-        ExperimentalPagerApi::class,
-        ExperimentalMaterialApi::class,
+        ExperimentalMaterial3Api::class,
         ExperimentalCoroutinesApi::class
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
 
         userActionAPpGlobalErrorListener(

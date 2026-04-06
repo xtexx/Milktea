@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Cloud
@@ -23,6 +23,7 @@ import net.pantasystem.milktea.messaging.viewmodel.MessageEditorViewModel
 import net.pantasystem.milktea.messaging.viewmodel.MessageViewModel
 import net.pantasystem.milktea.model.messaging.MessageRelation
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageScreen(
     messageViewModel: MessageViewModel,
@@ -44,6 +45,7 @@ fun MessageScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeContent,
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -56,10 +58,7 @@ fun MessageScreen(
                 }
             )
         },
-        modifier = Modifier.windowInsetsPadding(
-            WindowInsets
-                .navigationBars
-                .only(WindowInsetsSides.Horizontal + WindowInsetsSides.Top))
+        modifier = Modifier
     ) {
         Column(
             Modifier

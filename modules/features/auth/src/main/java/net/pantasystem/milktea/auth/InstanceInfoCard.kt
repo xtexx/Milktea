@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.outlined.Circle
@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import net.pantasystem.milktea.api.misskey.infos.SimpleInstanceInfo
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MisskeyInstanceInfoCard(
     modifier: Modifier = Modifier,
@@ -32,7 +32,7 @@ fun MisskeyInstanceInfoCard(
 ) {
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colors.surface,
+        color = MaterialTheme.colorScheme.surface,
         onClick = onClick,
     ) {
         Row(
@@ -80,7 +80,7 @@ fun MisskeyInstanceInfoCard(
 @Stable
 private fun CircleCheckbox(modifier: Modifier = Modifier, selected: Boolean) {
 
-    val color = MaterialTheme.colors
+    val color = MaterialTheme.colorScheme
     val imageVector = if (selected) Icons.Filled.CheckCircle else Icons.Outlined.Circle
     val tint = color.primary
     val background = if (selected) Color.White else Color.Transparent

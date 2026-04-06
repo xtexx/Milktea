@@ -4,11 +4,9 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:windowLightStatusBar">true</item>
     </style>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.Material3.Light.NoActionBar">
 
         <item name="colorPrimary">#3F51B5</item>
         <item name="colorSecondary">#575DAE</item>
@@ -26,36 +24,25 @@
 
         <item name="colorSeparator">@color/colorSeparator</item>
 
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.Toolbar</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar</item>
-        <item name="tabStyle">@style/TabLayout4Light</item>
-
-
-
-
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
-
-
 
         <item name="colorDotTabSelected">#575DAE</item>
         <item name="colorDotTabNormal">@color/colorItemNotSelected</item>
-        <item name="android:windowLightStatusBar">true</item>
 
         <item name="emojiPickerRippleColor">#5C000000</item>
     </style>
 
-    <style name="AppThemeDark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppThemeDark" parent="Theme.Material3.DayNight.NoActionBar">
 
         <item name="colorPrimary">#9FA8DA</item>
         <item name="colorSecondary">#6D7FE1</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="toolbarStyle">@style/Widget.MaterialComponents.Toolbar.PrimarySurface</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.PrimarySurface</item>
-        <item name="bottomNavigationStyle">@style/BottomNavigationView4Dark</item>
 
         <item name="android:windowBackground">@color/colorDarkWindowBackground</item>
 
         <item name="colorSurface">#1E1E1E</item>
+        <item name="colorSurfaceContainer">#1E1E1E</item>
+
+        <item name="bottomNavigationStyle">@style/BottomNavigationView4Dark</item>
 
         <item name="normalIconTint">@color/colorDarkTextColor</item>
         <item name="actionBarSize">53dp</item>
@@ -67,11 +54,12 @@
         <item name="colorMessageRecipient">@color/colorMessageRecipientDark</item>
         <item name="colorSeparator">@color/colorSeparatorDark</item>
 
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:navigationBarColor">#1E1E1E</item>
         <item name="textInputStyle">@style/TextInputLayoutStyle</item>
         <item name="colorDotTabSelected">@color/colorDarkAccent</item>
         <item name="colorDotTabNormal">@color/colorDarkTextColor</item>
+
+        <item name="colorBottomNavigationSelected">@color/colorDarkBottomNavSelected</item>
+        <item name="colorBottomNavigationNotSelect">@color/colorDarkBottomNavNormal</item>
 
         <item name="emojiPickerRippleColor">#66FFFFFF</item>
     </style>

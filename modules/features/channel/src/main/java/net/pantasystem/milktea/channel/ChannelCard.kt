@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Edit
@@ -34,7 +34,7 @@ sealed interface ChannelCardAction {
     data class OnToggleTabButtonClicked(override val channel: Channel) : ChannelCardAction
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Stable
 fun ChannelCard(
@@ -42,7 +42,8 @@ fun ChannelCard(
     isPaged: Boolean,
     onAction: (ChannelCardAction) -> Unit = {},
 ) {
-    Card(elevation = 4.dp,
+    Card(
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier.padding(8.dp),
         shape = RoundedCornerShape(8.dp),
         onClick = {
@@ -85,13 +86,13 @@ private fun AddToTabButton(isPaged: Boolean, onPressed: () -> Unit) {
             Icon(
                 painter = painterResource(R.drawable.ic_remove_to_tab_24px),
                 contentDescription = "add to tab",
-                tint = MaterialTheme.colors.secondary
+                tint = MaterialTheme.colorScheme.secondary
             )
         } else {
             Icon(
                 painter = painterResource(R.drawable.ic_add_to_tab_24px),
                 contentDescription = "add to tab",
-                tint = MaterialTheme.colors.secondary
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
 

@@ -1,7 +1,7 @@
 package net.pantasystem.milktea.userlist.compose
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
@@ -20,7 +20,7 @@ import net.pantasystem.milktea.userlist.R
 import net.pantasystem.milktea.userlist.viewmodel.UserListBindingModel
 
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Stable
 fun UserListCard(userList: UserListBindingModel, onAction: (UserListCardAction) -> Unit) {
@@ -31,7 +31,7 @@ fun UserListCard(userList: UserListBindingModel, onAction: (UserListCardAction) 
         Modifier
             .fillMaxWidth()
             .padding(0.5.dp),
-        backgroundColor = if (userList.isTargetUserAdded) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+        colors = CardDefaults.cardColors(containerColor = if (userList.isTargetUserAdded) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surface)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -101,13 +101,13 @@ private fun AddToTabButton(modifier: Modifier = Modifier, isPaged: Boolean, onPr
             Icon(
                 painter = painterResource(R.drawable.ic_remove_to_tab_24px),
                 contentDescription = "add to tab",
-                tint = MaterialTheme.colors.secondary
+                tint = MaterialTheme.colorScheme.secondary
             )
         } else {
             Icon(
                 painter = painterResource(R.drawable.ic_add_to_tab_24px),
                 contentDescription = "add to tab",
-                tint = MaterialTheme.colors.secondary
+                tint = MaterialTheme.colorScheme.secondary
             )
         }
 

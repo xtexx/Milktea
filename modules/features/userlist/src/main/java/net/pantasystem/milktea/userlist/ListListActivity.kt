@@ -23,6 +23,7 @@ import net.pantasystem.milktea.userlist.compose.UserListCardScreen
 import net.pantasystem.milktea.userlist.compose.UserListCardScreenAction
 import net.pantasystem.milktea.userlist.viewmodel.ListListViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class ListListActivity : AppCompatActivity() {
@@ -82,6 +83,7 @@ class ListListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         userActionAppGlobalErrorListener(
             lifecycle = lifecycle,

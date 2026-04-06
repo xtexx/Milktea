@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -75,11 +75,11 @@ dependencies {
     implementation libs.wada811.databinding
     implementation libs.activity.ktx
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
 
     implementation libs.lifecycle.livedata
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation libs.retrofit
     implementation libs.recyclerview
     implementation libs.androidx.constraintlayout
     implementation libs.androidx.swiperefreshlayout

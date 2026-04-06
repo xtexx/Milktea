@@ -9,7 +9,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.Alignment
@@ -19,29 +19,38 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.google.android.material.composethemeadapter.MdcTheme
 import dagger.hilt.android.AndroidEntryPoint
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.common_resource.R
 import net.pantasystem.milktea.setting.compose.SettingListTileLayout
 import java.util.*
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
+@OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
 class AboutMilkteaActivity : AppCompatActivity() {
 
     @Inject
     internal lateinit var applyTheme: ApplyTheme
 
+    @Inject
+    internal lateinit var configRepository: LocalConfigRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         val version = getSelfVersion()
         val lang = Locale.getDefault().language
         setContent {
-            MdcTheme {
+            MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             navigationIcon = {

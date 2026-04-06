@@ -18,6 +18,7 @@ import net.pantasystem.milktea.user.UserCardActionHandler
 import net.pantasystem.milktea.user.compose.screen.FollowFollowerRoute
 import net.pantasystem.milktea.user.viewmodel.ToggleFollowViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class FollowFollowerActivity : AppCompatActivity() {
@@ -60,6 +61,7 @@ class FollowFollowerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {

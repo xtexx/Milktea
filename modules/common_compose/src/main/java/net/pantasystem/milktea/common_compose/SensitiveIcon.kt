@@ -1,8 +1,8 @@
 package net.pantasystem.milktea.common_compose
 
 import androidx.compose.foundation.background
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.HideImage
 import androidx.compose.runtime.Composable
@@ -17,6 +17,6 @@ fun SensitiveIcon(
     Icon(
         Icons.Default.HideImage,
         contentDescription = stringResource(R.string.sensitive),
-        modifier = modifier.background(MaterialTheme.colors.secondary)
+        modifier = modifier.background(MaterialTheme.colorScheme.secondary)
     )
 }
