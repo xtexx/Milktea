@@ -36,8 +36,8 @@ class GalleryPostsActivity : AppCompatActivity() {
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setTheme.invoke()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_gallery_posts)
 
         val action = intent.action ?: Intent.ACTION_VIEW
