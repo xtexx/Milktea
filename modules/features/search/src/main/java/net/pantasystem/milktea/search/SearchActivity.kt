@@ -27,6 +27,9 @@ import net.pantasystem.milktea.search.databinding.ActivitySearchBinding
 import net.pantasystem.milktea.user.profile.UserDetailActivity
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
@@ -61,6 +64,15 @@ class SearchActivity : AppCompatActivity() {
         applyTheme()
 
         setContentView(R.layout.activity_search)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, windowInsets ->
+            val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            val imeInsets = windowInsets.getInsets(WindowInsetsCompat.Type.ime())
+            binding.searchToolbar.updatePadding(top = systemBarsInsets.top)
+            v.updatePadding(bottom = maxOf(systemBarsInsets.bottom, imeInsets.bottom))
+            windowInsets
+        }
+
         setSupportActionBar(binding.searchToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

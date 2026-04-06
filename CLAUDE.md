@@ -92,9 +92,9 @@ M3 移行後に対応（M3 の PullToRefreshBox を使うため）。
 
 Phase 4 で `enableEdgeToEdge()` が有効になった後、Compose 側の Insets を整備する。
 
-- [ ] 全 `Scaffold` に `contentWindowInsets = WindowInsets.safeDrawing` を設定（33ファイル）
-- [ ] `AuthScreen.kt` — 既存の `windowInsetsPadding` を `safeDrawing` に統一
-- [ ] `MessageScreen.kt` — 同上
+- [x] 全 `Scaffold` に `contentWindowInsets = WindowInsets.safeDrawing` を設定（33ファイル）
+- [x] `AuthScreen.kt` — 既存の `windowInsetsPadding` を `safeDrawing` に統一
+- [x] `MessageScreen.kt` — 同上
 
 ---
 
@@ -102,10 +102,10 @@ Phase 4 で `enableEdgeToEdge()` が有効になった後、Compose 側の Inset
 
 `adjustResize` → `adjustNothing` への変更 + `ViewCompat.setOnApplyWindowInsetsListener` で Insets を手動適用。
 
-- [ ] `AuthorizationActivity` — `windowSoftInputMode` 変更 + Insets 対応
-- [ ] `SearchActivity` — `windowSoftInputMode` 変更 + Insets 対応
-- [ ] `GalleryPostsActivity` — `windowSoftInputMode` 変更 + Insets 対応
-- [ ] `SearchAndSelectUserActivity` — `windowSoftInputMode` 変更 + Insets 対応
+- [x] `AuthorizationActivity` — `windowSoftInputMode` 変更 + Insets 対応
+- [x] `SearchActivity` — `windowSoftInputMode` 変更 + Insets 対応
+- [x] `GalleryPostsActivity` — `windowSoftInputMode` 変更 + Insets 対応
+- [x] `SearchAndSelectUserActivity` — `windowSoftInputMode` 変更 + Insets 対応
 
 ---
 
