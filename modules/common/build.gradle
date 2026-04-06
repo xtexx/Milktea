@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -57,10 +57,10 @@ dependencies {
     androidTestImplementation libs.androidx.test.espresso.core
 
     //Kotlin coroutines用ライブラリ(async, await)
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
     implementation libs.kotlin.datetime
-    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
+    implementation libs.retrofit.serialization.converter
 
     // compose
     implementation libs.compose.ui.ui
@@ -81,9 +81,8 @@ dependencies {
     implementation 'com.caverock:androidsvg-aar:1.4'
     implementation libs.okhttp3.logging.inspector
 
-    def retrofit = '2.9.0'
     //retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation libs.retrofit
 
     implementation libs.kotlin.serialization
 

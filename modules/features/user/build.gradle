@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -68,8 +68,8 @@ dependencies {
     implementation project(path: ':modules:common_navigation')
 
 
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
 
     implementation libs.lifecycle.runtime
     kapt libs.lifecycle.compiler
@@ -112,7 +112,7 @@ dependencies {
 
     implementation libs.flexbox
     implementation libs.recyclerview
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation libs.retrofit
 
     implementation libs.glide.glide
     kapt libs.glide.compiler
