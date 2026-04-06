@@ -198,6 +198,19 @@ IME（ソフトキーボード）表示時のレイアウト調整が必要な A
 
 ---
 
+## Phase 10: 16KB ページサイズ対応
+
+Android 15 以降で 16KB ページサイズデバイスに対応するための変更。
+
+- [x] `AndroidManifest.xml` に `android:extractNativeLibs="false"` を追加（.so を APK 内で非圧縮格納し直接 mmap 可能にする）
+- [x] Flipper を削除（16KB 非対応のネイティブライブラリ libflipper.so 等を除去）
+  - `app/build.gradle` から `com.facebook.flipper:flipper`, `soloader`, `flipper-network-plugin` を削除
+  - `FlipperSetupManagerImpl.kt` を削除
+  - `DebugAppModule.kt` / `DebugAPIModule.kt` を no-op 実装に置き換え
+  - `EmptyDebuggerSetupManagerImpl` を `main` ソースセットに移動
+
+---
+
 ## 参考：主要ファイルパス
 
 | 内容 | パス |
