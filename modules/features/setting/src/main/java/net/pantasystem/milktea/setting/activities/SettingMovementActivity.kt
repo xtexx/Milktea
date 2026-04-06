@@ -72,8 +72,8 @@ class SettingMovementActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         val isHighlightSafeSearch = intent.getBooleanExtra(EXTRA_HIGHLIGHT_SAFE_SEARCH, false)
         setContent {

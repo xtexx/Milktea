@@ -31,6 +31,9 @@ import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import net.pantasystem.milktea.search.databinding.ActivitySearchResultBinding
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @AndroidEntryPoint
 class SearchResultActivity : AppCompatActivity() {
@@ -67,10 +70,16 @@ class SearchResultActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_search_result)
         setSupportActionBar(binding.searchResultToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.searchResultToolbar.updatePadding(top = insets.top)
+            binding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val keyword: String? = intent.getStringExtra(EXTRA_SEARCH_WORLD)

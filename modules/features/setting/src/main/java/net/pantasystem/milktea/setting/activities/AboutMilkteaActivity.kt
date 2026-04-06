@@ -42,8 +42,8 @@ class AboutMilkteaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         val version = getSelfVersion()
         val lang = Locale.getDefault().language

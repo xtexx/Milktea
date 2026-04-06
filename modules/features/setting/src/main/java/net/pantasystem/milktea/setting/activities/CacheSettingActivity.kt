@@ -48,8 +48,8 @@ class CacheSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         setContent {
             val uiState by viewModel.uiState.collectAsState()
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {

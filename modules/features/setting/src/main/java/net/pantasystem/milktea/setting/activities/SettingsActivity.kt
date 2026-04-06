@@ -46,8 +46,8 @@ class SettingsActivity : AppCompatActivity() {
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {

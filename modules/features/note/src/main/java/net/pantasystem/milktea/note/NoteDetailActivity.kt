@@ -30,6 +30,9 @@ import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @AndroidEntryPoint
 class NoteDetailActivity : AppCompatActivity() {
@@ -79,11 +82,17 @@ class NoteDetailActivity : AppCompatActivity() {
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setTheme()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_note_detail)
 
         setSupportActionBar(binding.noteDetailToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.noteDetailToolbar.updatePadding(top = insets.top)
+            binding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

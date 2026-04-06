@@ -31,6 +31,9 @@ import net.pantasystem.milktea.setting.databinding.ActivityReactionSettingBindin
 import net.pantasystem.milktea.setting.viewmodel.reaction.ReactionPickerSettingViewModel
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @AndroidEntryPoint
 class ReactionSettingActivity : AppCompatActivity() {
@@ -52,14 +55,20 @@ class ReactionSettingActivity : AppCompatActivity() {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         val binding = DataBindingUtil.setContentView<ActivityReactionSettingBinding>(
             this,
             R.layout.activity_reaction_setting
         )
         binding.lifecycleOwner = this
         setSupportActionBar(binding.reactionSettingToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.reactionSettingToolbar.updatePadding(top = insets.top)
+            binding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         mCustomEmojiDecorator = CustomEmojiDecorator()

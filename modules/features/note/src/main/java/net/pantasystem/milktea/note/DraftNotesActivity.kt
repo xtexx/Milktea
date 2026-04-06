@@ -22,8 +22,8 @@ class DraftNotesActivity : AppCompatActivity() {
     private lateinit var mBinding: ActivityDraftNotesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_draft_notes)
         mBinding.lifecycleOwner = this
 

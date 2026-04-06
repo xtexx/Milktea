@@ -29,6 +29,9 @@ import net.pantasystem.milktea.model.antenna.Antenna
 import net.pantasystem.milktea.model.user.User
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 @Suppress("DEPRECATION")
 @ExperimentalCoroutinesApi
@@ -60,11 +63,17 @@ class AntennaEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_antenna_editor)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_antenna_editor)
         setSupportActionBar(mBinding.antennaEditorToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(mBinding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            mBinding.antennaEditorToolbar.updatePadding(top = insets.top)
+            mBinding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val antennaId = intent.getSerializableExtra(EXTRA_ANTENNA_ID) as? Antenna.Id

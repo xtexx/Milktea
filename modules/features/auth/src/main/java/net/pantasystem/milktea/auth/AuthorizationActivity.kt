@@ -74,8 +74,8 @@ class AuthorizationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 //        setContentView(R.layout.activity_authorization)
 
         lifecycleScope.launch {

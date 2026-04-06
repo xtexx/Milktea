@@ -82,8 +82,8 @@ class ListListActivity : AppCompatActivity() {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         userActionAppGlobalErrorListener(
             lifecycle = lifecycle,

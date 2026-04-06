@@ -78,8 +78,8 @@ class UserListDetailActivity : AppCompatActivity(), UserListEditorDialog.OnSubmi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         NoteActionHandler(
             this.supportFragmentManager,

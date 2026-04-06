@@ -77,8 +77,8 @@ class PageSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         mPageSettingViewModel.pageOnActionEvent.onEach {
             PageSettingActionDialog.newInstance(it).show(supportFragmentManager, PageSettingActionDialog.FRAGMENT_TAG)

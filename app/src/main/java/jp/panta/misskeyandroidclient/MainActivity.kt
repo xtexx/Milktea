@@ -110,8 +110,8 @@ class MainActivity : AppCompatActivity(), ToolbarSetter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme.invoke()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->

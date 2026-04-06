@@ -91,8 +91,8 @@ class NoteEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_note_editor)
 
         binding.lifecycleOwner = this

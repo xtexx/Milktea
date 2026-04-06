@@ -105,8 +105,8 @@ class SettingAppearanceActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             val configState by settingStore.configState.collectAsState()

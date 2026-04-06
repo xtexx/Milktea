@@ -64,6 +64,9 @@ import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 
 @AndroidEntryPoint
@@ -139,8 +142,8 @@ class UserDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         userActionAppGlobalErrorListener(lifecycle, supportFragmentManager)
         val binding = DataBindingUtil.setContentView<ActivityUserDetailBinding>(
             this,
@@ -185,6 +188,12 @@ class UserDetailActivity : AppCompatActivity() {
         }
 
         setSupportActionBar(binding.userDetailToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.userDetailToolbar.updatePadding(top = insets.top)
+            binding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowTitleEnabled(false)

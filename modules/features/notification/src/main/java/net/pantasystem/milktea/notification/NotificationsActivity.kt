@@ -34,8 +34,8 @@ class NotificationsActivity : AppCompatActivity(), ToolbarSetter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_notifications)
 
         NoteActionHandler(

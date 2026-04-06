@@ -29,8 +29,8 @@ class SignUpActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {

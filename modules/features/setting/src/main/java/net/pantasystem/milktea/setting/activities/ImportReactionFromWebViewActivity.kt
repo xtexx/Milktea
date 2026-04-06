@@ -31,6 +31,9 @@ import net.pantasystem.milktea.setting.databinding.ActivityImportReactionFromWeb
 import net.pantasystem.milktea.setting.viewmodel.ImportReactionFromWebViewViewModel
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 const val EXTRA_ACCOUNT_HOST = "EXTRA_ACCOUNT_HOST"
 
@@ -56,12 +59,18 @@ class ImportReactionFromWebViewActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         applyTheme()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_import_reaction_from_web_view)
 
         setupWebView()
         setSupportActionBar(binding.topToolbar)
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            binding.topToolbar.updatePadding(top = insets.top)
+            binding.root.updatePadding(bottom = insets.bottom)
+            windowInsets
+        }
         supportActionBar?.setTitle(R.string.import_reactions_from_the_web)
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
