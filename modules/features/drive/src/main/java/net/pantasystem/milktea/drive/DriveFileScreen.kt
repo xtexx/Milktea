@@ -19,8 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
@@ -42,9 +41,6 @@ fun FilePropertyListScreen(
     val uiState by driveViewModel.uiState.collectAsState()
     val filesState = uiState.driveFilesState
 
-    val swipeRefreshState = rememberSwipeRefreshState(
-        isRefreshing = filesState is PageableState.Loading.Init || filesState is PageableState.Loading.Future
-    )
     val isSelectMode: Boolean = uiState.isSelectMode
     val files = (filesState.content as? StateContent.Exist)?.rawContent ?: emptyList()
 
@@ -123,8 +119,8 @@ fun FilePropertyListScreen(
         }
     }
 
-    SwipeRefresh(
-        state = swipeRefreshState,
+    PullToRefreshBox(
+        isRefreshing = filesState is PageableState.Loading.Init || filesState is PageableState.Loading.Future,
         onRefresh = {
             driveViewModel.onFileListRefreshed()
         }

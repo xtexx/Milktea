@@ -12,9 +12,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.data.infrastructure.channel.ChannelListType
@@ -25,7 +24,7 @@ data class ChannelTypeWithTitle(
     val title: String,
 )
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelScreen(
     onNavigateUp: () -> Unit,
@@ -41,7 +40,7 @@ fun ChannelScreen(
         ChannelTypeWithTitle(ChannelListType.OWNED, stringResource(id = R.string.channel_owned))
     )
 
-    val pagerState = rememberPagerState(pageCount = channelTypeWithTitleList.size)
+    val pagerState = rememberPagerState { channelTypeWithTitleList.size }
     val coroutine = rememberCoroutineScope()
 
     val uiState by channelViewModel.uiState.collectAsState()

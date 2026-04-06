@@ -11,14 +11,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import net.pantasystem.milktea.common.PageableState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.data.infrastructure.channel.ChannelListType
 import net.pantasystem.milktea.model.channel.Channel
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun ChannelListStateScreen(
     uiState: ChannelListUiState,
@@ -30,14 +30,12 @@ fun ChannelListStateScreen(
 
     val pagingState = uiState.getByType(listType)
 
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = false)
-
     LaunchedEffect(listType) {
         viewModel.clearAndLoad(listType)
     }
 
-    SwipeRefresh(
-        state = swipeRefreshState,
+    PullToRefreshBox(
+        isRefreshing = false,
         onRefresh = {
             viewModel.clearAndLoad(listType)
         },

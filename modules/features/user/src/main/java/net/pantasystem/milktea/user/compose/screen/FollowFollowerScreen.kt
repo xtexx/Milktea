@@ -15,10 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.launch
@@ -80,7 +79,7 @@ fun FollowFollowerRoute(
     )
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FollowFollowerScreen(
     uiState: FollowFollowerUiState,
@@ -91,7 +90,7 @@ fun FollowFollowerScreen(
     onCardAction: (UserDetailCardAction) -> Unit,
     snackBarHostState: SnackbarHostState,
 ) {
-    val pagerState = rememberPagerState(pageCount = 2, initialPage = initialTabIndex)
+    val pagerState = rememberPagerState(initialPage = initialTabIndex) { 2 }
     val tabTitles = remember {
         listOf(FollowFollowerTabItem(R.string.follow, LoadType.Follow), FollowFollowerTabItem(R.string.follower, LoadType.Follower))
     }
@@ -137,7 +136,6 @@ fun FollowFollowerScreen(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 private fun Pager(
     modifier: Modifier,
@@ -181,7 +179,7 @@ private fun Pager(
     }
 }
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun FollowFollowerTopBar(
     modifier: Modifier,

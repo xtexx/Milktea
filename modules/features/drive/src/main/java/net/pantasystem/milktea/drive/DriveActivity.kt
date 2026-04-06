@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.material3.ExperimentalMaterial3Api
-import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.pantasystem.milktea.common.ui.ApplyTheme
@@ -58,7 +57,6 @@ class DriveActivity : AppCompatActivity() {
     internal lateinit var userActionAPpGlobalErrorListener: UserActionAppGlobalErrorListener
 
     @OptIn(
-        ExperimentalPagerApi::class,
         ExperimentalMaterial3Api::class,
         ExperimentalCoroutinesApi::class
     )

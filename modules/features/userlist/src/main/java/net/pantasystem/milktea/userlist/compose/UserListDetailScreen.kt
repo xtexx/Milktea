@@ -15,9 +15,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.fragment.app.FragmentManager
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.common_android_ui.PageableFragmentFactory
 import net.pantasystem.milktea.model.account.Account
@@ -26,7 +25,7 @@ import net.pantasystem.milktea.model.list.UserList
 import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.userlist.R
 
-@OptIn(ExperimentalPagerApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserListDetailScreen(
     listId: UserList.Id,
@@ -47,7 +46,7 @@ fun UserListDetailScreen(
 //    val userList by mUserListDetailViewModel.userList.collectAsState()
     val titles =
         listOf(stringResource(R.string.timeline), stringResource(R.string.user_list))
-    val pagerState = rememberPagerState(pageCount = titles.size)
+    val pagerState = rememberPagerState { titles.size }
 ////    val users by mUserListDetailViewModel.users.collectAsState()
 //    val isAddedTab by mUserListDetailViewModel.isAddedToTab.collectAsState()
 

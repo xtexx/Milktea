@@ -14,8 +14,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -24,7 +24,7 @@ import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.common.ui.isScrolledToTheEnd
 import net.pantasystem.milktea.gallery.viewmodel.GalleryPostsViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
+@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun GalleryPostCardList(
     viewModel: GalleryPostsViewModel,
@@ -50,11 +50,11 @@ fun GalleryPostCardList(
     val state by viewModel.galleryPosts.collectAsState()
 
     val content = state.content
-    SwipeRefresh(
+    PullToRefreshBox(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(rememberNestedScrollInteropConnection()),
-        state = rememberSwipeRefreshState(isRefreshing = state is PageableState.Loading.Init),
+        isRefreshing = state is PageableState.Loading.Init,
         onRefresh = {
             viewModel.loadInit()
         }

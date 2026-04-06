@@ -16,8 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.model.user.User
@@ -30,7 +30,7 @@ sealed interface UserDetailCardListAction {
     object Refresh : UserDetailCardListAction
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun UserDetailCardList(
     pageableState: ResultState<List<User.Id>>,
@@ -45,8 +45,8 @@ fun UserDetailCardList(
 
     when (pageableState.content) {
         is StateContent.Exist -> {
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing = pageableState is ResultState.Loading),
+            PullToRefreshBox(
+                isRefreshing = pageableState is ResultState.Loading,
                 onRefresh = { onAction(UserDetailCardListAction.Refresh) },
                 modifier = Modifier
                     .nestedScroll(rememberNestedScrollInteropConnection())

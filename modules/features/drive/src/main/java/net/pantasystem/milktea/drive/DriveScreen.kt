@@ -40,9 +40,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.drive.viewmodel.DriveViewModel
@@ -50,7 +49,6 @@ import net.pantasystem.milktea.model.drive.Directory
 import net.pantasystem.milktea.model.drive.FileProperty
 
 
-@ExperimentalPagerApi
 @ExperimentalCoroutinesApi
 @ExperimentalMaterial3Api
 @Composable
@@ -75,7 +73,7 @@ fun DriveScreen(
     val selectableMaxCount = uiState.maxSelectableSize
 
     val selectedFileIds: Set<FileProperty.Id> = uiState.selectedFilePropertyIds.toSet()
-    val pagerState = rememberPagerState(pageCount = tabTitles.size)
+    val pagerState = rememberPagerState { tabTitles.size }
     val scope = rememberCoroutineScope()
 
 

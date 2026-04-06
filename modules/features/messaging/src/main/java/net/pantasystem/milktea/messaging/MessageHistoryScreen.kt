@@ -14,13 +14,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.messaging.viewmodel.MessageHistoryViewModel
 import net.pantasystem.milktea.model.messaging.messagingId
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MessageHistoryScreen(
     historyViewModel: MessageHistoryViewModel,
@@ -34,13 +35,11 @@ fun MessageHistoryScreen(
         historyViewModel.loadGroupAndUser()
     }
 
-    SwipeRefresh(
+    PullToRefreshBox(
         modifier = Modifier
             .fillMaxSize()
             .nestedScroll(rememberNestedScrollInteropConnection()),
-        state = rememberSwipeRefreshState(
-                isRefreshing = isRefreshing
-        ),
+        isRefreshing = isRefreshing,
         onRefresh = { historyViewModel.loadGroupAndUser() }
     ) {
 

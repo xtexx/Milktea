@@ -73,8 +73,8 @@
 
 M3 移行後に対応（M3 の PullToRefreshBox を使うため）。
 
-- [ ] `accompanist-swiperefresh`（0.25.1）→ Material3 `PullToRefreshBox` に置き換え（`user/followrequests/FollowRequestsScreen.kt` 等）
-- [ ] `accompanist-pager`（0.14.0）→ Compose Foundation の `HorizontalPager` / `VerticalPager` に置き換え
+- [x] `accompanist-swiperefresh`（0.25.1）→ Material3 `PullToRefreshBox` に置き換え（`user/followrequests/FollowRequestsScreen.kt` 等）
+- [x] `accompanist-pager`（0.14.0）→ Compose Foundation の `HorizontalPager` / `VerticalPager` に置き換え
   - `ChannelScreen.kt`（`ExperimentalPagerApi` 使用中）
   - `DriveScreen.kt`（`ExperimentalPagerApi` 使用中）
 
