@@ -20,6 +20,8 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
+                style="?textInputOutlinedStyle"
+
                 >
 
             <com.google.android.material.textfield.TextInputEditText
@@ -38,9 +40,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:tabMode="scrollable"
-                app:tabTextColor="?attr/normalIconTint"
                 android:elevation="0dp"
-                style="@style/Widget.MaterialComponents.Toolbar.Surface"
                 android:visibility="@{ emojiPickerViewModel.uiState.isSearchMode ? View.GONE : View.VISIBLE }"
                 android:layout_below="@id/searchReactionInputLayout"
                 >
