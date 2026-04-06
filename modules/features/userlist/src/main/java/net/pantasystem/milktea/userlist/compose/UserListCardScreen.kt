@@ -45,6 +45,7 @@ fun UserListCardScreen(
 
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CollapsingTopAppBar(

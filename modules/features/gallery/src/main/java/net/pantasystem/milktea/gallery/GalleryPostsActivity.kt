@@ -20,6 +20,7 @@ import net.pantasystem.milktea.gallery.databinding.ActivityGalleryPostsBinding
 import net.pantasystem.milktea.gallery.viewmodel.Action
 import net.pantasystem.milktea.gallery.viewmodel.GalleryPostActionViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class GalleryPostsActivity : AppCompatActivity() {
@@ -36,6 +37,7 @@ class GalleryPostsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setTheme.invoke()
+        enableEdgeToEdge()
         setContentView(R.layout.activity_gallery_posts)
 
         val action = intent.action ?: Intent.ACTION_VIEW

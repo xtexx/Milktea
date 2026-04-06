@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         minSdk 21
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
@@ -78,8 +78,8 @@ dependencies {
     implementation libs.lifecycle.viewmodel
 
     //Kotlin coroutines用ライブラリ(async, await)
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
-    testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    implementation libs.coroutines.android
+    testImplementation libs.coroutines.test
     implementation libs.recyclerview
     implementation libs.flexbox
     implementation libs.androidx.swiperefreshlayout
@@ -118,7 +118,7 @@ dependencies {
     implementation libs.glide.glide
     kapt libs.glide.compiler
     implementation libs.accompanist.glide
-    implementation "com.squareup.retrofit2:retrofit:$retrofit"
+    implementation libs.retrofit
 
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     // If you want to use the GPU Filters

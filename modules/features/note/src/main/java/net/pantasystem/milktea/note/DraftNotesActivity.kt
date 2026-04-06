@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.note.databinding.ActivityDraftNotesBinding
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class DraftNotesActivity : AppCompatActivity() {
@@ -22,6 +23,7 @@ class DraftNotesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_draft_notes)
         mBinding.lifecycleOwner = this
 

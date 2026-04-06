@@ -32,6 +32,7 @@ fun RenoteMuteSettingScreen(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         modifier = modifier,
         topBar = {
             TopAppBar(

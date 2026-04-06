@@ -28,6 +28,7 @@ import net.pantasystem.milktea.common_resource.R
 import net.pantasystem.milktea.setting.compose.SettingListTileLayout
 import java.util.*
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -42,12 +43,14 @@ class AboutMilkteaActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         val version = getSelfVersion()
         val lang = Locale.getDefault().language
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             navigationIcon = {

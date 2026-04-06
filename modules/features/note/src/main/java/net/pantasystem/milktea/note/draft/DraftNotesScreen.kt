@@ -20,6 +20,8 @@ import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.model.note.draft.DraftNote
 import net.pantasystem.milktea.model.note.draft.DraftNoteFile
 import net.pantasystem.milktea.note.draft.viewmodel.DraftNotesViewModel
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -34,6 +36,7 @@ fun DraftNotesScreen(
     val state by viewModel.uiState.collectAsState()
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         topBar = {
             TopAppBar(
                 navigationIcon = {

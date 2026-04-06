@@ -46,6 +46,7 @@ import net.pantasystem.milktea.setting.SettingSection
 import net.pantasystem.milktea.setting.compose.SettingRadioTile
 import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 data class ThemeUiState(
     val type: Theme,
@@ -105,6 +106,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             val configState by settingStore.configState.collectAsState()
@@ -121,6 +123,7 @@ class SettingAppearanceActivity : AppCompatActivity() {
             }
             MilkteaStyleConfigApplyAndTheme(configRepository = localConfigRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {

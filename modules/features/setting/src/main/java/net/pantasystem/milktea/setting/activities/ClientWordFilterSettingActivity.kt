@@ -27,6 +27,7 @@ import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.viewmodel.muteword.ClientWordFilterSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -43,6 +44,7 @@ class ClientWordFilterSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         applyTheme()
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -50,6 +52,7 @@ class ClientWordFilterSettingActivity : AppCompatActivity() {
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             title = {

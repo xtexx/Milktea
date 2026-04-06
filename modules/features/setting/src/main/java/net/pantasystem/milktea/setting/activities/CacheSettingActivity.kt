@@ -30,6 +30,9 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.compose.SettingTitleTile
 import net.pantasystem.milktea.setting.viewmodel.CacheSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -46,10 +49,12 @@ class CacheSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
         setContent {
             val uiState by viewModel.uiState.collectAsState()
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 Scaffold(
+                    contentWindowInsets = WindowInsets.safeDrawing,
                     topBar = {
                         TopAppBar(
                             navigationIcon = {

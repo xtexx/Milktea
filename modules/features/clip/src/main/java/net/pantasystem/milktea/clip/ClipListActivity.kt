@@ -17,6 +17,7 @@ import net.pantasystem.milktea.common_navigation.ClipListNavigation
 import net.pantasystem.milktea.common_navigation.ClipListNavigationArgs
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class ClipListActivity : AppCompatActivity() {
@@ -43,6 +44,7 @@ class ClipListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         applyTheme()
         userActionAppGlobalErrorListener(lifecycle, supportFragmentManager)

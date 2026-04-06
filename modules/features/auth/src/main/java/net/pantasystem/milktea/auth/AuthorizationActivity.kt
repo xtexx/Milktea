@@ -33,6 +33,7 @@ import net.pantasystem.milktea.data.infrastructure.auth.custom.CustomAuthStore
 import net.pantasystem.milktea.data.infrastructure.auth.from
 import java.util.Locale
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 const val EXTRA_HOST = "EXTRA_HOST"
@@ -74,6 +75,7 @@ class AuthorizationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 //        setContentView(R.layout.activity_authorization)
 
         lifecycleScope.launch {

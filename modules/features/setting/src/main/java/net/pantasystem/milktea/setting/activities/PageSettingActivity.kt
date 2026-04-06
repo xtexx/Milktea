@@ -38,6 +38,7 @@ import net.pantasystem.milktea.setting.compose.tab.TabItemsListScreen
 import net.pantasystem.milktea.setting.compose.tab.rememberDragDropListState
 import net.pantasystem.milktea.setting.viewmodel.page.PageSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @Suppress("DEPRECATION")
 @AndroidEntryPoint
@@ -77,6 +78,7 @@ class PageSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         mPageSettingViewModel.pageOnActionEvent.onEach {
             PageSettingActionDialog.newInstance(it).show(supportFragmentManager, PageSettingActionDialog.FRAGMENT_TAG)

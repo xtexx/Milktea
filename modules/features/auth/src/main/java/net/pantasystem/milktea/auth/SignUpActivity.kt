@@ -14,6 +14,7 @@ import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.auth.viewmodel.SignUpViewModel
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class SignUpActivity : AppCompatActivity() {
@@ -29,6 +30,7 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {

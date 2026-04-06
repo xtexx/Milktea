@@ -30,6 +30,8 @@ import net.pantasystem.milktea.user.followlist.FollowFollowerUiState
 import net.pantasystem.milktea.user.followlist.FollowFollowerViewModel
 import net.pantasystem.milktea.user.followlist.LoadType
 import net.pantasystem.milktea.user.viewmodel.ToggleFollowViewModel
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.safeDrawing
 
 @Composable
 fun FollowFollowerRoute(
@@ -111,6 +113,7 @@ fun FollowFollowerScreen(
     }
 
     Scaffold(
+        contentWindowInsets = WindowInsets.safeDrawing,
         snackbarHost = { SnackbarHost(snackBarHostState) },
         topBar = {
             FollowFollowerTopBar(

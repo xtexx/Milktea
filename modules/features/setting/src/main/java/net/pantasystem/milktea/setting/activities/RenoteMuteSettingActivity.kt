@@ -15,6 +15,7 @@ import net.pantasystem.milktea.common_navigation.UserDetailNavigationArgs
 import net.pantasystem.milktea.setting.compose.renote.mute.RenoteMuteSettingScreen
 import net.pantasystem.milktea.setting.viewmodel.RenoteMuteSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class RenoteMuteSettingActivity : AppCompatActivity() {
@@ -33,6 +34,7 @@ class RenoteMuteSettingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyTheme()
+        enableEdgeToEdge()
 
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {

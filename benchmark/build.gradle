@@ -5,20 +5,20 @@ plugins {
 
 android {
     namespace 'systems.panta.benchmark'
-    compileSdk 34
+    compileSdk 35
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 
     defaultConfig {
         minSdk 28
-        targetSdk 34
+        targetSdk 35
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -62,7 +62,7 @@ dependencies {
     implementation project(":modules:data")
     implementation project(":modules:model")
     implementation project(":modules:common")
-    implementation "androidx.room:room-runtime:$room_version"
+    implementation libs.room.runtime
 }
 
 androidComponents {
