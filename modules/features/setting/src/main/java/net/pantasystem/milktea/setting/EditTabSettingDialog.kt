@@ -37,7 +37,7 @@ class EditTabSettingDialog : AppCompatDialogFragment(){
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState)
-        val view = View.inflate(dialog.context, R.layout.dialog_edit_tab_name, null)
+        val view = View.inflate(requireContext(), R.layout.dialog_edit_tab_name, null)
         val binding = DataBindingUtil.bind<DialogEditTabNameBinding>(view)
         requireNotNull(binding)
         dialog.setContentView(view)

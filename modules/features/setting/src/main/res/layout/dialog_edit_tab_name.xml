@@ -57,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_below="@id/toggleExcludeIfExistsSensitiveMedia"
+                style="?textInputOutlinedStyle"
                 >
             <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/editTabName"
