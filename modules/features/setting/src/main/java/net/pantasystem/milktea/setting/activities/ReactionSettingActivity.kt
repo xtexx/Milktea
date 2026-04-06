@@ -30,6 +30,7 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.databinding.ActivityReactionSettingBinding
 import net.pantasystem.milktea.setting.viewmodel.reaction.ReactionPickerSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class ReactionSettingActivity : AppCompatActivity() {
@@ -51,6 +52,7 @@ class ReactionSettingActivity : AppCompatActivity() {
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         val binding = DataBindingUtil.setContentView<ActivityReactionSettingBinding>(
             this,

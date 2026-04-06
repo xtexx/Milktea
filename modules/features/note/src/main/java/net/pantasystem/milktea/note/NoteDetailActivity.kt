@@ -29,6 +29,7 @@ import net.pantasystem.milktea.note.detail.viewmodel.NoteDetailPagerViewModel
 import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class NoteDetailActivity : AppCompatActivity() {
@@ -78,6 +79,7 @@ class NoteDetailActivity : AppCompatActivity() {
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme()
         setContentView(R.layout.activity_note_detail)
 

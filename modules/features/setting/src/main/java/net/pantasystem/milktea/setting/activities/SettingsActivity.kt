@@ -29,6 +29,7 @@ import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.compose.SettingListTileLayout
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -43,6 +44,7 @@ class SettingsActivity : AppCompatActivity() {
     @OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         setContent {

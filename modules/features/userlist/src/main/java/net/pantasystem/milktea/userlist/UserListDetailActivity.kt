@@ -27,6 +27,7 @@ import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import net.pantasystem.milktea.userlist.compose.UserListDetailScreen
 import net.pantasystem.milktea.userlist.viewmodel.UserListDetailViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class UserListDetailActivity : AppCompatActivity(), UserListEditorDialog.OnSubmittedListener {
@@ -77,6 +78,7 @@ class UserListDetailActivity : AppCompatActivity(), UserListEditorDialog.OnSubmi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         NoteActionHandler(

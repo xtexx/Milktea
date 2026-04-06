@@ -15,6 +15,7 @@ import net.pantasystem.milktea.model.account.page.Pageable
 import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 @AndroidEntryPoint
@@ -38,6 +39,7 @@ class FavoriteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         userActionAppGlobalErrorListener(lifecycle, supportFragmentManager)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_favorite)

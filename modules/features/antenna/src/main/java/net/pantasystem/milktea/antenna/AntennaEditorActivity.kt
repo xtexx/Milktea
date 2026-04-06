@@ -28,6 +28,7 @@ import net.pantasystem.milktea.common_navigation.SearchAndSelectUserNavigationAr
 import net.pantasystem.milktea.model.antenna.Antenna
 import net.pantasystem.milktea.model.user.User
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @Suppress("DEPRECATION")
 @ExperimentalCoroutinesApi
@@ -59,6 +60,7 @@ class AntennaEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContentView(R.layout.activity_antenna_editor)
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_antenna_editor)

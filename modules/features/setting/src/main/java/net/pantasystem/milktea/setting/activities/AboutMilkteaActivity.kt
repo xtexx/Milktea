@@ -28,6 +28,7 @@ import net.pantasystem.milktea.common_resource.R
 import net.pantasystem.milktea.setting.compose.SettingListTileLayout
 import java.util.*
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -41,6 +42,7 @@ class AboutMilkteaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         val version = getSelfVersion()

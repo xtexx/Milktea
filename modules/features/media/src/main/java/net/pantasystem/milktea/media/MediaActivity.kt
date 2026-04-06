@@ -26,6 +26,7 @@ import net.pantasystem.milktea.model.file.AboutMediaType
 import net.pantasystem.milktea.model.file.FilePreviewSource
 import java.io.Serializable
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 class MediaNavigationImpl @Inject constructor(
     val activity: Activity
@@ -87,6 +88,7 @@ class MediaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_media)
         setSupportActionBar(mBinding.mediaToolbar)

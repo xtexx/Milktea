@@ -10,6 +10,7 @@ import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.common_navigation.AuthorizationArgs
 import net.pantasystem.milktea.common_navigation.AuthorizationNavigation
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class JoinMilkteaActivity : AppCompatActivity() {
@@ -22,6 +23,7 @@ class JoinMilkteaActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContent {
             MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
                 JoinMilkteaScreen(

@@ -26,6 +26,7 @@ import net.pantasystem.milktea.note.NoteDetailActivity
 import net.pantasystem.milktea.search.databinding.ActivitySearchBinding
 import net.pantasystem.milktea.user.profile.UserDetailActivity
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class SearchActivity : AppCompatActivity() {
@@ -56,6 +57,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         setContentView(R.layout.activity_search)

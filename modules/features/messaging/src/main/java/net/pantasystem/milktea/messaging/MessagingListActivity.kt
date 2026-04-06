@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import net.pantasystem.milktea.common.ui.ApplyTheme
 import net.pantasystem.milktea.messaging.databinding.ActivityMessagingListBinding
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class MessagingListActivity : AppCompatActivity() {
@@ -19,6 +20,7 @@ class MessagingListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_messaging_list)
         setSupportActionBar(mBinding.messagingListToolbar)

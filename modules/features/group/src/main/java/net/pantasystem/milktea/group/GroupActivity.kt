@@ -24,6 +24,7 @@ import net.pantasystem.milktea.common_navigation.UserDetailNavigationArgs
 import net.pantasystem.milktea.model.messaging.MessagingId
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class GroupActivity : AppCompatActivity() {
@@ -50,6 +51,7 @@ class GroupActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme.invoke()
         setContent {
             val navController = rememberNavController()

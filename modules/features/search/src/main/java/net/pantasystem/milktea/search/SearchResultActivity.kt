@@ -30,6 +30,7 @@ import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import net.pantasystem.milktea.search.databinding.ActivitySearchResultBinding
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class SearchResultActivity : AppCompatActivity() {
@@ -66,6 +67,7 @@ class SearchResultActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContentView(R.layout.activity_search_result)
         setSupportActionBar(binding.searchResultToolbar)

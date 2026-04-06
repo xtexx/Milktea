@@ -26,6 +26,7 @@ import net.pantasystem.milktea.common_navigation.EXTRA_SELECTED_FILE_PROPERTY_ID
 import net.pantasystem.milktea.drive.viewmodel.DriveViewModel
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 class DriveNavigationImpl @Inject constructor(
     val activity: Activity
@@ -62,6 +63,7 @@ class DriveActivity : AppCompatActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
 
         userActionAPpGlobalErrorListener(

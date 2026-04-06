@@ -13,6 +13,7 @@ import net.pantasystem.milktea.common_navigation.MessageNavigationArgs
 import net.pantasystem.milktea.messaging.databinding.ActivityMessageBinding
 import net.pantasystem.milktea.model.messaging.MessagingId
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 class MessageNavigationImpl @Inject constructor(
     val activity: Activity
@@ -39,6 +40,7 @@ class MessageActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setTheme.invoke()
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_message)
         mBinding.lifecycleOwner = this

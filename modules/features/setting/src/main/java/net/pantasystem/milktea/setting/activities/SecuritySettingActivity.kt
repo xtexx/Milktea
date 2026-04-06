@@ -33,6 +33,7 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.SettingSection
 import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -49,6 +50,7 @@ class SecuritySettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContent {
             val configState by settingStore.configState.collectAsState()

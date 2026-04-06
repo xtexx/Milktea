@@ -63,6 +63,7 @@ import nl.dionsegijn.konfetti.core.Spread
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 @AndroidEntryPoint
@@ -138,6 +139,7 @@ class UserDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         userActionAppGlobalErrorListener(lifecycle, supportFragmentManager)
         val binding = DataBindingUtil.setContentView<ActivityUserDetailBinding>(

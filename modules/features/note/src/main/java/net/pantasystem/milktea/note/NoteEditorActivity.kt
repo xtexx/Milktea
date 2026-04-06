@@ -18,6 +18,7 @@ import net.pantasystem.milktea.note.editor.NoteEditorFragment
 import net.pantasystem.milktea.note.editor.viewmodel.NoteEditorSavedStateKey
 import net.pantasystem.milktea.note.editor.viewmodel.NoteEditorViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 @AndroidEntryPoint
@@ -90,6 +91,7 @@ class NoteEditorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContentView(R.layout.activity_note_editor)
 

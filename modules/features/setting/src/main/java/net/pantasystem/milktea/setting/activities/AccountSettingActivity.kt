@@ -19,6 +19,7 @@ import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.setting.compose.account.AccountSettingScreen
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class AccountSettingActivity : AppCompatActivity() {
@@ -39,6 +40,7 @@ class AccountSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContent {
             val uiState by viewModel.uiState.collectAsState()

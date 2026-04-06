@@ -19,6 +19,7 @@ import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.user.User
 import java.io.Serializable
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 class SearchAndSelectUserNavigationImpl @Inject constructor(
     val activity: Activity
@@ -81,6 +82,7 @@ class SearchAndSelectUserActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         setContent {

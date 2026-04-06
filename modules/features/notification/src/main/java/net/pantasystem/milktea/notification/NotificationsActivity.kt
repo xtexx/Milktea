@@ -16,6 +16,7 @@ import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import net.pantasystem.milktea.notification.databinding.ActivityNotificationsBinding
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @ExperimentalCoroutinesApi
 @FlowPreview
@@ -33,6 +34,7 @@ class NotificationsActivity : AppCompatActivity(), ToolbarSetter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContentView(R.layout.activity_notifications)
 

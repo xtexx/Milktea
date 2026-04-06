@@ -30,6 +30,7 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.databinding.ActivityImportReactionFromWebViewBinding
 import net.pantasystem.milktea.setting.viewmodel.ImportReactionFromWebViewViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 const val EXTRA_ACCOUNT_HOST = "EXTRA_ACCOUNT_HOST"
 
@@ -55,6 +56,7 @@ class ImportReactionFromWebViewActivity : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled", "JavascriptInterface")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContentView(R.layout.activity_import_reaction_from_web_view)
 

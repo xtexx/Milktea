@@ -54,6 +54,7 @@ import net.pantasystem.milktea.note.renote.RenoteViewModel
 import net.pantasystem.milktea.note.view.NoteActionHandler
 import net.pantasystem.milktea.note.viewmodel.NotesViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 @AndroidEntryPoint
@@ -106,6 +107,7 @@ class MainActivity : AppCompatActivity(), ToolbarSetter {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme.invoke()
         setContentView(R.layout.activity_main)
 

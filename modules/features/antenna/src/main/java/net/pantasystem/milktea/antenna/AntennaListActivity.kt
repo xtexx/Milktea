@@ -23,6 +23,7 @@ import net.pantasystem.milktea.common_navigation.AntennaNavigation
 import net.pantasystem.milktea.common_navigation.AntennaNavigationArgs
 import net.pantasystem.milktea.model.antenna.Antenna
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @AndroidEntryPoint
 class AntennaListActivity : AppCompatActivity() {
@@ -38,6 +39,7 @@ class AntennaListActivity : AppCompatActivity() {
     @OptIn(ExperimentalCoroutinesApi::class, FlowPreview::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_antenna_list)

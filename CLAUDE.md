@@ -84,7 +84,7 @@ M3 移行後に対応（M3 の PullToRefreshBox を使うため）。
 
 `enableEdgeToEdge()` がシステムバー色を管理するため、テーマ側の設定と競合する（Phase 1 で XML テーマから削除済みのはず）。
 
-- [ ] 全 Activity に `enableEdgeToEdge()` を追加（`onCreate` の `setContentView` より前）
+- [x] 全 Activity に `enableEdgeToEdge()` を追加（`onCreate` の `setContentView` より前）
 
 ---
 

@@ -43,6 +43,7 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.SettingSection
 import net.pantasystem.milktea.setting.compose.SettingSwitchTile
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,7 @@ class SettingMovementActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
 
         val isHighlightSafeSearch = intent.getBooleanExtra(EXTRA_HIGHLIGHT_SAFE_SEARCH, false)

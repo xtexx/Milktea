@@ -30,6 +30,7 @@ import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.compose.SettingTitleTile
 import net.pantasystem.milktea.setting.viewmodel.CacheSettingViewModel
 import javax.inject.Inject
+import androidx.activity.enableEdgeToEdge
 
 @OptIn(ExperimentalMaterial3Api::class)
 @AndroidEntryPoint
@@ -45,6 +46,7 @@ class CacheSettingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         applyTheme()
         setContent {
             val uiState by viewModel.uiState.collectAsState()
