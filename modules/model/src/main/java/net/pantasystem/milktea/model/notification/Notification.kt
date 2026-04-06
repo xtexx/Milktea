@@ -196,10 +196,10 @@ data class UnknownNotification(
     override val id: Id,
     override val createdAt: Instant,
     override val isRead: Boolean,
-    override val userId: User.Id,
+    val userId: User.Id?,
     val rawType: String
 
-) : Notification(), HasUser {
+) : Notification() {
     override fun read(): Notification {
         return this.copy(isRead = true)
     }

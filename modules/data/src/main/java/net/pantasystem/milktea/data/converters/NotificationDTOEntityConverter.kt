@@ -174,7 +174,7 @@ class NotificationDTOEntityConverter @Inject constructor(
                     id,
                     notificationDTO.createdAt,
                     notificationDTO.isRead ?: false,
-                    User.Id(account.accountId, notificationDTO.userId!!),
+                    notificationDTO.userId?.let { User.Id(account.accountId, notificationDTO.userId!!) },
                     notificationDTO.type
                 )
             }
