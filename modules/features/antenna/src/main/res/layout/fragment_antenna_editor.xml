@@ -34,7 +34,8 @@
                         android:id="@+id/antennaNameInputLayout"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginBottom="8dp"
+                        style="?textInputOutlinedStyle">
 
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/antennaNameEditText"
@@ -120,7 +121,8 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        style="?textInputOutlinedStyle">
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/keywordsToReceiveEditText"
                             android:layout_width="match_parent"
@@ -137,7 +139,8 @@
                         android:layout_marginBottom="8dp"/>
                 <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        style="?textInputOutlinedStyle">
                     <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/keywordsToExcludeEditText"
                             android:layout_width="match_parent"
