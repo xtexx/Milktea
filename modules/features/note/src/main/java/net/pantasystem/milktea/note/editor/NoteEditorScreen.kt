@@ -71,6 +71,8 @@ fun NoteEditorScreen(
     onShowPollDatePicker: () -> Unit,
     onShowPollTimePicker: () -> Unit,
     onShowConfirmSaveAsDraftDialog: () -> Unit,
+    onTextCursorPositionChanged: (Int) -> Unit = {},
+    onCwCursorPositionChanged: (Int) -> Unit = {},
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val replyTo by viewModel.replyTo.collectAsState()
@@ -242,6 +244,8 @@ fun NoteEditorScreen(
                 onUrlPasted = { text, start, beforeText, count ->
                     viewModel.onPastePostUrl(text, start, beforeText, count)
                 },
+                onTextCursorPositionChanged = onTextCursorPositionChanged,
+                onCwCursorPositionChanged = onCwCursorPositionChanged,
             )
 
             // 投票エディタ

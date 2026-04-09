@@ -221,15 +221,15 @@ if (uiState.isPostButtonAtTheBottom) {
 
 ### チェックリスト
 
-- [ ] `NoteEditorFragment.onCreateView` を `ComposeView` を返す実装に変更する
-- [ ] DataBinding 関連コード（`binding.*` の参照）を `NoteEditorFragment` からすべて削除する
-- [ ] `ActivityResultContracts` ランチャー群をラムダとして `NoteEditorScreen` に渡す
-- [ ] `PollEditorFragment` のトランザクションを削除し `PollEditorLayout` を直接呼ぶ
-- [ ] 既存の `ComposeView` 島（toolbar・filePreview・userActionMenu）を `NoteEditorScreen` 内に統合する
-- [ ] `UserChipListAdapter` + RecyclerView を `NoteEditorAddressSection` に置換する
-- [ ] `fragment_note_editor.xml` を削除する
-- [ ] `PollEditorFragment.kt` を削除する
-- [ ] `./gradlew :app:assembleDebug` BUILD SUCCESSFUL を確認
+- [x] `NoteEditorFragment.onCreateView` を `ComposeView` を返す実装に変更する
+- [x] DataBinding 関連コード（`binding.*` の参照）を `NoteEditorFragment` からすべて削除する
+- [x] `ActivityResultContracts` ランチャー群をラムダとして `NoteEditorScreen` に渡す
+- [x] `PollEditorFragment` のトランザクションを削除し `PollEditorLayout` を直接呼ぶ
+- [x] 既存の `ComposeView` 島（toolbar・filePreview・userActionMenu）を `NoteEditorScreen` 内に統合する
+- [x] `UserChipListAdapter` + RecyclerView を `NoteEditorAddressSection` に置換する
+- [x] `fragment_note_editor.xml` を削除する
+- [ ] `PollEditorFragment.kt` を削除する（`SimpleEditorFragment` が参照しているため保留）
+- [x] `./gradlew :app:assembleDebug` BUILD SUCCESSFUL を確認
 - [ ] 実機またはエミュレータで以下の動作確認:
   - [ ] テキスト入力・絵文字補完が動作する
   - [ ] CW フィールドの表示/非表示が動作する

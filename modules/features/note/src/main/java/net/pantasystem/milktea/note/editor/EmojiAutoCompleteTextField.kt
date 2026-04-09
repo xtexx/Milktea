@@ -38,6 +38,8 @@ import net.pantasystem.milktea.note.editor.viewmodel.TextWithCursorPos
  * @param inputType android.text.InputType の値
  * @param textCursorPosFlow ViewModel から流れてくるカーソル位置更新イベント（絵文字挿入後など）
  * @param onUrlPasted URL が貼り付けられたときのコールバック。null の場合は検出しない
+ * @param onCursorPositionChanged テキスト変化後のカーソル位置を通知するコールバック。
+ *   絵文字ピッカーから挿入位置を決める際に使う
  */
 @Composable
 fun EmojiAutoCompleteTextField(
@@ -52,6 +54,7 @@ fun EmojiAutoCompleteTextField(
     inputType: Int = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
     textCursorPosFlow: SharedFlow<TextWithCursorPos>? = null,
     onUrlPasted: ((text: String, start: Int, beforeText: String, count: Int) -> Unit)? = null,
+    onCursorPositionChanged: (Int) -> Unit = {},
 ) {
     // MultiAutoCompleteTextView への参照を保持して LaunchedEffect からアクセスできるようにする
     val viewRef = remember { mutableStateOf<MultiAutoCompleteTextView?>(null) }
@@ -63,6 +66,7 @@ fun EmojiAutoCompleteTextField(
     val currentOnValueChange by rememberUpdatedState(onValueChange)
     val currentOnFocused by rememberUpdatedState(onFocused)
     val currentOnUrlPasted by rememberUpdatedState(onUrlPasted)
+    val currentOnCursorPositionChanged by rememberUpdatedState(onCursorPositionChanged)
 
     // ViewModel から流れるカーソル位置更新を監視し、View に反映する
     LaunchedEffect(textCursorPosFlow) {
@@ -100,6 +104,9 @@ fun EmojiAutoCompleteTextField(
 
                 addTextChangedListener(
                     onTextChanged = { text, start, _, count ->
+                        // テキスト変化後のカーソル位置を通知
+                        currentOnCursorPositionChanged(start + count)
+
                         // URL 貼り付け検出（コールバックが設定されている場合のみ）
                         if (currentOnUrlPasted != null && text != null && count > 0) {
                             val inputText = try {

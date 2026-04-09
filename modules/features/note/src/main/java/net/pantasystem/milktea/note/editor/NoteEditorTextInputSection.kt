@@ -42,6 +42,8 @@ fun NoteEditorTextInputSection(
     onCwChanged: (String) -> Unit,
     onFocusChanged: (NoteEditorFocusEditTextType) -> Unit,
     onUrlPasted: (text: String, start: Int, beforeText: String, count: Int) -> Unit,
+    onTextCursorPositionChanged: (Int) -> Unit = {},
+    onCwCursorPositionChanged: (Int) -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -58,6 +60,7 @@ fun NoteEditorTextInputSection(
                 hint = stringResource(id = R.string.cw_hint),
                 inputType = InputType.TYPE_CLASS_TEXT,
                 minLines = 1,
+                onCursorPositionChanged = onCwCursorPositionChanged,
             )
             HorizontalDivider(modifier = Modifier.padding(horizontal = 8.dp))
         }
@@ -76,6 +79,7 @@ fun NoteEditorTextInputSection(
             minLines = 6,
             textCursorPosFlow = textCursorPosFlow,
             onUrlPasted = onUrlPasted,
+            onCursorPositionChanged = onTextCursorPositionChanged,
         )
     }
 }
