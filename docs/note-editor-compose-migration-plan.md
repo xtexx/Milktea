@@ -159,12 +159,12 @@ var focusedField by remember { mutableStateOf(NoteEditorFocusEditTextType.Text) 
 
 ### チェックリスト
 
-- [ ] `EmojiAutoCompleteTextField.kt` を作成し、`AndroidView` で `MultiAutoCompleteTextView` をラップする
-- [ ] `CustomEmojiCompleteAdapter` + `CustomEmojiTokenizer` を `AndroidView` の `factory` ブロックで設定する
-- [ ] `update` ブロックでテキスト同期とカーソル位置同期を実装する
-- [ ] `NoteEditorTextInputSection.kt` を `EmojiAutoCompleteTextField` を使う実装に更新する
-- [ ] `NoteEditorScreen` 内に `focusedField` ローカル状態を追加する
-- [ ] `./gradlew :modules:features:note:compileDebugKotlin` でコンパイルエラーがないことを確認
+- [x] `EmojiAutoCompleteTextField.kt` を作成し、`AndroidView` で `MultiAutoCompleteTextView` をラップする
+- [x] `CustomEmojiCompleteAdapter` + `CustomEmojiTokenizer` を `AndroidView` の `factory` ブロックで設定する
+- [x] `update` ブロックでテキスト同期とカーソル位置同期を実装する
+- [x] `NoteEditorTextInputSection.kt` を `EmojiAutoCompleteTextField` を使う実装に更新する
+- [x] `NoteEditorScreen` 内に `focusedField` ローカル状態を追加する
+- [x] `./gradlew :modules:features:note:compileDebugKotlin` でコンパイルエラーがないことを確認
 
 ---
 

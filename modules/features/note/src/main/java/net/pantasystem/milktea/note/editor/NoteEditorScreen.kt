@@ -26,6 +26,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.datetime.Clock
 import net.pantasystem.milktea.common_android_ui.account.viewmodel.AccountViewModel
 import net.pantasystem.milktea.common_compose.haptic.rememberHapticFeedback
+import net.pantasystem.milktea.model.emoji.CustomEmojiRepository
 import net.pantasystem.milktea.model.file.FilePreviewSource
 import net.pantasystem.milktea.model.instance.FeatureType
 import net.pantasystem.milktea.model.note.PollExpiresAt
@@ -50,6 +51,7 @@ import kotlin.time.Duration.Companion.days
 fun NoteEditorScreen(
     viewModel: NoteEditorViewModel,
     accountViewModel: AccountViewModel,
+    customEmojiRepository: CustomEmojiRepository,
     isPostButtonAtTheBottom: Boolean,
     onNavigateUp: () -> Unit,
     onPickFileFromDrive: () -> Unit,
@@ -74,11 +76,12 @@ fun NoteEditorScreen(
     val replyTo by viewModel.replyTo.collectAsState()
     val addressUsers by viewModel.address.collectAsState()
     val enableFeatures by viewModel.enableFeatures.collectAsState()
+    val currentAccount by viewModel.currentAccount.collectAsState()
 
     // フォーカスされているテキストフィールドを追跡（絵文字挿入先の判定に使う）
-    // Phase 2 の EmojiAutoCompleteTextField 導入後にここで focusedField を使う
-    @Suppress("UNUSED_VARIABLE")
     var focusedField by remember { mutableStateOf(NoteEditorFocusEditTextType.Text) }
+    // focusedField を ViewModel にも同期させる（EmojiPickerDialog のコールバックが ViewModel 経由のため）
+    viewModel.focusType = focusedField
 
     // 投稿完了で画面を閉じる
     LaunchedEffect(Unit) {
@@ -225,13 +228,20 @@ fun NoteEditorScreen(
                 )
             }
 
-            // テキスト入力エリア（Phase 2 で EmojiAutoCompleteTextField に置き換え）
+            // テキスト入力エリア
             NoteEditorTextInputSection(
                 text = uiState.formState.text ?: "",
                 cw = uiState.formState.cw,
                 hasCw = uiState.formState.hasCw,
+                account = currentAccount,
+                customEmojiRepository = customEmojiRepository,
+                textCursorPosFlow = viewModel.textCursorPos,
                 onTextChanged = { viewModel.setText(it) },
                 onCwChanged = { viewModel.setCw(it) },
+                onFocusChanged = { focusedField = it },
+                onUrlPasted = { text, start, beforeText, count ->
+                    viewModel.onPastePostUrl(text, start, beforeText, count)
+                },
             )
 
             // 投票エディタ
