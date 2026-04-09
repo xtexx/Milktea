@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.SearchManager
 import android.content.Intent
 import android.graphics.Color
+import java.net.URLDecoder
 import android.graphics.Typeface
 import android.net.Uri
 import android.text.Layout
@@ -202,7 +203,12 @@ object MFMDecorator {
                     val convertedUrl = MFMParser.convertAppNoteUriIfGiveNoteUrl(accountHost, node.url)
                         ?: MFMParser.convertAppChannelUriIfGiveChannelUrl(accountHost, node.url)
                         ?: node.url
-                    makeClickableSpan(node.url) {
+                    val displayUrl = try {
+                        URLDecoder.decode(node.url, "UTF-8")
+                    } catch (_: Exception) {
+                        node.url
+                    }
+                    makeClickableSpan(displayUrl) {
                         Intent(Intent.ACTION_VIEW, Uri.parse(convertedUrl))
                     }
                 }
