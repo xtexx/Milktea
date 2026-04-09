@@ -208,14 +208,22 @@ object MFMDecorator {
                 is MathInline -> SpannedString(node.formula)
                 is Fn -> {
                     val inner = decorateNodes(node.children, offset)
-                    val scale = when (node.name) {
-                        "x2" -> 2.0f
-                        "x3" -> 3.0f
-                        "x4" -> 4.0f
-                        else -> null
-                    }
-                    if (scale != null) {
-                        inner.setSpan(RelativeSizeSpan(scale), 0, inner.length, 0)
+                    when (node.name) {
+                        "x2" -> inner.setSpan(RelativeSizeSpan(2.0f), 0, inner.length, 0)
+                        "x3" -> inner.setSpan(RelativeSizeSpan(3.0f), 0, inner.length, 0)
+                        "x4" -> inner.setSpan(RelativeSizeSpan(4.0f), 0, inner.length, 0)
+                        "fg" -> {
+                            val color = parseMfmColor(node.args["color"])
+                            if (color != null) {
+                                inner.setSpan(ForegroundColorSpan(color), 0, inner.length, 0)
+                            }
+                        }
+                        "bg" -> {
+                            val color = parseMfmColor(node.args["color"])
+                            if (color != null) {
+                                inner.setSpan(BackgroundColorSpan(color), 0, inner.length, 0)
+                            }
+                        }
                     }
                     inner
                 }
@@ -276,6 +284,20 @@ object MFMDecorator {
             if (!HostWithVersion.isOverV13(accountHost)) return null
             val url = V13EmojiUrlResolver.resolve(accountHost, name, userHost)
             return CustomEmoji(name = name, url = url, uri = url, host = userHost)
+        }
+
+        private fun parseMfmColor(hex: String?): Int? {
+            hex ?: return null
+            return try {
+                val expanded = when (hex.length) {
+                    3 -> hex.map { "$it$it" }.joinToString("")
+                    6 -> hex
+                    else -> return null
+                }
+                Color.parseColor("#$expanded")
+            } catch (_: IllegalArgumentException) {
+                null
+            }
         }
 
         private fun makeClickableSpan(text: String, makeIntent: (View) -> Intent): SpannableString {
