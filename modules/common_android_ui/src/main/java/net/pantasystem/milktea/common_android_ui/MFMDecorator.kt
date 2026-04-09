@@ -19,6 +19,7 @@ import android.text.style.QuoteSpan
 import android.text.style.RelativeSizeSpan
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
+import android.text.style.TypefaceSpan
 import android.view.View
 import android.widget.TextView
 import dagger.hilt.android.EntryPointAccessors
@@ -222,6 +223,18 @@ object MFMDecorator {
                             val color = parseMfmColor(node.args["color"])
                             if (color != null) {
                                 inner.setSpan(BackgroundColorSpan(color), 0, inner.length, 0)
+                            }
+                        }
+                        "font" -> {
+                            val family = when {
+                                node.args.containsKey("serif") -> "serif"
+                                node.args.containsKey("monospace") -> "monospace"
+                                node.args.containsKey("cursive") -> "cursive"
+                                node.args.containsKey("fantasy") -> "fantasy"
+                                else -> null
+                            }
+                            if (family != null) {
+                                inner.setSpan(TypefaceSpan(family), 0, inner.length, 0)
                             }
                         }
                     }
