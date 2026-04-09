@@ -274,6 +274,22 @@ object MFMDecorator {
                                 return spanned
                             }
                         }
+                        "flip" -> {
+                            val h = !node.args.containsKey("v") || node.args.containsKey("h")
+                            val v = node.args.containsKey("v")
+                            inner.setSpan(MfmFlipSpan(h, v), 0, inner.length, 0)
+                        }
+                        "rotate" -> {
+                            val deg = node.args["deg"]?.toFloatOrNull() ?: 0f
+                            inner.setSpan(MfmRotateSpan(deg), 0, inner.length, 0)
+                        }
+                        "border" -> {
+                            val style = node.args["style"] ?: "solid"
+                            val width = node.args["width"]?.toFloatOrNull() ?: 1f
+                            val color = parseMfmColor(node.args["color"]) ?: Color.BLACK
+                            val radius = node.args["radius"]?.toFloatOrNull() ?: 0f
+                            inner.setSpan(MfmBorderSpan(style, width, color, radius), 0, inner.length, 0)
+                        }
                     }
                     inner
                 }
