@@ -83,7 +83,9 @@ class EmojiPickerUiStateService(
     val searchWord = MutableStateFlow("")
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val filteredEmojis = searchWord.flatMapLatest { keyword ->
+    private val filteredEmojis = searchWord
+        .debounce(300L)
+        .flatMapLatest { keyword ->
         account.filterNotNull().map { account ->
             keyword to account
         }
