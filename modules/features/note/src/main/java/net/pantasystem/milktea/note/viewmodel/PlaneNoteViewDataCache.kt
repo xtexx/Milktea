@@ -236,14 +236,16 @@ class PlaneNoteViewDataCache(
     }
 
     private suspend fun loadUrlPreview(note: PlaneNoteViewData) {
-        // TODO: mfmライブラリ移行時に対応できなかった対応すること
-//        (note.textNode as? TextType.Misskey?)?.root?.getUrls()?.let { urls ->
-//            UrlPreviewLoadTask(
-//                getUrlPreviewStore.invoke(getAccount.invoke()),
-//                urls,
-//                coroutineScope + Dispatchers.IO,
-//            ).load(note.urlPreviewLoadTaskCallback)
-//        }
+        val urls = when (val textNode = note.textNode) {
+            is net.pantasystem.milktea.common_android_ui.TextType.Misskey -> textNode.getUrls()
+            else -> null
+        } ?: return
+        if (urls.isEmpty()) return
+        net.pantasystem.milktea.model.url.UrlPreviewLoadTask(
+            getUrlPreviewStore.invoke(getAccount.invoke()),
+            urls,
+            coroutineScope + Dispatchers.IO,
+        ).load(note.urlPreviewLoadTaskCallback)
     }
 
     suspend fun suspendNoteCapture() {
