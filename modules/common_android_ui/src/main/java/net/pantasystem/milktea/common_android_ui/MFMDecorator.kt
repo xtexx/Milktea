@@ -259,6 +259,21 @@ object MFMDecorator {
                                 inner.setSpan(RelativeSizeSpan(scaleY), 0, inner.length, 0)
                             }
                         }
+                        "ruby" -> {
+                            val raw = inner.toString()
+                            val splitIndex = raw.lastIndexOf(' ')
+                            if (splitIndex > 0) {
+                                val baseText = raw.substring(0, splitIndex)
+                                val rubyText = raw.substring(splitIndex + 1)
+                                val spanned = SpannableString(baseText)
+                                spanned.setSpan(
+                                    MfmRubySpan(baseText, rubyText),
+                                    0, baseText.length,
+                                    0
+                                )
+                                return spanned
+                            }
+                        }
                     }
                     inner
                 }
