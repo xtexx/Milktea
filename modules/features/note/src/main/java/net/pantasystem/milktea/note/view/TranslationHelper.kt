@@ -7,9 +7,6 @@ import androidx.databinding.BindingAdapter
 import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.common.runCancellableCatching
-import net.pantasystem.milktea.common_android.mfm.MFMParser
-import net.pantasystem.milktea.common_android_ui.LazyDecorateSkipElementsHolder
-import net.pantasystem.milktea.common_android_ui.MFMDecorator
 import net.pantasystem.milktea.model.emoji.CustomEmoji
 import net.pantasystem.milktea.model.note.Translation
 import net.pantasystem.milktea.note.R
@@ -42,10 +39,12 @@ object TranslationHelper {
             return
         }
 
-        val text = context.getString(R.string.translated_from_s, translation.sourceLang) + translation.text
-        val root = MFMParser.parse(text, emojis)!!
-        val lazy = MFMDecorator.decorate(root, LazyDecorateSkipElementsHolder())
-        this.text = MFMDecorator.decorate(this, lazy)
+//        val text = context.getString(R.string.translated_from_s, translation.sourceLang) + translation.text
+//        val root = MFMParser.parse(text, emojis)!!
+//        val lazy = MFMDecorator.decorate(root, LazyDecorateSkipElementsHolder())
+//        this.text = MFMDecorator.decorate(this, lazy)
+        // TODO: mfmライブラリ移行時に対応できなかった。対応すること。
+        this.text = context.getString(R.string.translated_from_s, translation.sourceLang) + translation.text
 
     }
 

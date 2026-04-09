@@ -8,7 +8,6 @@ import kotlinx.coroutines.plus
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import net.pantasystem.milktea.app_store.notes.NoteTranslationStore
-import net.pantasystem.milktea.common_android_ui.TextType
 import net.pantasystem.milktea.model.account.Account
 import net.pantasystem.milktea.model.emoji.CustomEmojiRepository
 import net.pantasystem.milktea.model.note.Note
@@ -17,7 +16,6 @@ import net.pantasystem.milktea.model.note.NoteDataSource
 import net.pantasystem.milktea.model.note.NoteRelation
 import net.pantasystem.milktea.model.note.NoteRelationGetter
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
-import net.pantasystem.milktea.model.url.UrlPreviewLoadTask
 import net.pantasystem.milktea.model.url.UrlPreviewStore
 import net.pantasystem.milktea.model.url.UrlPreviewStoreProvider
 import javax.inject.Inject
@@ -238,13 +236,14 @@ class PlaneNoteViewDataCache(
     }
 
     private suspend fun loadUrlPreview(note: PlaneNoteViewData) {
-        (note.textNode as? TextType.Misskey?)?.root?.getUrls()?.let { urls ->
-            UrlPreviewLoadTask(
-                getUrlPreviewStore.invoke(getAccount.invoke()),
-                urls,
-                coroutineScope + Dispatchers.IO,
-            ).load(note.urlPreviewLoadTaskCallback)
-        }
+        // TODO: mfmライブラリ移行時に対応できなかった対応すること
+//        (note.textNode as? TextType.Misskey?)?.root?.getUrls()?.let { urls ->
+//            UrlPreviewLoadTask(
+//                getUrlPreviewStore.invoke(getAccount.invoke()),
+//                urls,
+//                coroutineScope + Dispatchers.IO,
+//            ).load(note.urlPreviewLoadTaskCallback)
+//        }
     }
 
     suspend fun suspendNoteCapture() {

@@ -18,7 +18,6 @@ import dagger.hilt.android.EntryPointAccessors
 import dagger.hilt.android.internal.managers.FragmentComponentManager
 import net.pantasystem.milktea.common_android.html.MastodonHTMLParser
 import net.pantasystem.milktea.common_android.mfm.MFMParser
-import net.pantasystem.milktea.common_android.mfm.Root
 import net.pantasystem.milktea.common_android.ui.text.CustomEmojiDecorator
 import net.pantasystem.milktea.common_android.ui.text.DrawableEmojiSpan
 import net.pantasystem.milktea.common_navigation.SearchNavType
@@ -28,16 +27,14 @@ import net.pantasystem.milktea.model.emoji.CustomEmoji
 
 object DecorateTextHelper {
 
-
     @BindingAdapter("textNode")
     @JvmStatic
-    fun TextView.decorate(node: Root?) {
-        node ?: return
+    fun TextView.decorate(result: LazyDecorateResult?) {
+        result ?: return
         this.movementMethod = LinkMovementMethod.getInstance()
         stopDrawableAnimations(this)
-        val lazy = MFMDecorator.decorate(node, LazyDecorateSkipElementsHolder())
         this.setText(
-            MFMDecorator.decorate(this, lazy),
+            MFMDecorator.decorate(this, result),
             TextView.BufferType.SPANNABLE,
         )
     }
@@ -68,9 +65,6 @@ object DecorateTextHelper {
                 it.imageDrawable?.callback = null
                 it.imageDrawable = null
                 it.adapter = null
-                // NOTE: 不要になった画像リソースを解放している
-                // NOTE: MFMDecoratorの仕様上現状はEmojiSpanを使いまわさないのでここでリソース破棄をしてしまっても問題ない。
-//                Glide.with(textView).clear(it.target)
             }
         }
     }
@@ -96,8 +90,6 @@ object DecorateTextHelper {
                     TextView.BufferType.SPANNABLE,
                 )
                 this.movementMethod = ClickListenableLinkMovementMethod { url ->
-
-                    // NOTE: クリックしたURLを探している
                     val urlSpans = decoratedText.getSpans(0, decoratedText.length, URLSpan::class.java)
                     var textHashTag: CharSequence? = null
                     for (urlSpan in urlSpans) {
@@ -124,16 +116,16 @@ object DecorateTextHelper {
                     )
                     when {
                         tag != null -> {
-                            val intent = navigationEntryPoint.searchNavigation().newIntent(SearchNavType.ResultScreen(
-                                searchWord = "#${tag.name}"
-                            ))
+                            val intent = navigationEntryPoint.searchNavigation().newIntent(
+                                SearchNavType.ResultScreen(searchWord = "#${tag.name}")
+                            )
                             context.startActivity(intent)
                             true
                         }
                         textHashTag != null -> {
-                            val intent = navigationEntryPoint.searchNavigation().newIntent(SearchNavType.ResultScreen(
-                                searchWord = textHashTag.toString()
-                            ))
+                            val intent = navigationEntryPoint.searchNavigation().newIntent(
+                                SearchNavType.ResultScreen(searchWord = textHashTag.toString())
+                            )
                             context.startActivity(intent)
                             true
                         }
@@ -146,7 +138,6 @@ object DecorateTextHelper {
                         }
                         else -> false
                     }
-
                 }
             }
             is TextType.Misskey -> {
@@ -155,22 +146,35 @@ object DecorateTextHelper {
                 this.setText(spanned, TextView.BufferType.SPANNABLE)
             }
         }
-
     }
 
     @BindingAdapter("sourceText", "emojis", "account", "host")
     @JvmStatic
-    fun TextView.decorateWithLowPerformance(sourceText: String?, emojis: List<CustomEmoji>?, account: Account?, host: String?) {
+    fun TextView.decorateWithLowPerformance(
+        sourceText: String?,
+        emojis: List<CustomEmoji>?,
+        account: Account?,
+        host: String?,
+    ) {
         sourceText ?: return
         emojis ?: return
         account ?: return
         host ?: return
-        when(account.instanceType) {
+        when (account.instanceType) {
             Account.InstanceType.MISSKEY, Account.InstanceType.FIREFISH -> {
-                val node = MFMParser.parse(sourceText, emojis, accountHost = account.getHost(), userHost = host)
-                    ?: return
+                val nodes = MFMParser.parse(sourceText) ?: return
+                val emojiMap = emojis.associateBy { it.name }
+                val lazy = MFMDecorator.decorate(
+                    sourceText = sourceText,
+                    nodes = nodes,
+                    emojiNameMap = emojiMap,
+                    instanceEmojiNameMap = emptyMap(),
+                    userHost = host,
+                    accountHost = account.getHost(),
+                    isRequireProcessNyaize = false,
+                    holder = LazyDecorateSkipElementsHolder(),
+                )
                 this.movementMethod = LinkMovementMethod.getInstance()
-                val lazy = MFMDecorator.decorate(node, LazyDecorateSkipElementsHolder())
                 this.text = MFMDecorator.decorate(this, lazy)
             }
             Account.InstanceType.MASTODON, Account.InstanceType.PLEROMA -> {
@@ -189,10 +193,8 @@ object DecorateTextHelper {
                 )
             }
         }
-
     }
 }
-
 
 class ClickListenableLinkMovementMethod(private val onClick: ((url: String) -> Boolean)) :
     LinkMovementMethod() {

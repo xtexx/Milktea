@@ -103,4 +103,5 @@ dependencies {
     testRuntimeOnly libs.junit.jupiter.engine
     implementation libs.flexbox
 
+    implementation "com.github.pantasystem:mfm-kt:0.1.0"
 }
