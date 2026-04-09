@@ -329,15 +329,13 @@ LaunchedEffect(Unit) {
 
 ### チェックリスト
 
-- [ ] `ActivityResultContracts` ランチャー群を `NoteEditorFragment` から `NoteEditorActivity` に移動する
-- [ ] `NoteEditorActivity.onCreate` を `setContent { NoteEditorScreen(...) }` に変更する
-- [ ] `parseNoteEditorArgs(intent)` 関数を切り出す
-- [ ] `NoteEditorScreen` 内に `BackHandler` を追加する
-- [ ] `NoteEditorScreen` の Scaffold に `contentWindowInsets = WindowInsets.safeDrawing` を設定する
-- [ ] `LaunchedEffect` で `isSaveNoteAsDraft` / `isPost` フローを監視する実装に変更する
-- [ ] `NoteEditorFragment.kt` を削除する
-- [ ] `activity_note_editor.xml` を削除する
-- [ ] `./gradlew :app:assembleDebug` BUILD SUCCESSFUL を確認
+- [x] `ActivityResultContracts` ランチャー群を `NoteEditorFragment` から `NoteEditorActivity` に移動する
+- [x] `NoteEditorActivity.onCreate` を `setContent { NoteEditorScreen(...) }` に変更する
+- [x] `NoteEditorScreen` の Scaffold に `contentWindowInsets = WindowInsets.safeDrawing` を設定する
+- [x] bottomBar に `imePadding()` を追加してキーボード表示時にアクションバーが上に移動するよう対応
+- [x] `NoteEditorFragment.kt` を削除する
+- [x] `activity_note_editor.xml` を削除する
+- [x] `./gradlew :app:assembleDebug` BUILD SUCCESSFUL を確認
 - [ ] 実機またはエミュレータで Phase 3 と同じ動作確認項目を再確認する
 
 ---
