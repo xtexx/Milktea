@@ -43,9 +43,26 @@ object TranslationHelper {
         }
 
         val text = context.getString(R.string.translated_from_s, translation.sourceLang) + translation.text
-        val root = MFMParser.parse(text, emojis)!!
-        val lazy = MFMDecorator.decorate(root, LazyDecorateSkipElementsHolder())
-        this.text = MFMDecorator.decorate(this, lazy)
+        val nodes = MFMParser.parse(text)
+        if (nodes != null) {
+            val emojiMap = emojis?.associateBy { it.name } ?: emptyMap()
+            val lazy = MFMDecorator.decorate(
+                sourceText = text,
+                nodes = nodes,
+                emojiNameMap = emojiMap,
+                instanceEmojiNameMap = emptyMap(),
+                userHost = null,
+                accountHost = null,
+                isRequireProcessNyaize = false,
+                holder = LazyDecorateSkipElementsHolder(),
+            )
+            android.text.method.LinkMovementMethod.getInstance().also {
+                this.movementMethod = it
+            }
+            this.text = MFMDecorator.decorate(this, lazy)
+        } else {
+            this.text = text
+        }
 
     }
 

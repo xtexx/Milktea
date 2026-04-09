@@ -12,6 +12,9 @@ import net.pantasystem.milktea.app_store.notes.NoteTranslationStore
 import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common_android.mfm.MFMParser
 import net.pantasystem.milktea.common_android.resource.StringSource
+import net.pantasystem.milktea.common_android_ui.LazyDecorateResult
+import net.pantasystem.milktea.common_android_ui.LazyDecorateSkipElementsHolder
+import net.pantasystem.milktea.common_android_ui.MFMDecorator
 import net.pantasystem.milktea.common_android_ui.getTextType
 import net.pantasystem.milktea.model.account.Account
 import net.pantasystem.milktea.model.file.AboutMediaType
@@ -49,7 +52,6 @@ open class PlaneNoteViewData(
 
     val isRenotedByMe = !note.note.hasContent() && note.user.id.id == account.remoteId
 
-
     val userId: User.Id
         get() = toShowNote.user.id
 
@@ -61,18 +63,20 @@ open class PlaneNoteViewData(
     val avatarUrl = toShowNote.user.avatarUrl
 
     val cw = toShowNote.note.cw
-    val cwNode = MFMParser.parse(
-        toShowNote.note.cw,
-        toShowNote.note.emojiNameMap,
-        instanceEmojis = emptyMap(),
-        userHost = toShowNote.user
-            .host,
-        accountHost = account.getHost(),
-        isRequireProcessNyaize = (toShowNote.note.type as? Note.Type.Misskey)?.isRequireNyaize
-            ?: false
-    )
+    val cwNode: LazyDecorateResult? = toShowNote.note.cw?.let { text ->
+        val nodes = MFMParser.parse(text) ?: return@let null
+        MFMDecorator.decorate(
+            sourceText = text,
+            nodes = nodes,
+            emojiNameMap = toShowNote.note.emojiNameMap ?: emptyMap(),
+            instanceEmojiNameMap = emptyMap(),
+            userHost = toShowNote.user.host,
+            accountHost = account.getHost(),
+            isRequireProcessNyaize = (toShowNote.note.type as? Note.Type.Misskey)?.isRequireNyaize ?: false,
+            holder = LazyDecorateSkipElementsHolder(),
+        )
+    }
 
-    //true　折り畳み
     val text = toShowNote.note.text
 
     val contentFolding = MutableStateFlow(cw != null)
@@ -83,7 +87,6 @@ open class PlaneNoteViewData(
         SharingStarted.WhileSubscribed(5_000),
         CwTextGenerator(toShowNote, true)
     )
-
 
     val textNode = getTextType(
         account,
@@ -108,7 +111,6 @@ open class PlaneNoteViewData(
 
     val isOnlyVisibleRenoteStatusMessage = MutableStateFlow<Boolean>(false)
 
-
     val urlPreviewList = MutableStateFlow<List<UrlPreview>>(emptyList())
 
     val previews = urlPreviewList.map {
@@ -125,7 +127,6 @@ open class PlaneNoteViewData(
         (otherFiles ?: emptyList()) + urlPreviews
     }.stateIn(coroutineScope, SharingStarted.WhileSubscribed(5_000), emptyList())
 
-    //var replyCount: String? = if(toShowNote.replyCount > 0) toShowNote.replyCount.toString() else null
     val replyCount = toShowNote.note.repliesCount
 
     val favoriteCount = currentNote.map {
@@ -157,7 +158,6 @@ open class PlaneNoteViewData(
         emptyList()
     )
 
-    //reNote先
     val subNote: NoteRelation? = toShowNote.renote
 
     val subNoteAvatarUrl = subNote?.user?.avatarUrl
@@ -169,17 +169,20 @@ open class PlaneNoteViewData(
     }
 
     val subCw = subNote?.note?.cw
-    val subCwNode = MFMParser.parse(
-        subNote?.note?.cw,
-        emojis = subNote?.note?.emojiNameMap,
-        instanceEmojis = emptyMap(),
-        accountHost = account.getHost(),
-        userHost = subNote?.user?.host,
-        isRequireProcessNyaize = (toShowNote.note.type as? Note.Type.Misskey)?.isRequireNyaize
-            ?: false
-    )
+    val subCwNode: LazyDecorateResult? = subNote?.note?.cw?.let { text ->
+        val nodes = MFMParser.parse(text) ?: return@let null
+        MFMDecorator.decorate(
+            sourceText = text,
+            nodes = nodes,
+            emojiNameMap = subNote.note.emojiNameMap ?: emptyMap(),
+            instanceEmojiNameMap = emptyMap(),
+            userHost = subNote.user.host,
+            accountHost = account.getHost(),
+            isRequireProcessNyaize = (toShowNote.note.type as? Note.Type.Misskey)?.isRequireNyaize ?: false,
+            holder = LazyDecorateSkipElementsHolder(),
+        )
+    }
 
-    //true　折り畳み
     val subContentFolding = MutableStateFlow(subCw != null)
 
     val subContentFoldingStatusMessage = subContentFolding.map { isFolding ->
@@ -216,7 +219,6 @@ open class PlaneNoteViewData(
         subContentFolding.value = !isFolding
     }
 
-
     val urlPreviewLoadTaskCallback = object : UrlPreviewLoadTask.Callback {
         override fun accept(list: List<UrlPreview>) {
             urlPreviewList.value = list
@@ -235,10 +237,7 @@ open class PlaneNoteViewData(
 
     var job: Job? = null
 
-    // NOTE: (Panta) cwの時点で大半が隠されるので折りたたむ必要はない
-    // NOTE: (Panta) cwを折りたたんでしまうとcw展開後に自動的に折りたたまれてしまって二度手間になる可能性がある。
     val expanded = MutableStateFlow(cw != null)
-
 
     init {
         require(toShowNote.note.id != subNote?.note?.id)
@@ -254,20 +253,8 @@ open class PlaneNoteViewData(
     }
 
     enum class FilterResult {
-        /**
-         * フィルターが実行されていない
-         */
         NotExecuted,
-
-        /**
-         * フィルターに引っかかった投稿
-         */
         ShouldFilterNote,
-
-        /**
-         * フィルターに引っかからなかった投稿
-         */
         Pass,
     }
 }
-

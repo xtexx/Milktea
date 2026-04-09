@@ -77,4 +77,6 @@ dependencies {
 
     testImplementation libs.junit.jupiter.api
     testRuntimeOnly libs.junit.jupiter.engine
+
+    api "com.github.pantasystem:mfm-kt:main-SNAPSHOT"
 }

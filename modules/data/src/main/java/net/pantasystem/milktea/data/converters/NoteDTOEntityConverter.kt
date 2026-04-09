@@ -198,6 +198,10 @@ class NoteDTOEntityConverter @Inject constructor(
         )
     }
 
+    /**
+     * 表示するときにカスタム絵文字の取捨選択する処理は面倒なので、
+     * この段階で紐づくカスタム絵文字を選出して紐づけておく
+     */
     private suspend fun getEmojis(
         account: Account,
         noteDTO: NoteDTO,
