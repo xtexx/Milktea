@@ -1,5 +1,7 @@
 package net.pantasystem.milktea.note.reaction.choices
 
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -7,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import net.pantasystem.milktea.common.glide.GlideApp
 import net.pantasystem.milktea.common_android.resource.getString
@@ -22,41 +23,126 @@ import net.pantasystem.milktea.note.databinding.ItemEmojiListItemHeaderBinding
 import net.pantasystem.milktea.note.reaction.CustomEmojiImageViewSizeHelper.applySizeByAspectRatio
 import net.pantasystem.milktea.note.reaction.ImageAspectRatioCache
 import net.pantasystem.milktea.note.reaction.SaveImageAspectRequestListener
+import java.util.concurrent.Executors
+import kotlin.math.abs
 
 class EmojiListItemsAdapter(
     private val isApplyImageAspectRatio: Boolean,
     private val onEmojiSelected: (EmojiType) -> Unit,
     private val onEmojiLongClicked: (EmojiType) -> Boolean,
     private val baseItemSizeDp: Int = 28,
-) : ListAdapter<EmojiListItemType, EmojiListItemsAdapter.VH>(
-    DiffUtilItemCallback()
-) {
-    class DiffUtilItemCallback : DiffUtil.ItemCallback<EmojiListItemType>() {
+) : RecyclerView.Adapter<EmojiListItemsAdapter.VH>() {
 
+    companion object {
+        // この閾値以上の差分は DiffUtil を使わず全置換する
+        private const val FULL_REPLACE_THRESHOLD = 200
+    }
 
-        override fun areContentsTheSame(
-            oldItem: EmojiListItemType,
-            newItem: EmojiListItemType,
-        ): Boolean {
-            if (oldItem is EmojiListItemType.EmojiItem && newItem is EmojiListItemType.EmojiItem) {
-                return oldItem.emoji.areContentsTheSame(newItem.emoji)
-            }
-            return oldItem == newItem
+    private var items: List<EmojiListItemType> = emptyList()
+
+    // 最後に submitList されたリストへの参照（古い diff 結果を破棄するために使用）
+    @Volatile
+    private var latestSubmittedList: List<EmojiListItemType> = emptyList()
+
+    private val bgExecutor = Executors.newSingleThreadExecutor()
+    private val mainHandler = Handler(Looper.getMainLooper())
+
+    fun submitList(newList: List<EmojiListItemType>) {
+        latestSubmittedList = newList
+
+        val oldList = items
+        val sizeDiff = abs(oldList.size - newList.size)
+
+        // 大きな差分（検索モード切替など）は即座に全置換
+        if (sizeDiff >= FULL_REPLACE_THRESHOLD) {
+            items = newList
+            notifyDataSetChanged()
+            return
         }
 
-        override fun areItemsTheSame(
-            oldItem: EmojiListItemType,
-            newItem: EmojiListItemType,
-        ): Boolean {
-            if (oldItem is EmojiListItemType.EmojiItem && newItem is EmojiListItemType.EmojiItem) {
-                return oldItem.emoji.areItemsTheSame(newItem.emoji)
-            }
-            return oldItem == newItem
-        }
+        // 小規模差分: バックグラウンドで DiffUtil を実行
+        // detectMoves=false で移動検出を省略し計算を高速化
+        bgExecutor.execute {
+            val capturedLatest = latestSubmittedList
+            if (capturedLatest !== newList) return@execute  // より新しいリクエストが来ていたらスキップ
 
+            val result = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                override fun getOldListSize() = oldList.size
+                override fun getNewListSize() = newList.size
+
+                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    val old = oldList[oldItemPosition]
+                    val new = newList[newItemPosition]
+                    if (old is EmojiListItemType.EmojiItem && new is EmojiListItemType.EmojiItem) {
+                        return old.emoji.areItemsTheSame(new.emoji)
+                    }
+                    return old == new
+                }
+
+                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+                    return oldList[oldItemPosition] == newList[newItemPosition]
+                }
+            }, false)
+
+            mainHandler.post {
+                if (latestSubmittedList !== newList) return@post  // 結果適用前に新しいリクエストが来ていたらスキップ
+                items = newList
+                result.dispatchUpdatesTo(this@EmojiListItemsAdapter)
+            }
+        }
+    }
+
+    val currentList: List<EmojiListItemType> get() = items
+
+    override fun getItemCount() = items.size
+
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is EmojiListItemType.EmojiItem -> ItemType.Emoji.ordinal
+            is EmojiListItemType.Header -> ItemType.Header.ordinal
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        return when (ItemType.values()[viewType]) {
+            ItemType.Header -> {
+                val binding = ItemEmojiListItemHeaderBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                HeaderVH(binding)
+            }
+            ItemType.Emoji -> {
+                val binding = DataBindingUtil.inflate<ItemEmojiChoiceBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.item_emoji_choice,
+                    parent,
+                    false
+                )
+                EmojiVH(binding, isApplyImageAspectRatio, baseItemSizeDp)
+            }
+        }
+    }
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        when (val item = items[position]) {
+            is EmojiListItemType.EmojiItem -> {
+                (holder as EmojiVH).onBind(
+                    item.emoji,
+                    onEmojiLongClicked = onEmojiLongClicked,
+                    onEmojiSelected = onEmojiSelected
+                )
+            }
+            is EmojiListItemType.Header -> {
+                (holder as HeaderVH).binding.categoryName.text =
+                    item.label.getString(holder.binding.root.context)
+            }
+        }
     }
 
     sealed class VH(view: View) : RecyclerView.ViewHolder(view)
+
     class EmojiVH(
         val binding: ItemEmojiChoiceBinding,
         private val isApplyImageAspectRatio: Boolean,
@@ -107,7 +193,6 @@ class EmojiListItemsAdapter(
                                     )
                             )
                             .into(binding.reactionImagePreview)
-
                     }
 
                     binding.reactionStringPreview.setMemoVisibility(View.GONE)
@@ -141,61 +226,7 @@ class EmojiListItemsAdapter(
 
     class HeaderVH(val binding: ItemEmojiListItemHeaderBinding) : VH(binding.root)
 
-
-    override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)) {
-            is EmojiListItemType.EmojiItem -> ItemType.Emoji.ordinal
-            is EmojiListItemType.Header -> ItemType.Header.ordinal
-        }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
-        when (ItemType.values()[viewType]) {
-            ItemType.Header -> {
-                val binding = ItemEmojiListItemHeaderBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                return HeaderVH(binding)
-            }
-            ItemType.Emoji -> {
-                val binding =
-                    DataBindingUtil.inflate<ItemEmojiChoiceBinding>(
-                        LayoutInflater.from(parent.context),
-                        R.layout.item_emoji_choice,
-                        parent,
-                        false
-                    )
-                return EmojiVH(
-                    binding,
-                    isApplyImageAspectRatio,
-                    baseItemSizeDp
-                )
-            }
-        }
-
-    }
-
-    override fun onBindViewHolder(holder: VH, position: Int) {
-        when (val item = getItem(position)) {
-            is EmojiListItemType.EmojiItem -> {
-                (holder as EmojiVH).onBind(
-                    item.emoji,
-                    onEmojiLongClicked = onEmojiLongClicked,
-                    onEmojiSelected = onEmojiSelected
-                )
-            }
-            is EmojiListItemType.Header -> {
-                (holder as HeaderVH).binding.categoryName.text =
-                    item.label.getString(holder.binding.root.context)
-            }
-        }
-
-    }
-
     enum class ItemType {
         Header, Emoji
     }
-
 }
