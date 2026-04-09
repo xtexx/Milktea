@@ -100,13 +100,13 @@ Phase 2 で実装する `EmojiAutoCompleteTextField` を組み込む。
 
 ### チェックリスト
 
-- [ ] `NoteEditorScreen.kt` を作成し、既存の Compose コンポーネント（`NoteEditorToolbar`、`NoteFilePreview`、`NoteEditorUserActionMenuLayout`）を組み込む
-- [ ] `NoteEditorTextInputSection.kt` を作成（この時点では `AndroidView` なしのプレースホルダーでよい）
-- [ ] `NoteEditorAddressSection.kt` を作成
-- [ ] `NoteEditorReplyPreview.kt` を作成
-- [ ] `NoteEditorScheduleSection.kt` を作成
-- [ ] 各 Composable に `@Preview` を追加して確認
-- [ ] `./gradlew :modules:features:note:compileDebugKotlin` でコンパイルエラーがないことを確認
+- [x] `NoteEditorScreen.kt` を作成し、既存の Compose コンポーネント（`NoteEditorToolbar`、`NoteFilePreview`、`NoteEditorUserActionMenuLayout`）を組み込む
+- [x] `NoteEditorTextInputSection.kt` を作成（この時点では `AndroidView` なしのプレースホルダーでよい）
+- [x] `NoteEditorAddressSection.kt` を作成
+- [x] `NoteEditorReplyPreview.kt` を作成
+- [x] `NoteEditorScheduleSection.kt` を作成
+- [x] 各 Composable に `@Preview` を追加して確認
+- [x] `./gradlew :modules:features:note:compileDebugKotlin` でコンパイルエラーがないことを確認
 
 ---
 
