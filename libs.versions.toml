@@ -1,4 +1,5 @@
 [versions]
+mfm-kt = "0.2.3"
 kotlin-version = "2.0.0"
 date-time = "0.6.1"
 compose = "1.7.1"
@@ -145,6 +146,9 @@ navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.
 navigation-dynamic-features = { module = "androidx.navigation:navigation-dynamic-features-fragment", version.ref = "nav" }
 navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "nav" }
 navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "nav" }
+
+# MFM parser
+mfm-kt = { module = "com.github.pantasystem:mfm-kt", version.ref = "mfm-kt" }
 
 # Kotlin reflect
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin-version" }
