@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
@@ -140,7 +141,7 @@ fun NoteEditorScreen(
             }
         },
         bottomBar = {
-            Column(modifier = Modifier.imePadding()) {
+            Column(modifier = Modifier.navigationBarsPadding().imePadding()) {
                 NoteFilePreview(
                     noteEditorViewModel = viewModel,
                     onShow = { feedback.performClickHapticFeedback(); onShowMediaPreview(it) },
