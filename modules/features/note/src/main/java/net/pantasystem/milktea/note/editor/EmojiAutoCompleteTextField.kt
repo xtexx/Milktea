@@ -94,6 +94,11 @@ fun EmojiAutoCompleteTextField(
                 this.minLines = minLines
                 // 背景を透明にして OutlinedTextField 的な枠線を出さない
                 setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                // Material3 テーマのデフォルトスタイルが paddingTop ~16dp を持つため、
+                // TYPE_TEXT_FLAG_MULTI_LINE 設定後に gravity が TOP になると
+                // テキスト上部に余分な空白として現れる。
+                // 外側の Compose modifier で padding を管理するため内部は 0 にリセットする。
+                setPadding(0, 0, 0, 0)
 
                 if (account != null) {
                     setAdapter(

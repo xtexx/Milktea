@@ -260,7 +260,13 @@ class NoteEditorActivity : AppCompatActivity(), EmojiSelection {
                         )
                     },
                     onShowAlarmPermissionDescriptionDialogIfPermissionDenied = {
-                        if (!alarmManager.canScheduleExactAlarms()) {
+                        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                                !alarmManager.canScheduleExactAlarms()
+                            } else {
+                                // TODO: 正しい実装をする
+                                return@NoteEditorScreen false
+                            }
+                        ) {
                             MaterialAlertDialogBuilder(this)
                                 .setTitle(R.string.alarm_permission_description_title)
                                 .setMessage(R.string.alarm_permission_description_message)

@@ -76,7 +76,7 @@ fun NoteEditorTextInputSection(
                 .padding(horizontal = 8.dp, vertical = 4.dp),
             hint = stringResource(id = R.string.please_speak),
             inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
-            minLines = 6,
+            minLines = 1,
             textCursorPosFlow = textCursorPosFlow,
             onUrlPasted = onUrlPasted,
             onCursorPositionChanged = onTextCursorPositionChanged,
