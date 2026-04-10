@@ -1,7 +1,6 @@
 package net.pantasystem.milktea.common_android_ui
 
 import android.graphics.Color as AndroidColor
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -28,7 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 import dev.misskey.mfm.node.Bold
 import dev.misskey.mfm.node.Center
 import dev.misskey.mfm.node.CodeBlock
@@ -107,8 +106,8 @@ fun MfmText(
                 placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline,
             )
         ) {
-            Image(
-                painter = rememberAsyncImagePainter(model = url),
+            AsyncImage(
+                model = url,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
             )
