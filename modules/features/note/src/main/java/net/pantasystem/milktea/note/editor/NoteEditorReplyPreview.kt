@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import net.pantasystem.milktea.common_android_ui.MfmText
 import net.pantasystem.milktea.common_compose.AvatarIcon
 import net.pantasystem.milktea.note.viewmodel.PlaneNoteViewData
 
@@ -50,8 +51,9 @@ fun NoteEditorReplyPreview(
                 )
                 val text = note.text
                 if (!text.isNullOrEmpty()) {
-                    Text(
+                    MfmText(
                         text = text,
+                        emojiNameMap = replyTo.toShowNote.note.emojiNameMap ?: emptyMap(),
                         style = MaterialTheme.typography.bodySmall,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis,

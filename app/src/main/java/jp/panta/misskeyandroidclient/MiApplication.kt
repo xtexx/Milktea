@@ -1,12 +1,18 @@
 package jp.panta.misskeyandroidclient
 
 import android.app.Application
+import android.os.Build
 import android.os.Looper
 import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import coil.Coil
+import coil.ImageLoader
+import coil.decode.GifDecoder
+import coil.decode.ImageDecoderDecoder
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dagger.hilt.android.HiltAndroidApp
+import jp.panta.misskeyandroidclient.media.CoilApngDecoder
 import jp.panta.misskeyandroidclient.setup.AppStateController
 import jp.panta.misskeyandroidclient.worker.WorkerJobInitializer
 import kotlinx.coroutines.CoroutineScope
@@ -76,6 +82,8 @@ class MiApplication : Application(), Configuration.Provider {
             }
         }
 
+        setupCoilImageLoader()
+
         applicationScope.launch {
             appStateController.initializeSettings()
         }
@@ -120,6 +128,31 @@ class MiApplication : Application(), Configuration.Provider {
 
 
         }
+    }
+
+    /**
+     * Coil の ImageLoader をアプリ全体で共有するシングルトンとして設定する。
+     *
+     * GIF・APNG のアニメーション表示に必要なデコーダを登録する:
+     * - API 28+: ImageDecoderDecoder（Android ネイティブ, GIF + APNG 対応）
+     * - API 28未満: CoilApngDecoder（penfeizhou ラッパー, APNG 対応）+ GifDecoder（GIF 対応）
+     *
+     * この設定により CustomEmojiText・MfmText 等の InlineTextContent 内の
+     * AsyncImage がアニメーション絵文字を正しく再生できるようになる。
+     */
+    private fun setupCoilImageLoader() {
+        val imageLoader = ImageLoader.Builder(this)
+            .components {
+                if (Build.VERSION.SDK_INT >= 28) {
+                    add(ImageDecoderDecoder.Factory())
+                } else {
+                    // CoilApngDecoder を GifDecoder より先に登録し、PNG を優先処理させる
+                    add(CoilApngDecoder.Factory())
+                    add(GifDecoder.Factory())
+                }
+            }
+            .build()
+        Coil.setImageLoader(imageLoader)
     }
 
     private fun enqueueWorkManagers() {
