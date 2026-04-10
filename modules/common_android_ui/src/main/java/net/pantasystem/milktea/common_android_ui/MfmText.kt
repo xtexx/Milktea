@@ -57,6 +57,9 @@ import java.util.Date
 
 /**
  * MFM (Markup For Misskey) テキストを Compose の Text でリッチ表示するコンポーザブル。
+ * 事前にパース済みの MfmNode リストを受け取るオーバーロード。
+ *
+ * タイムライン等でパース結果を ViewModel でキャッシュして再利用する場合はこちらを使用する。
  *
  * - テキスト装飾（太字・斜体・打消し線・小文字・中央揃え）は AnnotatedString の SpanStyle/ParagraphStyle で表現
  * - カスタム絵文字（:emoji_name:）は InlineTextContent + Coil で画像表示
@@ -64,7 +67,7 @@ import java.util.Date
  */
 @Composable
 fun MfmText(
-    text: String,
+    nodes: List<MfmNode>,
     modifier: Modifier = Modifier,
     emojiNameMap: Map<String, CustomEmoji> = emptyMap(),
     style: TextStyle = LocalTextStyle.current,
@@ -75,20 +78,6 @@ fun MfmText(
     val primaryColor = MaterialTheme.colorScheme.primary
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
     val baseFontSize = if (style.fontSize == TextUnit.Unspecified) 14.sp else style.fontSize
-
-    val nodes = remember(text) { MFMParser.parse(text) }
-
-    if (nodes == null) {
-        Text(
-            text = text,
-            modifier = modifier,
-            style = style,
-            color = color,
-            maxLines = maxLines,
-            overflow = overflow,
-        )
-        return
-    }
 
     // AnnotatedString 構築（non-composable なので remember 内で実行可能）
     val annotatedString = remember(nodes, emojiNameMap, primaryColor, onSurfaceVariantColor, baseFontSize) {
@@ -134,6 +123,48 @@ fun MfmText(
         maxLines = maxLines,
         overflow = overflow,
         inlineContent = inlineContents,
+    )
+}
+
+/**
+ * MFM (Markup For Misskey) テキストを Compose の Text でリッチ表示するコンポーザブル。
+ * テキスト文字列を受け取り、内部で MFMParser によるパースを行うオーバーロード。
+ *
+ * パース結果を外部でキャッシュしない用途（ReplyPreview 等の簡易表示）に使用する。
+ * パースに失敗した場合はプレーンテキストにフォールバックする。
+ */
+@Composable
+fun MfmText(
+    text: String,
+    modifier: Modifier = Modifier,
+    emojiNameMap: Map<String, CustomEmoji> = emptyMap(),
+    style: TextStyle = LocalTextStyle.current,
+    color: Color = Color.Unspecified,
+    maxLines: Int = Int.MAX_VALUE,
+    overflow: TextOverflow = TextOverflow.Clip,
+) {
+    val nodes = remember(text) { MFMParser.parse(text) }
+
+    if (nodes == null) {
+        Text(
+            text = text,
+            modifier = modifier,
+            style = style,
+            color = color,
+            maxLines = maxLines,
+            overflow = overflow,
+        )
+        return
+    }
+
+    MfmText(
+        nodes = nodes,
+        modifier = modifier,
+        emojiNameMap = emojiNameMap,
+        style = style,
+        color = color,
+        maxLines = maxLines,
+        overflow = overflow,
     )
 }
 
