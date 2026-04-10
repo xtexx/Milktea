@@ -105,21 +105,32 @@ private fun CollapsingTopAppBar(
         }
     }
 
-    TopAppBar(
-        title = {
-            Text(
-                text = stringResource(id = R.string.user_list),
-                style = MaterialTheme.typography.titleLarge.copy(fontSize = fontSize)
+    // ステータスバー領域とツールバー領域を分離し、height() がステータスバー inset と
+    // 競合してレイアウトが崩れる問題を解消する
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surface,
+    ) {
+        Column {
+            Spacer(modifier = Modifier.windowInsetsTopHeight(WindowInsets.statusBars))
+            TopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.user_list),
+                        style = MaterialTheme.typography.titleLarge.copy(fontSize = fontSize)
+                    )
+                },
+                navigationIcon = {
+                    IconButton(onClick = onNavigateUp) {
+                        Icon(Icons.Default.ArrowBack, contentDescription = null)
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
+                windowInsets = WindowInsets(0, 0, 0, 0),
+                modifier = Modifier.height(toolbarHeight),
             )
-        },
-        navigationIcon = {
-            IconButton(onClick = onNavigateUp) {
-                Icon(Icons.Default.ArrowBack, contentDescription = null)
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.surface),
-        modifier = modifier.height(toolbarHeight)
-    )
+        }
+    }
 }
 
 @Composable
