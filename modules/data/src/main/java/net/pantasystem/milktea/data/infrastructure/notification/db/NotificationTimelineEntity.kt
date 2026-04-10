@@ -107,6 +107,7 @@ interface NotificationTimelineDAO {
             WHERE accountId = :accountId
         """
     )
+    @Transaction
     suspend fun findByExcludeTypesAndIncludeTypes(
         accountId: Long,
         excludeTypes: List<String>,
@@ -127,6 +128,7 @@ interface NotificationTimelineDAO {
             AND accountId = :accountId
         """
     )
+    @Transaction
     suspend fun findEmpty(accountId: Long): List<NotificationTimelineRelation>
 
     // include typesに完全一致し、exclude typesのリレーションが存在しないタイムラインを取得
@@ -145,6 +147,7 @@ interface NotificationTimelineDAO {
             AND accountId = :accountId
         """
     )
+    @Transaction
     suspend fun findByIncludeTypes(accountId: Long, includeTypes: List<String>, includeTypesCount: Int = includeTypes.size): List<NotificationTimelineRelation>
 
     // exclude typesに完全一致し、include typesのリレーションが存在しないタイムラインを取得
@@ -163,6 +166,7 @@ interface NotificationTimelineDAO {
             AND accountId = :accountId
         """
     )
+    @Transaction
     suspend fun findByExcludeTypes(accountId: Long, excludeTypes: List<String>, excludeTypesCount: Int = excludeTypes.size): List<NotificationTimelineRelation>
 
     // find by id
@@ -172,6 +176,7 @@ interface NotificationTimelineDAO {
             WHERE id = :id
         """
     )
+    @Transaction
     suspend fun findById(id: Long): NotificationTimelineRelation?
 
     // find notifications join notification_timeline_items
@@ -184,6 +189,7 @@ interface NotificationTimelineDAO {
             LIMIT :limit
         """
     )
+    @Transaction
     suspend fun findNotifications(timelineId: Long, limit: Int): List<NotificationWithDetails>
 
     // find notifications join notification_timeline_items and untilId
@@ -196,6 +202,7 @@ interface NotificationTimelineDAO {
             LIMIT :limit
         """
     )
+    @Transaction
     suspend fun findNotificationsUntilId(timelineId: Long, untilId: String, limit: Int): List<NotificationWithDetails>
 
     @Query(
