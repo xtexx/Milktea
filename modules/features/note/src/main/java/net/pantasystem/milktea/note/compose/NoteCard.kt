@@ -183,7 +183,14 @@ fun SimpleNoteCardAsMain(
                     note = note,
                     userName = note.userName,
                     timestamp = note.toShowNote.note.createdAt,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    onTimestampClick = {
+                        onAction(
+                            NoteCardAction.OnNoteCardClicked(
+                                note.toShowNote.note,
+                            )
+                        )
+                    }
                 )
                 if (config.isEnableInstanceTicker
                     && instance?.name != null
@@ -273,38 +280,45 @@ private fun Header(
     userName: String,
     timestamp: Instant,
     modifier: Modifier = Modifier,
+    onTimestampClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically // 垂直方向の中央揃えも追加しておくと綺麗です
+        verticalAlignment = Alignment.CenterVertically, // 垂直方向の中央揃えも追加しておくと綺麗です
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         // 1. 名前（長すぎる場合は省略）
-        EmojiText(
-            parsedResult = note.toShowNote.user.parsedResult,
-            accountHost = note.account.getHost(),
-            style = MaterialTheme.typography.bodyMedium,
-            fontWeight = FontWeight.Bold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            // 名前も長すぎると時間を圧迫するので、ここにもweightを入れるのが一般的です
-            modifier = Modifier.weight(1f, fill = false)
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f, fill = false),
+        ) {
+            EmojiText(
+                parsedResult = note.toShowNote.user.parsedResult,
+                accountHost = note.account.getHost(),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                // 名前も長すぎると時間を圧迫するので、ここにもweightを入れるのが一般的です
+//                modifier = Modifier.weight(1f, fill = false)
+            )
 
-        Spacer(Modifier.width(4.dp))
+            Spacer(Modifier.width(4.dp))
 
-        // 2. ユーザー名（ここが可変領域）
-        Text(
-            text = userName,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            fontStyle = FontStyle.Italic,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            // fill = false を指定することで、中身が短いときはその分だけ、
-            // 長いときは他の要素を押し出さない範囲で最大まで広がります
-            modifier = Modifier.weight(1f)
-        )
+            // 2. ユーザー名（ここが可変領域）
+            Text(
+                text = userName,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                fontStyle = FontStyle.Italic,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                // fill = false を指定することで、中身が短いときはその分だけ、
+                // 長いときは他の要素を押し出さない範囲で最大まで広がります
+//                modifier = Modifier.weight(1f)
+            )
 
+        }
         Spacer(Modifier.width(8.dp))
 
         // 3. タイムスタンプ（絶対表示したい要素）
@@ -319,8 +333,11 @@ private fun Header(
                 ).toString()
             },
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            color = MaterialTheme.colorScheme.primary,
             maxLines = 1,
+            modifier = Modifier.clickable {
+                onTimestampClick()
+            }
         )
     }
 }
