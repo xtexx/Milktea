@@ -54,6 +54,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
+import kotlinx.datetime.Instant
 import net.pantasystem.milktea.common_android.resource.getString
 import net.pantasystem.milktea.common_android_ui.MfmText
 import net.pantasystem.milktea.common_android_ui.TextType
@@ -226,38 +227,8 @@ fun SimpleNoteCardAsMain(
             Column(
 
             ) {
-                Row() {
-                    Text(
-                        text = note.name,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Text(
-                        text = note.userName,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        fontStyle = FontStyle.Italic,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        modifier = Modifier.weight(1f),
-                    )
-                    val createdAtMs = note.toShowNote.note.createdAt.toEpochMilliseconds()
-                    Text(
 
-                        text = remember(createdAtMs) {
-                            DateUtils.getRelativeTimeSpanString(
-                                createdAtMs,
-                                System.currentTimeMillis(),
-                                DateUtils.MINUTE_IN_MILLIS,
-                                DateUtils.FORMAT_ABBREV_RELATIVE,
-                            ).toString()
-                        },
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
+                Header(name = note.name, userName = note.userName, timestamp = note.toShowNote.note.createdAt)
 
                 NoteBodySection(
                     note = note,
@@ -298,6 +269,47 @@ fun SimpleNoteCardAsMain(
                 NoteActionBar(note = note, currentNote = currentNote, onAction = onAction)
             }
         }
+    }
+}
+
+@Composable
+private fun Header(
+    name: String,
+    userName: String,
+    timestamp: Instant,
+) {
+    Row() {
+        Text(
+            text = name,
+            style = MaterialTheme.typography.bodyMedium,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(Modifier.width(2.dp))
+        Text(
+            text = userName,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            fontStyle = FontStyle.Italic,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(1f),
+        )
+        val createdAtMs = timestamp.toEpochMilliseconds()
+        Text(
+            text = remember(createdAtMs) {
+                DateUtils.getRelativeTimeSpanString(
+                    createdAtMs,
+                    System.currentTimeMillis(),
+                    DateUtils.MINUTE_IN_MILLIS,
+                    DateUtils.FORMAT_ABBREV_RELATIVE,
+                ).toString()
+            },
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = 1,
+        )
     }
 }
 
