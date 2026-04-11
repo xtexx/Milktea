@@ -650,6 +650,10 @@
 
     <string name="settings_enable_haptic_feedback_on_new_post">Enable haptic feedback on new post</string>
 
+    <!-- poll -->
+    <string name="poll_votes_count">%d votes</string>
+    <string name="poll_expires_in">Closes %s</string>
+
     <!-- developer options -->
     <string name="settings_developer_options">Developer options</string>
     <string name="settings_dev_compose_timeline">Compose timeline</string>

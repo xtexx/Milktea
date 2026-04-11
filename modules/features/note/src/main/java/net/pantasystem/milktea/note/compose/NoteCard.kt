@@ -2,6 +2,7 @@ package net.pantasystem.milktea.note.compose
 
 import android.annotation.SuppressLint
 import android.text.format.DateUtils
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,10 +25,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.icons.filled.SentimentSatisfied
@@ -62,6 +65,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
+import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import net.pantasystem.milktea.common_android.platform.isWifiConnected
 import net.pantasystem.milktea.common_android.resource.getString
@@ -71,6 +75,7 @@ import net.pantasystem.milktea.common_android_ui.TextType
 import net.pantasystem.milktea.common_compose.rememberBlurhashPainter
 import net.pantasystem.milktea.model.emoji.CustomEmoji
 import net.pantasystem.milktea.model.note.Note
+import net.pantasystem.milktea.model.note.poll.Poll
 import net.pantasystem.milktea.model.note.reaction.Reaction
 import net.pantasystem.milktea.note.R
 import net.pantasystem.milktea.note.media.viewmodel.MediaViewData
@@ -189,6 +194,16 @@ fun SimpleNoteCardAsMain(
                                 onAction(NoteCardAction.OnMentionClick(it))
                             },
                         )
+
+                        val poll = currentNote.poll
+                        if (!isFolding && poll != null) {
+                            Spacer(modifier = Modifier.height(6.dp))
+                            NotePollSection(
+                                poll = poll,
+                                noteId = currentNote.id,
+                                onAction = onAction,
+                            )
+                        }
 
                         if (!isFolding && mediaFiles.isNotEmpty()) {
                             Spacer(modifier = Modifier.height(6.dp))
@@ -926,6 +941,147 @@ private fun NoteActionButton(
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+    }
+}
+
+// ─────────────────────────────────────────────────
+// NotePollSection
+// ─────────────────────────────────────────────────
+
+/**
+ * 投票セクション。
+ * - 投票可能 (poll.canVote) な選択肢はタップで投票できる。
+ * - 投票済み / 期限切れの場合は結果バーのみ表示する。
+ * - 複数選択 (poll.multiple) の場合は未投票の選択肢を個別にタップできる。
+ */
+@Composable
+private fun NotePollSection(
+    poll: Poll,
+    noteId: Note.Id,
+    onAction: (NoteCardAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val totalVotes = poll.totalVoteCount
+
+    Column(modifier = modifier.fillMaxWidth()) {
+        poll.choices.forEach { choice ->
+            val fraction = if (totalVotes > 0) choice.votes.toFloat() / totalVotes else 0f
+            val animatedFraction by animateFloatAsState(
+                targetValue = fraction,
+                label = "poll_bar_${choice.index}",
+            )
+            // 複数選択は未投票のものに限り個別タップ可能、単一選択は canVote に従う
+            val isClickable = poll.canVote && !choice.isVoted
+
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .clip(RoundedCornerShape(6.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .then(
+                        if (isClickable) Modifier.clickable {
+                            onAction(NoteCardAction.OnPollChoiceClicked(noteId, poll, choice))
+                        } else Modifier
+                    ),
+            ) {
+                // 票数に応じた色付き背景（プログレスバー代わり）
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth(animatedFraction)
+                        .fillMaxHeight()
+                        .background(
+                            if (choice.isVoted) MaterialTheme.colorScheme.primary.copy(alpha = 0.35f)
+                            else MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
+                        ),
+                )
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    // 投票状態アイコン
+                    when {
+                        choice.isVoted -> Icon(
+                            imageVector = Icons.Default.CheckCircle,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        poll.canVote -> Icon(
+                            imageVector = Icons.Default.RadioButtonUnchecked,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(16.dp),
+                        )
+                        else -> Spacer(Modifier.size(16.dp))
+                    }
+
+                    Spacer(Modifier.width(6.dp))
+
+                    Text(
+                        text = choice.text,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = if (choice.isVoted) FontWeight.SemiBold else FontWeight.Normal,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+
+                    Spacer(Modifier.width(8.dp))
+
+                    val percentage = if (totalVotes > 0)
+                        (choice.votes.toFloat() / totalVotes * 100 + 0.5f).toInt()
+                    else 0
+                    Text(
+                        text = "$percentage%",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+
+            Spacer(Modifier.height(4.dp))
+        }
+
+        // フッター: 総投票数 ＋ 期限
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            Text(
+                text = stringResource(R.string.poll_votes_count, totalVotes),
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+
+            val expiresAt = poll.expiresAt
+            if (expiresAt != null) {
+                val now = Clock.System.now()
+                if (expiresAt <= now) {
+                    Text(
+                        text = stringResource(R.string.poll_ended),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Text(
+                        text = stringResource(
+                            R.string.poll_expires_in,
+                            DateUtils.getRelativeTimeSpanString(
+                                expiresAt.toEpochMilliseconds(),
+                                System.currentTimeMillis(),
+                                DateUtils.MINUTE_IN_MILLIS,
+                            ),
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
         }
     }
 }
