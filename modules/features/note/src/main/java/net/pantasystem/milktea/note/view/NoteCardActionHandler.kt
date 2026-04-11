@@ -209,9 +209,11 @@ class NoteCardActionHandler(
             }
 
             is NoteCardAction.OnHashtagClick -> {
-                searchNavigation.newIntent(
-                    SearchNavType.ResultScreen(
-                        action.hashtag,
+                activity.startActivity(
+                    searchNavigation.newIntent(
+                        SearchNavType.ResultScreen(
+                            action.hashtag,
+                        )
                     )
                 )
             }
