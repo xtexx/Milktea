@@ -653,4 +653,13 @@
 
     <string name="settings_enable_haptic_feedback_on_new_post">新規投稿受信時の感覚フィードバックを有効にする</string>
 
+    <!-- poll -->
+    <string name="poll_votes_count">%d 票</string>
+    <string name="poll_expires_in">%s に終了</string>
+
+    <!-- developer options -->
+    <string name="settings_developer_options">開発者向けオプション</string>
+    <string name="settings_dev_compose_timeline">Compose タイムライン</string>
+    <string name="settings_dev_compose_timeline_description">有効にすると次回タイムライン表示時から Compose 版を使用します</string>
+
 </resources>
