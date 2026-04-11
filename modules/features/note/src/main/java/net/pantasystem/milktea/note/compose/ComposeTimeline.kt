@@ -87,15 +87,26 @@ fun ComposeTimeline(
     // ── スクロール量を onScrolled で通知 ──────────────────────────────
     // ・position / offset を ViewModel に保存（スクロール位置復元用）
     // ・下方向スクロール (dy > 16) で新着ボタンを非表示
+    // ・isScrollInProgress が false のとき（データ更新によるリスト再構成など）は
+    //   dy=0 を渡してボタンが誤って消えないようにする
     LaunchedEffect(listState) {
         var prevIndex = 0
         var prevOffset = 0
-        snapshotFlow { listState.firstVisibleItemIndex to listState.firstVisibleItemScrollOffset }
-            .collect { (index, offset) ->
-                val dy = when {
-                    index > prevIndex -> 100   // アイテム境界を超えて下スクロール
-                    index < prevIndex -> -100  // アイテム境界を超えて上スクロール
-                    else -> offset - prevOffset
+        snapshotFlow {
+            Triple(
+                listState.firstVisibleItemIndex,
+                listState.firstVisibleItemScrollOffset,
+                listState.isScrollInProgress,
+            )
+        }.collect { (index, offset, isScrollInProgress) ->
+                val dy = if (isScrollInProgress) {
+                    when {
+                        index > prevIndex -> 100   // アイテム境界を超えて下スクロール
+                        index < prevIndex -> -100  // アイテム境界を超えて上スクロール
+                        else -> offset - prevOffset
+                    }
+                } else {
+                    0  // ユーザー操作なし（データ更新等）: 位置だけ保存、ボタンは消さない
                 }
                 prevIndex = index
                 prevOffset = offset
