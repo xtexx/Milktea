@@ -67,6 +67,7 @@ import net.pantasystem.milktea.common_android_ui.MfmText
 import net.pantasystem.milktea.common_android_ui.TextType
 import net.pantasystem.milktea.model.emoji.CustomEmoji
 import net.pantasystem.milktea.model.note.Note
+import net.pantasystem.milktea.model.note.reaction.Reaction
 import net.pantasystem.milktea.note.R
 import net.pantasystem.milktea.note.media.viewmodel.MediaViewData
 import net.pantasystem.milktea.note.media.viewmodel.PreviewAbleFile
@@ -111,7 +112,7 @@ fun NoteCard(
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
                         text = statusMessage,
-                        style = MaterialTheme.typography.labelSmall,
+                        style = MaterialTheme.typography.labelMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
@@ -824,6 +825,7 @@ private fun NoteReactions(
     expanded: Boolean,
     onAction: (NoteCardAction) -> Unit,
 ) {
+    val isMisskey = note.toShowNote.note.isMisskey
     FlowRow(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(4.dp),
@@ -832,6 +834,7 @@ private fun NoteReactions(
         reactions.forEach { reaction ->
             ReactionChip(
                 reaction = reaction,
+                isReactionable = !isMisskey || Reaction(reaction.reaction).isLocal(),
                 onClicked = { onAction(NoteCardAction.OnReactionClicked(note, reaction.reaction)) },
             )
         }
@@ -850,6 +853,7 @@ private fun NoteReactions(
 @Composable
 private fun ReactionChip(
     reaction: ReactionViewData,
+    isReactionable: Boolean,
     onClicked: () -> Unit,
 ) {
     val isMyReaction = reaction.isMyReaction
@@ -861,6 +865,7 @@ private fun ReactionChip(
             .clickable(onClick = onClicked),
         shape = RoundedCornerShape(50),
         color = if (isMyReaction) MaterialTheme.colorScheme.primaryContainer
+        else if (isReactionable) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f)
         else MaterialTheme.colorScheme.surfaceVariant,
     ) {
         Row(
