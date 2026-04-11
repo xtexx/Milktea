@@ -211,6 +211,7 @@ class TimelineViewModel @AssistedInject constructor(
     }
 
     fun loadOld() {
+        logger.debug { "call load old" }
         pagingCoroutineScope.launch {
             timelineStore.loadPrevious().onSuccess {
                 _isVisibleNewPostsButton.value = false

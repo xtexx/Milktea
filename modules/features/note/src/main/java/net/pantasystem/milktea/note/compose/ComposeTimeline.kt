@@ -57,6 +57,23 @@ fun ComposeTimeline(
     val listState = rememberLazyListState()
 
     // ── 末尾付近に達したら追加ロード（loadOld） ───────────────────────
+    // TODO: 以下不具合があるためClaudeのTokenが復活したら修正する
+    /**
+     *   根本原因: distinctUntilChanged() による二度目の emission がスキップされる
+     *
+     *   初回表示時の状態遷移はこうなっています：
+     *
+     *   1. items = [] → total = 0 → shouldLoadMore = false
+     *   2. items = [Loading] → total = 1, lastVisible = 0, 0 >= 1-5 = -4 → shouldLoadMore = true → loadOld() 呼ばれる（でも Loading 中で無効）
+     *   3. items = [N1, N2, N3, Loading]（全件画面に収まる）→ total = 4, lastVisible = 3, 3 >= -1 → まだ true
+     *
+     *   distinctUntilChanged() は step 2 で true を記録済みなので、step 3 では 変化なしとみなしてスキップ → loadOld() が呼ばれない。
+     *
+     *   一度先頭に戻ると shouldLoadMore = false になるので、その後末端に移動すると false → true の遷移になり呼ばれる、というわけです。
+     *
+     *   修正方針: shouldLoadMore の条件を「最後の Note アイテムが画面内に見えているか」に変更する。これで Loading item だけのとき（まだ Note が 0 件）は false
+     *   になり、ノートが追加されたタイミングで正しく false → true の遷移が起きます。
+     */
     val shouldLoadMore by remember {
         derivedStateOf {
             val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0

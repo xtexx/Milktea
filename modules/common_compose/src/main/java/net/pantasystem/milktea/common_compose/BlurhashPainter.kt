@@ -1,5 +1,6 @@
 package net.pantasystem.milktea.common_compose
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.util.LruCache
 import androidx.compose.runtime.Composable
@@ -48,6 +49,7 @@ fun rememberBlurhashPainter(
         blurhashBitmapCache.get(cacheKey(blurhash, width, height))
     }
 
+    @SuppressLint("ProduceStateDoesNotAssignValue")
     val painter by produceState<Painter?>(
         initialValue = cachedBitmap?.let { BitmapPainter(it.asImageBitmap()) },
         key1 = blurhash,
