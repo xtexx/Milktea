@@ -1,6 +1,5 @@
 package net.pantasystem.milktea.common_android_ui
 
-import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -41,7 +40,6 @@ import dev.misskey.mfm.node.MathBlock
 import dev.misskey.mfm.node.MathInline
 import dev.misskey.mfm.node.Mention
 import dev.misskey.mfm.node.MfmNode
-import dev.misskey.mfm.node.MfmText as MfmTextNode
 import dev.misskey.mfm.node.Plain
 import dev.misskey.mfm.node.Quote
 import dev.misskey.mfm.node.Search
@@ -53,6 +51,8 @@ import net.pantasystem.milktea.common_android.mfm.MFMParser
 import net.pantasystem.milktea.model.emoji.CustomEmoji
 import java.text.DateFormat
 import java.util.Date
+import android.graphics.Color as AndroidColor
+import dev.misskey.mfm.node.MfmText as MfmTextNode
 
 /**
  * MFM (Markup For Misskey) テキストを Compose の Text でリッチ表示するコンポーザブル。
@@ -109,6 +109,7 @@ fun MfmText(
             AsyncImage(
                 model = url,
                 contentDescription = null,
+                // TODO: emoji.aspectRatioを使って幅を広げたい
                 modifier = Modifier.fillMaxSize(),
             )
         }

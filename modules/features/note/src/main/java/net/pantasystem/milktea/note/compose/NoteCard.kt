@@ -812,7 +812,7 @@ private fun ReactionChip(
                 AsyncImage(
                     model = emoji.url ?: emoji.uri,
                     contentDescription = reaction.reaction,
-                    modifier = Modifier.size(20.dp),
+                    modifier = Modifier.height(20.dp).aspectRatio(reaction.emoji?.aspectRatio ?: 1f),
                 )
             } else {
                 Text(
