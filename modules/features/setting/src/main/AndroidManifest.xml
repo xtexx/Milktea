@@ -30,6 +30,9 @@
         <activity
             android:name=".activities.ClientWordFilterSettingActivity"
             android:exported="false" />
+        <activity
+            android:name=".activities.DeveloperSettingActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

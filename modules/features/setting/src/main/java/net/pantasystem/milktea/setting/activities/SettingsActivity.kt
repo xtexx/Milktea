@@ -19,24 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalContext
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
-import net.pantasystem.milktea.common_android.debug.DebugFeatureFlags
 import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import net.pantasystem.milktea.common.ui.ApplyTheme
-import net.pantasystem.milktea.setting.BuildConfig
 import net.pantasystem.milktea.setting.R
 import net.pantasystem.milktea.setting.compose.SettingListTileLayout
-import net.pantasystem.milktea.setting.compose.SettingSwitchTile
-import net.pantasystem.milktea.setting.compose.SettingTitleTile
 import javax.inject.Inject
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.WindowInsets
@@ -234,30 +226,19 @@ class SettingsActivity : AppCompatActivity() {
                             Text(stringResource(id = R.string.license))
                         }
 
-                        // ── 開発者向けオプション（DEBUG ビルドのみ表示）─────────────────
-                        if (BuildConfig.DEBUG) {
-                            val context = LocalContext.current
-                            var composeTimelineEnabled by remember {
-                                mutableStateOf(DebugFeatureFlags.isComposeTimelineEnabled(context))
-                            }
-                            SettingTitleTile(text = "[Dev] 開発者向けオプション")
-                            SettingSwitchTile(
-                                checked = composeTimelineEnabled,
-                                onChanged = { enabled ->
-                                    DebugFeatureFlags.setComposeTimelineEnabled(context, enabled)
-                                    composeTimelineEnabled = enabled
-                                },
-                                subtitle = {
-                                    Text(
-                                        text = "有効にすると次回タイムライン表示時から Compose 版を使用します",
-                                        style = androidx.compose.material3.MaterialTheme.typography.bodySmall,
+                        SettingListTileLayout(
+                            verticalPadding = 12.dp,
+                            onClick = {
+                                startActivity(
+                                    Intent(
+                                        this@SettingsActivity,
+                                        DeveloperSettingActivity::class.java,
                                     )
-                                },
-                            ) {
-                                Text("[Dev] Compose タイムライン")
+                                )
                             }
+                        ) {
+                            Text(stringResource(id = R.string.settings_developer_options))
                         }
-                        // ──────────────────────────────────────────────────────────────
                     }
                 }
             }
