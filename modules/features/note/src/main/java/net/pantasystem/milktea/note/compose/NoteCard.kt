@@ -170,6 +170,18 @@ fun SimpleNoteCardAsMain(
                             note = note,
                             isFolding = isFolding,
                             onToggleFolding = { note.changeContentFolding() },
+                            onUrlClick = {
+                                onAction(NoteCardAction.OnUrlClick(it))
+                            },
+                            onLinkClick = {
+                                onAction(NoteCardAction.OnLinkClick(it))
+                            },
+                            onHashtagClick = {
+                                onAction(NoteCardAction.OnHashtagClick(it))
+                            },
+                            onMentionClick = {
+                                onAction(NoteCardAction.OnMentionClick(it))
+                            },
                         )
 
                         if (!isFolding && mediaFiles.isNotEmpty()) {
@@ -342,6 +354,10 @@ private fun NoteBodySection(
     note: PlaneNoteViewData,
     isFolding: Boolean,
     onToggleFolding: () -> Unit,
+    onUrlClick: (String) -> Unit,
+    onLinkClick: (String) -> Unit,
+    onHashtagClick: (String) -> Unit,
+    onMentionClick: (String) -> Unit,
 ) {
     val cw = note.cw
 
@@ -360,17 +376,33 @@ private fun NoteBodySection(
     }
 
     if (!isFolding) {
-        NoteBodyText(note = note)
+        NoteBodyText(
+            note = note,
+            onUrlClick = onUrlClick,
+            onLinkClick = onLinkClick,
+            onHashtagClick = onHashtagClick,
+            onMentionClick = onMentionClick,
+        )
     }
 }
 
 @Composable
-private fun NoteBodyText(note: PlaneNoteViewData) {
+private fun NoteBodyText(
+    note: PlaneNoteViewData,
+    onUrlClick: (String) -> Unit,
+    onLinkClick: (String) -> Unit,
+    onHashtagClick: (String) -> Unit,
+    onMentionClick: (String) -> Unit,
+) {
     when (val textType = note.textNode) {
         is TextType.Misskey -> MfmText(
             nodes = textType.nodes,
             emojiNameMap = note.toShowNote.note.emojiNameMap ?: emptyMap(),
             style = MaterialTheme.typography.bodyMedium,
+            onUrlClick = onUrlClick,
+            onLinkClick = onLinkClick,
+            onHashtagClick = onHashtagClick,
+            onMentionClick = onMentionClick,
         )
 
         is TextType.Mastodon -> {

@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.common_viewmodel.CurrentPageableTimelineViewModel
 import net.pantasystem.milktea.model.account.page.Page
@@ -82,6 +83,9 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
     @Inject
     internal lateinit var configRepository: LocalConfigRepository
 
+    @Inject
+    internal lateinit var searchNavigation: SearchNavigation
+
     private val noteDetailViewModel: NoteDetailViewModel by viewModels()
 
     val binding: FragmentNoteDetailBinding by dataBinding()
@@ -101,6 +105,7 @@ class NoteDetailFragment : Fragment(R.layout.fragment_note_detail) {
                 settingStore,
                 userDetailNavigation,
                 channelDetailNavigation,
+                searchNavigation,
             ).onAction(it)
         }
         viewLifecycleOwner.lifecycleScope.launch {

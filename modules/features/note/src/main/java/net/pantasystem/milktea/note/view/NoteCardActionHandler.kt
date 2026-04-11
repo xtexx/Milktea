@@ -1,15 +1,20 @@
 package net.pantasystem.milktea.note.view
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.net.toUri
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.EntryPointAccessors
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common_android_ui.NavigationEntryPointForBinding
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
-import net.pantasystem.milktea.common_navigation.MediaNavigationArgs
+import net.pantasystem.milktea.common_navigation.MediaNavigationArgs.Files
+import net.pantasystem.milktea.common_navigation.SearchNavType
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigationArgs
+import net.pantasystem.milktea.common_navigation.UserDetailNavigationArgs.UserId
 import net.pantasystem.milktea.model.account.page.Pageable
 import net.pantasystem.milktea.model.note.Note
 import net.pantasystem.milktea.model.note.reaction.Reaction
@@ -32,6 +37,7 @@ class NoteCardActionHandler(
     val settingStore: SettingStore,
     val userDetailNavigation: UserDetailNavigation,
     val channelDetailNavigation: ChannelDetailNavigation,
+    val searchNavigation: SearchNavigation,
     val currentPageable: Pageable? = null,
 ) {
 
@@ -121,7 +127,7 @@ class NoteCardActionHandler(
                 )
             }
             is NoteCardAction.OnUserClicked -> {
-                val intent = userDetailNavigation.newIntent(UserDetailNavigationArgs.UserId(action.user.id))
+                val intent = userDetailNavigation.newIntent(UserId(action.user.id))
                 activity.startActivity(
                     intent
                 )
@@ -158,7 +164,7 @@ class NoteCardActionHandler(
                     NavigationEntryPointForBinding::class.java
                 )
                     .mediaNavigation().newIntent(
-                        MediaNavigationArgs.Files(
+                        Files(
                             files = previewAbleFileList.map { fvd ->
                                 fvd.source
                             },
@@ -200,6 +206,31 @@ class NoteCardActionHandler(
                     action.mediaViewData.show(action.targetIndex)
                 }
 
+            }
+
+            is NoteCardAction.OnHashtagClick -> {
+                searchNavigation.newIntent(
+                    SearchNavType.ResultScreen(
+                        action.hashtag,
+                    )
+                )
+            }
+            is NoteCardAction.OnLinkClick -> {
+                val intent = Intent(Intent.ACTION_VIEW, action.url.toUri())
+                activity.startActivity(intent)
+            }
+            is NoteCardAction.OnMentionClick -> {
+                activity.startActivity(
+                    userDetailNavigation.newIntent(
+                        UserDetailNavigationArgs.UserName(
+                            action.mention
+                        )
+                    )
+                )
+            }
+            is NoteCardAction.OnUrlClick -> {
+                val intent = Intent(Intent.ACTION_VIEW, action.url.toUri())
+                activity.startActivity(intent)
             }
         }
     }

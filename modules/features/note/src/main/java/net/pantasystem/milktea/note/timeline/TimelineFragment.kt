@@ -29,10 +29,13 @@ import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common.ui.ApplyMenuTint
 import net.pantasystem.milktea.common.ui.PageableView
+import net.pantasystem.milktea.common_android.debug.DebugFeatureFlags
 import net.pantasystem.milktea.common_android.ui.haptic.HapticFeedbackController
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
 import net.pantasystem.milktea.common_navigation.AuthorizationArgs
 import net.pantasystem.milktea.common_navigation.AuthorizationNavigation
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.common_viewmodel.CurrentPageableTimelineViewModel
 import net.pantasystem.milktea.common_viewmodel.ScrollToTopViewModel
@@ -40,8 +43,6 @@ import net.pantasystem.milktea.model.account.page.Page
 import net.pantasystem.milktea.model.account.page.Pageable
 import net.pantasystem.milktea.model.setting.DefaultConfig
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
-import net.pantasystem.milktea.common_android.debug.DebugFeatureFlags
-import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
 import net.pantasystem.milktea.note.BuildConfig
 import net.pantasystem.milktea.note.R
 import net.pantasystem.milktea.note.compose.ComposeTimeline
@@ -138,6 +139,9 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
     @Inject
     internal lateinit var configRepository: LocalConfigRepository
 
+    @Inject
+    internal lateinit var searchNavigation: SearchNavigation
+
 
     private val mBinding: FragmentTimelineBinding by dataBinding()
 
@@ -212,6 +216,7 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
                 userDetailNavigation,
                 channelDetailNavigation,
                 currentPageable = mPageable,
+                searchNavigation = searchNavigation
             ).onAction(it)
         }
 
@@ -367,6 +372,7 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
             userDetailNavigation,
             channelDetailNavigation,
             currentPageable = mPageable,
+            searchNavigation = searchNavigation,
         )
 
         val composeView = ComposeView(requireContext()).apply {

@@ -19,6 +19,7 @@ import net.pantasystem.milktea.common_android_ui.UserPinnedNotesFragmentFactory
 import net.pantasystem.milktea.common_navigation.AuthorizationArgs
 import net.pantasystem.milktea.common_navigation.AuthorizationNavigation
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.user.User
@@ -61,6 +62,9 @@ class PinnedNoteFragment : Fragment(R.layout.fragment_pinned_notes) {
     @Inject
     lateinit var configRepository: LocalConfigRepository
 
+    @Inject
+    internal lateinit var searchNavigation: SearchNavigation
+
     val notesViewModel: NotesViewModel by activityViewModels()
 
     val pinnedNotesViewModel: PinnedNotesViewModel by viewModels()
@@ -90,7 +94,8 @@ class PinnedNoteFragment : Fragment(R.layout.fragment_pinned_notes) {
                 notesViewModel,
                 settingStore,
                 userDetailNavigation,
-                channelDetailNavigation
+                channelDetailNavigation,
+                searchNavigation,
             ).onAction(it)
         }
 
