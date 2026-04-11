@@ -18,9 +18,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,23 +54,39 @@ fun ComposeTimeline(
     val nestedScrollInterop = rememberNestedScrollInteropConnection()
     val listState = rememberLazyListState()
 
+
+//    // ── 末尾付近に達したら追加ロード（loadOld） ───────────────────────
+//    val shouldLoadMore by remember {
+//        derivedStateOf {
+//            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+//            val total = listState.layoutInfo.totalItemsCount
+//            Log.d("ComposeTimeline", "lastVisible=$lastVisible, total=$total, calc=${total > 1 && lastVisible >= total - 5}")
+//            // 修正: total > 0 ではなく total > 1 にする
+//            // （Loadingアイテム1件だけの時は false になり、Noteが追加されると true に遷移する）
+//            canLoadMore && total > 1 && lastVisible >= total - 5
+//        }
+//    }
+//
+//    LaunchedEffect(listState) {
+//        snapshotFlow { shouldLoadMore }
+////            .distinctUntilChanged()
+//            .collect { reachedEnd ->
+//                Log.d("ComposeTimeline", "reachedEnd=$reachedEnd")
+//                if (reachedEnd) viewModel.loadOld()
+//            }
+//    }
+
     // ── 末尾付近に達したら追加ロード（loadOld） ───────────────────────
-    val shouldLoadMore by remember {
-        derivedStateOf {
-            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
-            val total = listState.layoutInfo.totalItemsCount
-
-            // 修正: total > 0 ではなく total > 1 にする
-            // （Loadingアイテム1件だけの時は false になり、Noteが追加されると true に遷移する）
-            total > 1 && lastVisible >= total - 5
-        }
-    }
-
     LaunchedEffect(listState) {
-        snapshotFlow { shouldLoadMore }
-            .distinctUntilChanged()
-            .collect { reachedEnd ->
-                if (reachedEnd) viewModel.loadOld()
+        // 「画面に見えている最後のアイテムのインデックス」だけをシンプルに監視する
+        snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
+            .collect { lastVisibleIndex ->
+                val total = listState.layoutInfo.totalItemsCount
+
+                // データが1件以上あり、最後のアイテムが末端（付近）ならとにかく関数を呼ぶ
+                if (lastVisibleIndex != null && total > 0 && lastVisibleIndex >= total - 3) {
+                    viewModel.loadOld()
+                }
             }
     }
 
