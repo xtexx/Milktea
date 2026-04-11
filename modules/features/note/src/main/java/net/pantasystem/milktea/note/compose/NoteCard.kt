@@ -278,15 +278,24 @@ private fun Header(
     userName: String,
     timestamp: Instant,
 ) {
-    Row() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically // 垂直方向の中央揃えも追加しておくと綺麗です
+    ) {
+        // 1. 名前（長すぎる場合は省略）
         Text(
             text = name,
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
+            // 名前も長すぎると時間を圧迫するので、ここにもweightを入れるのが一般的です
+            modifier = Modifier.weight(1f, fill = false)
         )
-        Spacer(Modifier.width(2.dp))
+
+        Spacer(Modifier.width(4.dp))
+
+        // 2. ユーザー名（ここが可変領域）
         Text(
             text = userName,
             style = MaterialTheme.typography.bodyMedium,
@@ -294,8 +303,14 @@ private fun Header(
             fontStyle = FontStyle.Italic,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f),
+            // fill = false を指定することで、中身が短いときはその分だけ、
+            // 長いときは他の要素を押し出さない範囲で最大まで広がります
+            modifier = Modifier.weight(1f)
         )
+
+        Spacer(Modifier.width(8.dp))
+
+        // 3. タイムスタンプ（絶対表示したい要素）
         val createdAtMs = timestamp.toEpochMilliseconds()
         Text(
             text = remember(createdAtMs) {
@@ -312,7 +327,6 @@ private fun Header(
         )
     }
 }
-
 
 // ─────────────────────────────────────────────────
 // NoteHeader
