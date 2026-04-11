@@ -6,6 +6,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -38,7 +40,11 @@ import net.pantasystem.milktea.model.account.page.Page
 import net.pantasystem.milktea.model.account.page.Pageable
 import net.pantasystem.milktea.model.setting.DefaultConfig
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
+import net.pantasystem.milktea.common_android.debug.DebugFeatureFlags
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
+import net.pantasystem.milktea.note.BuildConfig
 import net.pantasystem.milktea.note.R
+import net.pantasystem.milktea.note.compose.ComposeTimeline
 import net.pantasystem.milktea.note.databinding.FragmentTimelineBinding
 import net.pantasystem.milktea.note.timeline.viewmodel.AccountId
 import net.pantasystem.milktea.note.timeline.viewmodel.PageId
@@ -173,6 +179,13 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // ── デバッグ専用: Compose タイムラインを使用する場合は早期 return ──────────
+        if (BuildConfig.DEBUG && DebugFeatureFlags.isComposeTimelineEnabled(requireContext())) {
+            setupComposeTimeline(view)
+            return
+        }
+        // ─────────────────────────────────────────────────────────────────────────
 
         val lm = LinearLayoutManager(this.requireContext())
         _linearLayoutManager = lm
@@ -336,6 +349,43 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
         }
     }
 
+
+    /**
+     * Compose タイムラインをセットアップする。
+     * 既存の SwipeRefreshLayout + RecyclerView を隠し、ComposeView を FrameLayout に追加する。
+     * DEBUG ビルド + DebugFeatureFlags.isComposeTimelineEnabled() == true のときのみ呼ばれる。
+     */
+    private fun setupComposeTimeline(view: View) {
+        // 既存の RecyclerView (SwipeRefreshLayout) を隠す
+        mBinding.refresh.isVisible = false
+        mBinding.jumpToNewPostsButton.isVisible = false
+
+        val actionHandler = NoteCardActionHandler(
+            requireActivity() as AppCompatActivity,
+            notesViewModel,
+            settingStore,
+            userDetailNavigation,
+            channelDetailNavigation,
+            currentPageable = mPageable,
+        )
+
+        val composeView = ComposeView(requireContext()).apply {
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+            )
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
+                    ComposeTimeline(
+                        viewModel = mViewModel,
+                        onAction = { actionHandler.onAction(it) },
+                    )
+                }
+            }
+        }
+        (mBinding.root as android.widget.FrameLayout).addView(composeView, 0)
+    }
 
     override fun onResume() {
         super.onResume()

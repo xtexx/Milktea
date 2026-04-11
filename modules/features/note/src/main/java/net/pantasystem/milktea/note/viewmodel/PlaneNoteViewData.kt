@@ -2,12 +2,20 @@ package net.pantasystem.milktea.note.viewmodel
 
 
 import android.util.Log
-import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import net.pantasystem.milktea.app_store.notes.NoteTranslationStore
 import net.pantasystem.milktea.common.ResultState
 import net.pantasystem.milktea.common_android.mfm.MFMParser
@@ -20,7 +28,11 @@ import net.pantasystem.milktea.model.account.Account
 import net.pantasystem.milktea.model.file.AboutMediaType
 import net.pantasystem.milktea.model.file.AppFile
 import net.pantasystem.milktea.model.file.FilePreviewSource
-import net.pantasystem.milktea.model.note.*
+import net.pantasystem.milktea.model.note.Note
+import net.pantasystem.milktea.model.note.NoteCaptureAPIAdapter
+import net.pantasystem.milktea.model.note.NoteDataSource
+import net.pantasystem.milktea.model.note.NoteRelation
+import net.pantasystem.milktea.model.note.Translation
 import net.pantasystem.milktea.model.setting.DefaultConfig
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.url.UrlPreview
@@ -28,6 +40,7 @@ import net.pantasystem.milktea.model.url.UrlPreviewLoadTask
 import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.note.media.viewmodel.MediaViewData
 import net.pantasystem.milktea.note.reaction.ReactionViewData
+import java.util.UUID
 
 open class PlaneNoteViewData(
     val note: NoteRelation,
@@ -38,6 +51,7 @@ open class PlaneNoteViewData(
     coroutineScope: CoroutineScope,
 ) : NoteViewData {
 
+    val uuid = UUID.randomUUID().toString()
     val id = note.note.id
 
     var filterResult: FilterResult = FilterResult.NotExecuted
