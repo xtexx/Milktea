@@ -1,16 +1,19 @@
 package net.pantasystem.milktea.note.compose
 
+import android.annotation.SuppressLint
 import android.text.format.DateUtils
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +26,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.material.icons.filled.Reply
 import androidx.compose.material.icons.filled.SentimentSatisfied
@@ -44,11 +48,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -151,7 +157,7 @@ fun SimpleNoteCard(
             onToggleFolding = { note.changeContentFolding() },
         )
 
-        if (!isFolding && mediaFiles.isNotEmpty() && !note.media.isOver4Files) {
+        if (!isFolding && mediaFiles.isNotEmpty()) {
             Spacer(modifier = Modifier.height(6.dp))
             NoteMediaGrid(
                 mediaViewData = note.media,
@@ -236,7 +242,7 @@ fun SimpleNoteCardAsMain(
                     onToggleFolding = { note.changeContentFolding() },
                 )
 
-                if (!isFolding && mediaFiles.isNotEmpty() && !note.media.isOver4Files) {
+                if (!isFolding && mediaFiles.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(6.dp))
                     NoteMediaGrid(
                         mediaViewData = note.media,
@@ -455,8 +461,17 @@ private fun NoteBodyText(note: PlaneNoteViewData) {
 
 // ─────────────────────────────────────────────────
 // NoteMediaGrid
+// MediaLayout と同じレイアウトアルゴリズムを Compose で再現する。
+// アスペクト比 16:10、2カラム固定、枚数制限なし。
+//
+// 配置ルール（MediaLayout と同一）:
+//   N=1         : 全幅
+//   N=2         : 左右各1枚、高さ = 全幅 / aspect
+//   N=奇数(≥3) : 奇数インデックス + 最後のアイテム → 右カラム、残り → 左カラム
+//   N=偶数(≥4) : 奇数インデックス → 右カラム、偶数インデックス → 左カラム
 // ─────────────────────────────────────────────────
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 private fun NoteMediaGrid(
     mediaViewData: MediaViewData,
@@ -464,101 +479,84 @@ private fun NoteMediaGrid(
     onAction: (NoteCardAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val displayFiles = files.take(4)
+    val n = files.size
+    if (n == 0) return
 
-    when (displayFiles.size) {
-        1 -> MediaItem(
-            file = displayFiles[0],
-            index = 0,
-            files = files,
-            mediaViewData = mediaViewData,
-            onAction = onAction,
-            modifier = modifier
-                .fillMaxWidth()
-                .aspectRatio(16f / 9f),
-        )
+    val gap = 4.dp          // MediaLayout の spaceMargin 相当
+    val aspect = 16f / 10f  // MediaLayout: aspectRatio = 16.0 / 10.0
 
-        2 -> Row(
-            modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            displayFiles.forEachIndexed { idx, file ->
-                MediaItem(
-                    file = file,
-                    index = idx,
-                    files = files,
-                    mediaViewData = mediaViewData,
-                    onAction = onAction,
-                    modifier = Modifier
-                        .weight(1f)
-                        .aspectRatio(1f),
-                )
-            }
-        }
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+        val totalW = maxWidth
 
-        3 -> Row(
-            modifier = modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
+        // N=1: 全幅
+        if (n == 1) {
             MediaItem(
-                file = displayFiles[0],
+                file = files[0],
                 index = 0,
                 files = files,
                 mediaViewData = mediaViewData,
                 onAction = onAction,
-                modifier = Modifier
-                    .weight(1f)
-                    .aspectRatio(0.75f),
+                modifier = Modifier.fillMaxWidth().height(totalW / aspect),
             )
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(2.dp),
-            ) {
-                displayFiles.drop(1).forEachIndexed { i, file ->
-                    MediaItem(
-                        file = file,
-                        index = i + 1,
-                        files = files,
-                        mediaViewData = mediaViewData,
-                        onAction = onAction,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f),
-                    )
-                }
-            }
+            return@BoxWithConstraints
         }
 
-        else -> Column(
-            // 4枚: 2x2
-            modifier = modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+        val halfW = (totalW - gap) / 2
+        val isOdd = n % 2 == 1
+
+        // MediaLayout の isRight ロジックと同一
+        val leftFiles = mutableListOf<Pair<Int, PreviewAbleFile>>()
+        val rightFiles = mutableListOf<Pair<Int, PreviewAbleFile>>()
+        for (i in 0 until n) {
+            val isRight = if (isOdd) {
+                i == n - 1 || i % 2 == 1
+            } else {
+                i % 2 == 1
+            }
+            if (isRight) rightFiles.add(i to files[i])
+            else leftFiles.add(i to files[i])
+        }
+
+        // MediaLayout と同じ高さ計算
+        // N=2: totalH = totalW / aspect（全幅基準）
+        // N≥3: totalH = max(左行数, 右行数) × (halfW / aspect)
+        val totalH = if (n == 2) {
+            totalW / aspect
+        } else {
+            (halfW / aspect) * maxOf(leftFiles.size, rightFiles.size)
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth().height(totalH),
+            horizontalArrangement = Arrangement.spacedBy(gap),
         ) {
-            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                displayFiles.take(2).forEachIndexed { idx, file ->
+            Column(
+                modifier = Modifier.width(halfW).fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(gap),
+            ) {
+                leftFiles.forEach { (idx, file) ->
                     MediaItem(
                         file = file,
                         index = idx,
                         files = files,
                         mediaViewData = mediaViewData,
                         onAction = onAction,
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f),
+                        modifier = Modifier.fillMaxWidth().weight(1f),
                     )
                 }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                displayFiles.drop(2).forEachIndexed { idx, file ->
+            Column(
+                modifier = Modifier.width(halfW).fillMaxHeight(),
+                verticalArrangement = Arrangement.spacedBy(gap),
+            ) {
+                rightFiles.forEach { (idx, file) ->
                     MediaItem(
                         file = file,
-                        index = idx + 2,
+                        index = idx,
                         files = files,
                         mediaViewData = mediaViewData,
                         onAction = onAction,
-                        modifier = Modifier
-                            .weight(1f)
-                            .aspectRatio(1f),
+                        modifier = Modifier.fillMaxWidth().weight(1f),
                     )
                 }
             }
@@ -580,34 +578,81 @@ private fun MediaItem(
             .clip(RoundedCornerShape(4.dp))
             .background(MaterialTheme.colorScheme.surfaceVariant)
             .clickable {
-                if (file.isHiding) {
-                    onAction(NoteCardAction.OnSensitiveMediaPreviewClicked(mediaViewData, index))
-                } else {
-                    onAction(
-                        NoteCardAction.OnMediaPreviewClicked(
-                            previewAbleFile = file,
-                            files = files,
-                            index = index,
-                            thumbnailView = java.lang.ref.WeakReference(null),
+                when {
+                    file.visibleType == PreviewAbleFile.VisibleType.SensitiveHide ->
+                        onAction(NoteCardAction.OnSensitiveMediaPreviewClicked(mediaViewData, index))
+                    file.isHiding ->
+                        mediaViewData.show(index)
+                    else ->
+                        onAction(
+                            NoteCardAction.OnMediaPreviewClicked(
+                                previewAbleFile = file,
+                                files = files,
+                                index = index,
+                                thumbnailView = java.lang.ref.WeakReference(null),
+                            )
                         )
-                    )
                 }
             },
         contentAlignment = Alignment.Center,
     ) {
-        if (file.isHiding) {
-            Icon(
-                imageVector = Icons.Default.VisibilityOff,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        } else {
+        // サムネイル（隠し状態でも薄く表示してブラー感を演出）
+        val thumbnailUrl = file.source.thumbnailUrl ?: file.source.path
+        if (thumbnailUrl != null) {
             AsyncImage(
-                model = file.source.thumbnailUrl ?: file.source.path,
+                model = thumbnailUrl,
                 contentDescription = file.source.comment,
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
+                alpha = if (file.isHiding) 0.25f else 1f,
             )
+        }
+
+        if (file.isHiding) {
+            // 半透明スクリム + アイコン + メッセージ
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)),
+            )
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(horizontal = 8.dp),
+            ) {
+                Icon(
+                    imageVector = Icons.Default.VisibilityOff,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.size(24.dp),
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = stringResource(
+                        if (file.visibleType == PreviewAbleFile.VisibleType.SensitiveHide)
+                            R.string.sensitive_content
+                        else
+                            R.string.notes_media_click_to_load_image
+                    ),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
+                )
+            }
+        } else if (file.isVisiblePlayButton) {
+            // 動画再生ボタン
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(Color.Black.copy(alpha = 0.5f), CircleShape),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(32.dp),
+                )
+            }
         }
     }
 }
@@ -710,7 +755,7 @@ private fun SubNoteCard(
                     }
                 }
 
-                if (subMediaFiles.isNotEmpty() && !note.subNoteMedia.isOver4Files) {
+                if (subMediaFiles.isNotEmpty()) {
                     Spacer(modifier = Modifier.height(4.dp))
                     NoteMediaGrid(
                         mediaViewData = note.subNoteMedia,
