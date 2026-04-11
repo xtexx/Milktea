@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.ParagraphStyle
@@ -29,6 +30,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import dagger.hilt.android.EntryPointAccessors
 import dev.misskey.mfm.node.Bold
 import dev.misskey.mfm.node.Center
 import dev.misskey.mfm.node.CodeBlock
@@ -108,6 +110,7 @@ fun MfmText(
     }
 
     // InlineTextContent は @Composable コンテンツを含むため remember 外で構築する
+    val context = LocalContext.current
     val inlineContents = emojiEntries.entries.associate { (id, emoji) ->
         val url = emoji.url ?: emoji.uri
         // aspectRatio (width/height) を幅に反映。極端に広い絵文字は 3x までキャップ。
@@ -123,6 +126,17 @@ fun MfmText(
                 model = url,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
+                onSuccess = { state ->
+                    val drawable = state.result.drawable
+                    val imageAspectRatio =
+                        drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight
+                    val ep = EntryPointAccessors.fromApplication(
+                        context.applicationContext,
+                        BindingProvider::class.java,
+                    )
+                    ep.customEmojiAspectRatioStore().save(emoji, imageAspectRatio)
+                    ep.emojiImageCacheStore().save(emoji)
+                },
             )
         }
     }

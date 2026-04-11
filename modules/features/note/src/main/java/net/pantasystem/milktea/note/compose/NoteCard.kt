@@ -66,10 +66,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.graphics.ColorUtils
 import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
+import dagger.hilt.android.EntryPointAccessors
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import net.pantasystem.milktea.common_android.platform.isWifiConnected
 import net.pantasystem.milktea.common_android.resource.getString
+import net.pantasystem.milktea.common_android_ui.BindingProvider
 import net.pantasystem.milktea.common_android_ui.EmojiText
 import net.pantasystem.milktea.common_android_ui.MfmText
 import net.pantasystem.milktea.common_android_ui.TextType
@@ -82,6 +84,7 @@ import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.note.R
 import net.pantasystem.milktea.note.media.viewmodel.MediaViewData
 import net.pantasystem.milktea.note.media.viewmodel.PreviewAbleFile
+import net.pantasystem.milktea.note.reaction.ImageAspectRatioCache
 import net.pantasystem.milktea.note.reaction.ReactionViewData
 import net.pantasystem.milktea.note.view.NoteCardAction
 import net.pantasystem.milktea.note.viewmodel.NoteStatusMessageTextGenerator
@@ -872,12 +875,27 @@ private fun ReactionChip(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             if (emoji != null) {
+                val context = LocalContext.current
                 AsyncImage(
                     model = emoji.url ?: emoji.uri,
                     contentDescription = reaction.reaction,
                     modifier = Modifier
                         .height(20.dp)
                         .aspectRatio(reaction.emoji?.aspectRatio ?: 1f),
+                    onSuccess = { state ->
+                        val drawable = state.result.drawable
+                        val imageAspectRatio =
+                            drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight
+                        val ep = EntryPointAccessors.fromApplication(
+                            context.applicationContext,
+                            BindingProvider::class.java,
+                        )
+                        ep.customEmojiAspectRatioStore().save(emoji, imageAspectRatio)
+                        if (emoji.aspectRatio == null || emoji.aspectRatio != imageAspectRatio) {
+                            ImageAspectRatioCache.put(emoji.url ?: emoji.uri, imageAspectRatio)
+                        }
+                        ep.emojiImageCacheStore().save(emoji)
+                    },
                 )
             } else {
                 Text(

@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.TextStyle
@@ -17,6 +18,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import dagger.hilt.android.EntryPointAccessors
 import net.pantasystem.milktea.model.emoji.CustomEmojiParsedResult
 import net.pantasystem.milktea.model.emoji.EmojiResolvedType
 
@@ -63,9 +65,11 @@ fun EmojiText(
     }
 
     // InlineTextContent は @Composable コンテンツを含むため remember 外で構築する
+    val context = LocalContext.current
     val inlineContents = parsedResult.emojis.associate { emojiPos ->
         val id = ":${emojiPos.result.tag}:"
         val url = emojiPos.result.getUrl(accountHost)
+        val resolvedEmoji = (emojiPos.result as? EmojiResolvedType.Resolved)?.emoji
         val aspectRatio = when (val r = emojiPos.result) {
             is EmojiResolvedType.Resolved -> (r.emoji.aspectRatio ?: 1f).coerceIn(0.1f, 3f)
             is EmojiResolvedType.UnResolved -> 1f
@@ -81,6 +85,19 @@ fun EmojiText(
                 model = url,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
+                onSuccess = { state ->
+                    if (resolvedEmoji != null) {
+                        val drawable = state.result.drawable
+                        val imageAspectRatio =
+                            drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight
+                        val ep = EntryPointAccessors.fromApplication(
+                            context.applicationContext,
+                            BindingProvider::class.java,
+                        )
+                        ep.customEmojiAspectRatioStore().save(resolvedEmoji, imageAspectRatio)
+                        ep.emojiImageCacheStore().save(resolvedEmoji)
+                    }
+                },
             )
         }
     }
