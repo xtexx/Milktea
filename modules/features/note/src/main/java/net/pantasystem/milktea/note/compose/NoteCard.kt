@@ -865,7 +865,7 @@ private fun ReactionChip(
             .clickable(onClick = onClicked),
         shape = RoundedCornerShape(50),
         color = if (isMyReaction) MaterialTheme.colorScheme.primaryContainer
-        else if (isReactionable) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.75f)
+        else if (!isReactionable) MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f)
         else MaterialTheme.colorScheme.surfaceVariant,
     ) {
         Row(
