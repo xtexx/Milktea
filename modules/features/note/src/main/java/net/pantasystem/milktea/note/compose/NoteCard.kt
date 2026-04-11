@@ -138,6 +138,7 @@ fun SimpleNoteCard(
     val mediaFiles by note.media.files.collectAsState()
     val reactions by note.reactionCountsViewData.collectAsState()
     val reactionCountsExpanded by note.reactionCountsExpanded.collectAsState()
+    val isExpanded by note.expanded.collectAsState()
 
     val paddingH = if (isSubNote) 8.dp else 12.dp
     val paddingV = if (isSubNote) 6.dp else 8.dp
@@ -151,24 +152,31 @@ fun SimpleNoteCard(
 
         Spacer(modifier = Modifier.height(4.dp))
 
-        NoteBodySection(
-            note = note,
-            isFolding = isFolding,
-            onToggleFolding = { note.changeContentFolding() },
-        )
+        AutoCollapsingLayout(
+            expanded = isExpanded,
+            onExpand = { note.expand() },
+        ) {
+            Column {
+                NoteBodySection(
+                    note = note,
+                    isFolding = isFolding,
+                    onToggleFolding = { note.changeContentFolding() },
+                )
 
-        if (!isFolding && mediaFiles.isNotEmpty()) {
-            Spacer(modifier = Modifier.height(6.dp))
-            NoteMediaGrid(
-                mediaViewData = note.media,
-                files = mediaFiles,
-                onAction = onAction,
-            )
-        }
+                if (!isFolding && mediaFiles.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    NoteMediaGrid(
+                        mediaViewData = note.media,
+                        files = mediaFiles,
+                        onAction = onAction,
+                    )
+                }
 
-        if (note.subNote != null && !isFolding) {
-            Spacer(modifier = Modifier.height(6.dp))
-            SubNoteCard(note = note, onAction = onAction)
+                if (note.subNote != null && !isFolding) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    SubNoteCard(note = note, onAction = onAction)
+                }
+            }
         }
 
         val channel = note.channelInfo
@@ -204,6 +212,7 @@ fun SimpleNoteCardAsMain(
     val mediaFiles by note.media.files.collectAsState()
     val reactions by note.reactionCountsViewData.collectAsState()
     val reactionCountsExpanded by note.reactionCountsExpanded.collectAsState()
+    val isExpanded by note.expanded.collectAsState()
 
     val paddingH = 12.dp
     val paddingV = 8.dp
@@ -215,8 +224,6 @@ fun SimpleNoteCardAsMain(
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-//            horizontalArrangement = Arrangement.SpaceBetween,
-//            verticalAlignment = Alignment.Top,
         ) {
             // AvatarIcon
             AsyncImage(
@@ -230,30 +237,34 @@ fun SimpleNoteCardAsMain(
             )
 
             Spacer(Modifier.width(8.dp))
-            Column(
-
-            ) {
-
+            Column {
                 Header(name = note.name, userName = note.userName, timestamp = note.toShowNote.note.createdAt)
 
-                NoteBodySection(
-                    note = note,
-                    isFolding = isFolding,
-                    onToggleFolding = { note.changeContentFolding() },
-                )
+                AutoCollapsingLayout(
+                    expanded = isExpanded,
+                    onExpand = { note.expand() },
+                ) {
+                    Column {
+                        NoteBodySection(
+                            note = note,
+                            isFolding = isFolding,
+                            onToggleFolding = { note.changeContentFolding() },
+                        )
 
-                if (!isFolding && mediaFiles.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(6.dp))
-                    NoteMediaGrid(
-                        mediaViewData = note.media,
-                        files = mediaFiles,
-                        onAction = onAction,
-                    )
-                }
+                        if (!isFolding && mediaFiles.isNotEmpty()) {
+                            Spacer(modifier = Modifier.height(6.dp))
+                            NoteMediaGrid(
+                                mediaViewData = note.media,
+                                files = mediaFiles,
+                                onAction = onAction,
+                            )
+                        }
 
-                if (note.subNote != null && !isFolding) {
-                    Spacer(modifier = Modifier.height(6.dp))
-                    SubNoteCard(note = note, onAction = onAction)
+                        if (note.subNote != null && !isFolding) {
+                            Spacer(modifier = Modifier.height(6.dp))
+                            SubNoteCard(note = note, onAction = onAction)
+                        }
+                    }
                 }
 
                 val channel = note.channelInfo
