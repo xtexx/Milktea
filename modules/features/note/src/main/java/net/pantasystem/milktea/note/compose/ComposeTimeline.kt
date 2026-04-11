@@ -23,6 +23,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.distinctUntilChanged
 import net.pantasystem.milktea.note.timeline.viewmodel.TimelineListItem
@@ -46,7 +48,7 @@ fun ComposeTimeline(
     val items by viewModel.timelineListState.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val config by viewModel.configState.collectAsState()
-
+    val nestedScrollInterop = rememberNestedScrollInteropConnection()
     val listState = rememberLazyListState()
 
     // 末尾付近でスクロールしたら追加ロード
@@ -68,7 +70,7 @@ fun ComposeTimeline(
     PullToRefreshBox(
         isRefreshing = isLoading,
         onRefresh = { viewModel.loadNew() },
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().nestedScroll(nestedScrollInterop),
     ) {
         LazyColumn(
             state = listState,
