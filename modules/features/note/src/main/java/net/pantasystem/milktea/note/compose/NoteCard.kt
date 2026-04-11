@@ -63,6 +63,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.graphics.ColorUtils
 import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
 import kotlinx.datetime.Clock
@@ -77,6 +78,7 @@ import net.pantasystem.milktea.model.emoji.CustomEmoji
 import net.pantasystem.milktea.model.note.Note
 import net.pantasystem.milktea.model.note.poll.Poll
 import net.pantasystem.milktea.model.note.reaction.Reaction
+import net.pantasystem.milktea.model.user.User
 import net.pantasystem.milktea.note.R
 import net.pantasystem.milktea.note.media.viewmodel.MediaViewData
 import net.pantasystem.milktea.note.media.viewmodel.PreviewAbleFile
@@ -143,6 +145,7 @@ fun SimpleNoteCardAsMain(
     val reactions by note.reactionCountsViewData.collectAsState()
     val reactionCountsExpanded by note.reactionCountsExpanded.collectAsState()
     val isExpanded by note.expanded.collectAsState()
+    val config by note.config.collectAsState()
 
     val paddingH = 12.dp
     val paddingV = 8.dp
@@ -157,6 +160,7 @@ fun SimpleNoteCardAsMain(
         ) {
             // AvatarIcon
             val avatarPlaceholder = rememberBlurhashPainter(note.toShowNote.user.avatarBlurhash)
+            val instance = note.toShowNote.user.instance
             AsyncImage(
                 model = note.avatarUrl,
                 contentDescription = null,
@@ -169,8 +173,25 @@ fun SimpleNoteCardAsMain(
             )
 
             Spacer(Modifier.width(8.dp))
-            Column {
-                Header(note = note, userName = note.userName, timestamp = note.toShowNote.note.createdAt)
+            Column(
+                Modifier.fillMaxWidth()
+            ) {
+                Header(
+                    note = note,
+                    userName = note.userName,
+                    timestamp = note.toShowNote.note.createdAt,
+                    modifier = Modifier.fillMaxWidth()
+                )
+                if (config.isEnableInstanceTicker
+                    && instance?.name != null
+                    && instance.faviconUrl != null
+                ) {
+                    Spacer(Modifier.height(2.dp))
+                    InstanceInfoLabel(
+                        instance = instance,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
 
                 AutoCollapsingLayout(
                     expanded = isExpanded,
@@ -248,9 +269,10 @@ private fun Header(
     note: PlaneNoteViewData,
     userName: String,
     timestamp: Instant,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically // 垂直方向の中央揃えも追加しておくと綺麗です
     ) {
         // 1. 名前（長すぎる場合は省略）
@@ -417,7 +439,9 @@ private fun NoteMediaGrid(
                 files = files,
                 mediaViewData = mediaViewData,
                 onAction = onAction,
-                modifier = Modifier.fillMaxWidth().height(totalW / aspect),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(totalW / aspect),
             )
             return@BoxWithConstraints
         }
@@ -448,11 +472,15 @@ private fun NoteMediaGrid(
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth().height(totalH),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(totalH),
             horizontalArrangement = Arrangement.spacedBy(gap),
         ) {
             Column(
-                modifier = Modifier.width(halfW).fillMaxHeight(),
+                modifier = Modifier
+                    .width(halfW)
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(gap),
             ) {
                 leftFiles.forEach { (idx, file) ->
@@ -462,12 +490,16 @@ private fun NoteMediaGrid(
                         files = files,
                         mediaViewData = mediaViewData,
                         onAction = onAction,
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                     )
                 }
             }
             Column(
-                modifier = Modifier.width(halfW).fillMaxHeight(),
+                modifier = Modifier
+                    .width(halfW)
+                    .fillMaxHeight(),
                 verticalArrangement = Arrangement.spacedBy(gap),
             ) {
                 rightFiles.forEach { (idx, file) ->
@@ -477,7 +509,9 @@ private fun NoteMediaGrid(
                         files = files,
                         mediaViewData = mediaViewData,
                         onAction = onAction,
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                     )
                 }
             }
@@ -507,9 +541,16 @@ private fun MediaItem(
             .clickable {
                 when {
                     file.visibleType == PreviewAbleFile.VisibleType.SensitiveHide ->
-                        onAction(NoteCardAction.OnSensitiveMediaPreviewClicked(mediaViewData, index))
+                        onAction(
+                            NoteCardAction.OnSensitiveMediaPreviewClicked(
+                                mediaViewData,
+                                index
+                            )
+                        )
+
                     file.isHiding ->
                         mediaViewData.show(index)
+
                     else ->
                         onAction(
                             NoteCardAction.OnMediaPreviewClicked(
@@ -834,7 +875,9 @@ private fun ReactionChip(
                 AsyncImage(
                     model = emoji.url ?: emoji.uri,
                     contentDescription = reaction.reaction,
-                    modifier = Modifier.height(20.dp).aspectRatio(reaction.emoji?.aspectRatio ?: 1f),
+                    modifier = Modifier
+                        .height(20.dp)
+                        .aspectRatio(reaction.emoji?.aspectRatio ?: 1f),
                 )
             } else {
                 Text(
@@ -1011,12 +1054,14 @@ private fun NotePollSection(
                             tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(16.dp),
                         )
+
                         poll.canVote -> Icon(
                             imageVector = Icons.Default.RadioButtonUnchecked,
                             contentDescription = null,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(16.dp),
                         )
+
                         else -> Spacer(Modifier.size(16.dp))
                     }
 
@@ -1083,5 +1128,46 @@ private fun NotePollSection(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun InstanceInfoLabel(
+    instance: User.InstanceInfo,
+    modifier: Modifier = Modifier,
+) {
+    val bgAndText = remember(instance.themeColor) {
+        instance.themeColor?.let { colorStr ->
+            runCatching {
+                val rawColor = android.graphics.Color.parseColor(colorStr)
+                val alpha = (255 * 0.42f).toInt()
+                val withAlpha = Color((alpha shl 24) or (rawColor and 0x00FFFFFF))
+                val textColor =
+                    if (ColorUtils.calculateLuminance(rawColor) < 0.5) Color.White else Color.Black
+                withAlpha to textColor
+            }.getOrNull()
+        }
+    }
+
+    Row(
+        modifier = modifier
+            .clip(RoundedCornerShape(3.dp))
+            .then(bgAndText?.let { (bg, _) -> Modifier.background(bg) } ?: Modifier)
+            .padding(horizontal = 2.dp, vertical = 1.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(2.dp),
+    ) {
+        AsyncImage(
+            model = instance.faviconUrl,
+            contentDescription = null,
+            modifier = Modifier.size(10.dp),
+        )
+        Text(
+            text = instance.name ?: "",
+            style = MaterialTheme.typography.labelSmall.copy(fontSize = 9.sp),
+            color = bgAndText?.second ?: Color.Unspecified,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
