@@ -18,6 +18,7 @@ import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common.PageableState
 import net.pantasystem.milktea.common.StateContent
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.model.user.User
@@ -54,6 +55,9 @@ class UserReactionsFragment : Fragment(R.layout.fragment_user_reactions) {
     @Inject
     lateinit var configRepository: LocalConfigRepository
 
+    @Inject
+    internal lateinit var searchNavigation: SearchNavigation
+
     private val binding: FragmentUserReactionsBinding by dataBinding()
     private val viewModel by viewModels<UserReactionsViewModel>()
     private val notesViewModel by activityViewModels<NotesViewModel>()
@@ -74,6 +78,7 @@ class UserReactionsFragment : Fragment(R.layout.fragment_user_reactions) {
                     settingStore,
                     userDetailNavigation,
                     channelDetailNavigation,
+                    searchNavigation,
                 ).onAction(it)
             }
         )

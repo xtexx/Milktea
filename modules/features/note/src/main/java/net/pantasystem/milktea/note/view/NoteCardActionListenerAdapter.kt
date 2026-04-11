@@ -108,4 +108,12 @@ sealed interface NoteCardAction {
         val index: Int,
         val thumbnailView: WeakReference<ImageView>,
     ) : NoteCardAction
+
+    data class OnUrlClick(val url: String) : NoteCardAction
+
+    data class OnLinkClick(val url: String) : NoteCardAction
+
+    data class OnHashtagClick(val hashtag: String) : NoteCardAction
+
+    data class OnMentionClick(val mention: String) : NoteCardAction
 }

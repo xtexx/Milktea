@@ -1,6 +1,5 @@
 package net.pantasystem.milktea.common_android_ui
 
-import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
@@ -11,7 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.ParagraphStyle
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
@@ -24,10 +25,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import dagger.hilt.android.EntryPointAccessors
 import dev.misskey.mfm.node.Bold
 import dev.misskey.mfm.node.Center
 import dev.misskey.mfm.node.CodeBlock
@@ -41,7 +44,6 @@ import dev.misskey.mfm.node.MathBlock
 import dev.misskey.mfm.node.MathInline
 import dev.misskey.mfm.node.Mention
 import dev.misskey.mfm.node.MfmNode
-import dev.misskey.mfm.node.MfmText as MfmTextNode
 import dev.misskey.mfm.node.Plain
 import dev.misskey.mfm.node.Quote
 import dev.misskey.mfm.node.Search
@@ -53,6 +55,8 @@ import net.pantasystem.milktea.common_android.mfm.MFMParser
 import net.pantasystem.milktea.model.emoji.CustomEmoji
 import java.text.DateFormat
 import java.util.Date
+import android.graphics.Color as AndroidColor
+import dev.misskey.mfm.node.MfmText as MfmTextNode
 
 /**
  * MFM (Markup For Misskey) テキストを Compose の Text でリッチ表示するコンポーザブル。
@@ -73,23 +77,32 @@ fun MfmText(
     color: Color = Color.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    onUrlClick: (String) -> Unit = {},
+    onMentionClick: (String) -> Unit = {},
+    onHashtagClick: (String) -> Unit = {},
+    onLinkClick: (String) -> Unit = {}
 ) {
     val primaryColor = MaterialTheme.colorScheme.primary
     val onSurfaceVariantColor = MaterialTheme.colorScheme.onSurfaceVariant
     val baseFontSize = if (style.fontSize == TextUnit.Unspecified) 14.sp else style.fontSize
 
     // AnnotatedString 構築（non-composable なので remember 内で実行可能）
-    val annotatedString = remember(nodes, emojiNameMap, primaryColor, onSurfaceVariantColor, baseFontSize) {
-        buildAnnotatedString {
-            appendMfmNodes(
-                nodes = nodes,
-                emojiNameMap = emojiNameMap,
-                baseFontSize = baseFontSize.value,
-                primaryColor = primaryColor,
-                onSurfaceVariantColor = onSurfaceVariantColor,
-            )
+    val annotatedString =
+        remember(nodes, emojiNameMap, primaryColor, onSurfaceVariantColor, baseFontSize) {
+            buildAnnotatedString {
+                appendMfmNodes(
+                    nodes = nodes,
+                    emojiNameMap = emojiNameMap,
+                    baseFontSize = baseFontSize.value,
+                    primaryColor = primaryColor,
+                    onSurfaceVariantColor = onSurfaceVariantColor,
+                    onUrlClick = onUrlClick,
+                    onMentionClick = onMentionClick,
+                    onHashtagClick = onHashtagClick,
+                    onLinkClick = onLinkClick,
+                )
+            }
         }
-    }
 
     // EmojiCode ノードの ID → CustomEmoji マップを収集（InlineTextContent 構築に使用）
     val emojiEntries = remember(nodes, emojiNameMap) {
@@ -97,11 +110,14 @@ fun MfmText(
     }
 
     // InlineTextContent は @Composable コンテンツを含むため remember 外で構築する
+    val context = LocalContext.current
     val inlineContents = emojiEntries.entries.associate { (id, emoji) ->
         val url = emoji.url ?: emoji.uri
+        // aspectRatio (width/height) を幅に反映。極端に広い絵文字は 3x までキャップ。
+        val aspectRatio = (emoji.aspectRatio ?: 1f).coerceIn(0.1f, 3f)
         id to InlineTextContent(
             placeholder = Placeholder(
-                width = baseFontSize,
+                width = (baseFontSize.value * aspectRatio).sp,
                 height = baseFontSize,
                 placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline,
             )
@@ -110,6 +126,17 @@ fun MfmText(
                 model = url,
                 contentDescription = null,
                 modifier = Modifier.fillMaxSize(),
+                onSuccess = { state ->
+                    val drawable = state.result.drawable
+                    val imageAspectRatio =
+                        drawable.intrinsicWidth.toFloat() / drawable.intrinsicHeight
+                    val ep = EntryPointAccessors.fromApplication(
+                        context.applicationContext,
+                        BindingProvider::class.java,
+                    )
+                    ep.customEmojiAspectRatioStore().save(emoji, imageAspectRatio)
+                    ep.emojiImageCacheStore().save(emoji)
+                },
             )
         }
     }
@@ -141,6 +168,10 @@ fun MfmText(
     color: Color = Color.Unspecified,
     maxLines: Int = Int.MAX_VALUE,
     overflow: TextOverflow = TextOverflow.Clip,
+    onUrlClick: (String) -> Unit = {},
+    onMentionClick: (String) -> Unit = {},
+    onHashtagClick: (String) -> Unit = {},
+    onLinkClick: (String) -> Unit = {}
 ) {
     val nodes = remember(text) { MFMParser.parse(text) }
 
@@ -164,6 +195,10 @@ fun MfmText(
         color = color,
         maxLines = maxLines,
         overflow = overflow,
+        onMentionClick = onMentionClick,
+        onHashtagClick = onHashtagClick,
+        onUrlClick = onUrlClick,
+        onLinkClick = onLinkClick
     )
 }
 
@@ -184,6 +219,7 @@ private fun buildEmojiMap(
                         result[":${node.name}:"] = emoji
                     }
                 }
+
                 is Bold -> traverse(node.children)
                 is Italic -> traverse(node.children)
                 is Strike -> traverse(node.children)
@@ -210,9 +246,23 @@ private fun AnnotatedString.Builder.appendMfmNodes(
     baseFontSize: Float,
     primaryColor: Color,
     onSurfaceVariantColor: Color,
+    onUrlClick: (String) -> Unit = {},
+    onMentionClick: (String) -> Unit = {},
+    onHashtagClick: (String) -> Unit = {},
+    onLinkClick: (String) -> Unit = {}
 ) {
     for (node in nodes) {
-        appendMfmNode(node, emojiNameMap, baseFontSize, primaryColor, onSurfaceVariantColor)
+        appendMfmNode(
+            node,
+            emojiNameMap,
+            baseFontSize,
+            primaryColor,
+            onSurfaceVariantColor,
+            onMentionClick = onMentionClick,
+            onHashtagClick = onHashtagClick,
+            onUrlClick = onUrlClick,
+            onLinkClick = onLinkClick
+        )
     }
 }
 
@@ -223,6 +273,10 @@ private fun AnnotatedString.Builder.appendMfmNode(
     baseFontSize: Float,
     primaryColor: Color,
     onSurfaceVariantColor: Color,
+    onUrlClick: (String) -> Unit = {},
+    onMentionClick: (String) -> Unit = {},
+    onHashtagClick: (String) -> Unit = {},
+    onLinkClick: (String) -> Unit = {}
 ) {
     fun recurse(children: List<MfmNode>) {
         appendMfmNodes(children, emojiNameMap, baseFontSize, primaryColor, onSurfaceVariantColor)
@@ -278,21 +332,60 @@ private fun AnnotatedString.Builder.appendMfmNode(
             append(node.code)
         }
 
-        is Mention -> withStyle(SpanStyle(color = primaryColor)) {
-            val host = node.host
-            if (host == null) append("@${node.username}") else append("@${node.username}@$host")
+        is Mention -> withLink(
+            LinkAnnotation.Clickable(
+                tag = "mention",
+                linkInteractionListener = {
+                    val host = node.host
+                    onMentionClick(
+                        if (host == null) "@${node.username}" else "@${node.username}@$host"
+                    )
+                }
+            )
+        ) {
+            withStyle(SpanStyle(color = primaryColor)) {
+                val host = node.host
+                if (host == null) append("@${node.username}") else append("@${node.username}@$host")
+            }
         }
 
-        is Hashtag -> withStyle(SpanStyle(color = primaryColor)) {
-            append("#${node.hashtag}")
+        is Hashtag -> withLink(
+            LinkAnnotation.Clickable(
+                tag = "hashtag",
+                linkInteractionListener = {
+                    onHashtagClick(node.hashtag)
+                }
+            )
+        ) {
+            withStyle(SpanStyle(color = primaryColor)) {
+                append("#${node.hashtag}")
+            }
         }
 
-        is Url -> withStyle(SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)) {
-            append(node.url)
+        is Url -> withLink(
+            LinkAnnotation.Clickable(
+                tag = "url",
+                linkInteractionListener = {
+                    onUrlClick(node.url)
+                }
+            )
+        ) {
+            withStyle(SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)) {
+                append(node.url)
+            }
         }
 
-        is Link -> withStyle(SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)) {
-            recurse(node.children)
+        is Link -> withLink(
+            LinkAnnotation.Clickable(
+                tag = "Link",
+                linkInteractionListener = {
+                    onLinkClick(node.url)
+                }
+            )
+        ) {
+            withStyle(SpanStyle(color = primaryColor, textDecoration = TextDecoration.Underline)) {
+                recurse(node.children)
+            }
         }
 
         is UnicodeEmoji -> append(node.emoji)

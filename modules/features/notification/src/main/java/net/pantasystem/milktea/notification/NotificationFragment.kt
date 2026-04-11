@@ -29,6 +29,7 @@ import net.pantasystem.milktea.common.ui.ApplyMenuTint
 import net.pantasystem.milktea.common_navigation.AuthorizationArgs
 import net.pantasystem.milktea.common_navigation.AuthorizationNavigation
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.common_viewmodel.CurrentPageableTimelineViewModel
 import net.pantasystem.milktea.common_viewmodel.ScrollToTopViewModel
@@ -87,6 +88,9 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
     @Inject
     internal lateinit var configRepository: LocalConfigRepository
 
+    @Inject
+    internal lateinit var searchNavigation: SearchNavigation
+
     private val mBinding: FragmentNotificationBinding by dataBinding()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,6 +122,7 @@ class NotificationFragment : Fragment(R.layout.fragment_notification) {
                 settingStore,
                 userDetailNavigation,
                 channelDetailNavigation,
+                searchNavigation,
             ).onAction(it)
         }
 

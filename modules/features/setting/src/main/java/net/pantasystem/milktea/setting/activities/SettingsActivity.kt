@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.runtime.getValue
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import dagger.hilt.android.AndroidEntryPoint
 import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
@@ -223,6 +224,20 @@ class SettingsActivity : AppCompatActivity() {
                             }
                         ) {
                             Text(stringResource(id = R.string.license))
+                        }
+
+                        SettingListTileLayout(
+                            verticalPadding = 12.dp,
+                            onClick = {
+                                startActivity(
+                                    Intent(
+                                        this@SettingsActivity,
+                                        DeveloperSettingActivity::class.java,
+                                    )
+                                )
+                            }
+                        ) {
+                            Text(stringResource(id = R.string.settings_developer_options))
                         }
                     }
                 }

@@ -6,6 +6,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
@@ -27,10 +29,13 @@ import net.pantasystem.milktea.app_store.account.AccountStore
 import net.pantasystem.milktea.app_store.setting.SettingStore
 import net.pantasystem.milktea.common.ui.ApplyMenuTint
 import net.pantasystem.milktea.common.ui.PageableView
+import net.pantasystem.milktea.common_android.debug.DebugFeatureFlags
 import net.pantasystem.milktea.common_android.ui.haptic.HapticFeedbackController
+import net.pantasystem.milktea.common_compose.MilkteaStyleConfigApplyAndTheme
 import net.pantasystem.milktea.common_navigation.AuthorizationArgs
 import net.pantasystem.milktea.common_navigation.AuthorizationNavigation
 import net.pantasystem.milktea.common_navigation.ChannelDetailNavigation
+import net.pantasystem.milktea.common_navigation.SearchNavigation
 import net.pantasystem.milktea.common_navigation.UserDetailNavigation
 import net.pantasystem.milktea.common_viewmodel.CurrentPageableTimelineViewModel
 import net.pantasystem.milktea.common_viewmodel.ScrollToTopViewModel
@@ -38,7 +43,9 @@ import net.pantasystem.milktea.model.account.page.Page
 import net.pantasystem.milktea.model.account.page.Pageable
 import net.pantasystem.milktea.model.setting.DefaultConfig
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
+import net.pantasystem.milktea.note.BuildConfig
 import net.pantasystem.milktea.note.R
+import net.pantasystem.milktea.note.compose.ComposeTimeline
 import net.pantasystem.milktea.note.databinding.FragmentTimelineBinding
 import net.pantasystem.milktea.note.timeline.viewmodel.AccountId
 import net.pantasystem.milktea.note.timeline.viewmodel.PageId
@@ -132,6 +139,9 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
     @Inject
     internal lateinit var configRepository: LocalConfigRepository
 
+    @Inject
+    internal lateinit var searchNavigation: SearchNavigation
+
 
     private val mBinding: FragmentTimelineBinding by dataBinding()
 
@@ -174,6 +184,13 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // ── デバッグ専用: Compose タイムラインを使用する場合は早期 return ──────────
+        if (BuildConfig.DEBUG && DebugFeatureFlags.isComposeTimelineEnabled(requireContext())) {
+            setupComposeTimeline(view)
+            return
+        }
+        // ─────────────────────────────────────────────────────────────────────────
+
         val lm = LinearLayoutManager(this.requireContext())
         _linearLayoutManager = lm
         val adapter = TimelineListAdapter(
@@ -199,6 +216,7 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
                 userDetailNavigation,
                 channelDetailNavigation,
                 currentPageable = mPageable,
+                searchNavigation = searchNavigation
             ).onAction(it)
         }
 
@@ -336,6 +354,68 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
         }
     }
 
+
+    /**
+     * Compose タイムラインをセットアップする。
+     * 既存の SwipeRefreshLayout + RecyclerView を隠し、ComposeView を FrameLayout に追加する。
+     * DEBUG ビルド + DebugFeatureFlags.isComposeTimelineEnabled() == true のときのみ呼ばれる。
+     */
+    private fun setupComposeTimeline(view: View) {
+        // 既存の RecyclerView (SwipeRefreshLayout) を隠す
+        mBinding.refresh.isVisible = false
+        mBinding.jumpToNewPostsButton.isVisible = false
+
+        val actionHandler = NoteCardActionHandler(
+            requireActivity() as AppCompatActivity,
+            notesViewModel,
+            settingStore,
+            userDetailNavigation,
+            channelDetailNavigation,
+            currentPageable = mPageable,
+            searchNavigation = searchNavigation,
+        )
+
+        val composeView = ComposeView(requireContext()).apply {
+            layoutParams = android.widget.FrameLayout.LayoutParams(
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+                android.widget.FrameLayout.LayoutParams.MATCH_PARENT,
+            )
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MilkteaStyleConfigApplyAndTheme(configRepository = configRepository) {
+                    ComposeTimeline(
+                        viewModel = mViewModel,
+                        onAction = { actionHandler.onAction(it) },
+                    )
+                }
+            }
+        }
+        (mBinding.root as android.widget.FrameLayout).addView(composeView, 0)
+
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_timeline, menu)
+                setMenuTint(requireActivity(), menu)
+                if (mPageable is Pageable.Mastodon) {
+                    menu.findItem(R.id.set_time_machine).isVisible = false
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.refresh_timeline -> {
+                        mViewModel.loadInit(ignoreSavedScrollPosition = true)
+                        return true
+                    }
+                    R.id.set_time_machine -> {
+                        TimeMachineDialog().show(childFragmentManager, TimeMachineDialog.FRAGMENT_TAG)
+                        return true
+                    }
+                }
+                return false
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+    }
 
     override fun onResume() {
         super.onResume()

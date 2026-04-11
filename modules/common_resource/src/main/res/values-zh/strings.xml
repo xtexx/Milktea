@@ -642,4 +642,14 @@
 
 
     <string name="settings_enable_haptic_feedback_on_new_post">新帖子的触觉反馈</string>
+
+    <!-- poll -->
+    <string name="poll_votes_count">%d 票</string>
+    <string name="poll_expires_in">%s 结束</string>
+
+    <!-- developer options -->
+    <string name="settings_developer_options">开发者选项</string>
+    <string name="settings_dev_compose_timeline">Compose 时间线</string>
+    <string name="settings_dev_compose_timeline_description">启用后，下次显示时间线时将使用 Compose 版本</string>
+
 </resources>
