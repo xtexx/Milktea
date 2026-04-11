@@ -41,6 +41,7 @@ import net.pantasystem.milktea.model.note.NoteStreaming
 import net.pantasystem.milktea.model.note.TimelineScrollPositionRepository
 import net.pantasystem.milktea.model.note.timeline.TimelineRepository
 import net.pantasystem.milktea.model.note.timeline.TimelineType
+import net.pantasystem.milktea.model.setting.DefaultConfig
 import net.pantasystem.milktea.model.setting.LocalConfigRepository
 import net.pantasystem.milktea.note.timeline.viewmodel.filter.ExcludeIfExistsSensitiveMediaFilter
 import net.pantasystem.milktea.note.timeline.viewmodel.filter.ExcludeRepostOrReplyFilter
@@ -117,6 +118,11 @@ class TimelineViewModel @AssistedInject constructor(
         listOf(TimelineListItem.Loading)
     )
 
+    val configState = configRepository.observe().stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        DefaultConfig.config,
+    )
 
     val errorEvent = timelineStore.timelineState.map {
         (it as? PageableState.Error)?.throwable

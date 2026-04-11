@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
@@ -44,6 +45,7 @@ fun ComposeTimeline(
 ) {
     val items by viewModel.timelineListState.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    val config by viewModel.configState.collectAsState()
 
     val listState = rememberLazyListState()
 
@@ -90,11 +92,14 @@ fun ComposeTimeline(
                             onAction = onAction,
                             modifier = Modifier.fillMaxWidth(),
                         )
-//                        HorizontalDivider(
-//                            thickness = 0.5.dp,
-//                            color = MaterialTheme.colorScheme.outlineVariant,
-//                        )
+                        if (config.isEnableNoteDivider) {
+                            HorizontalDivider(
+                                thickness = 0.5.dp,
+                                color = MaterialTheme.colorScheme.outlineVariant,
+                            )
+                        }
                     }
+
                     TimelineListItem.Loading -> {
                         Box(
                             modifier = Modifier
@@ -105,6 +110,7 @@ fun ComposeTimeline(
                             CircularProgressIndicator()
                         }
                     }
+
                     is TimelineListItem.Error -> {
                         Text(
                             text = item.throwable.localizedMessage ?: "Error",
@@ -113,6 +119,7 @@ fun ComposeTimeline(
                             modifier = Modifier.padding(16.dp),
                         )
                     }
+
                     TimelineListItem.Empty -> {
                         Text(
                             text = "No notes",
