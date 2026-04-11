@@ -391,6 +391,30 @@ class TimelineFragment : Fragment(R.layout.fragment_timeline), PageableView {
             }
         }
         (mBinding.root as android.widget.FrameLayout).addView(composeView, 0)
+
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_timeline, menu)
+                setMenuTint(requireActivity(), menu)
+                if (mPageable is Pageable.Mastodon) {
+                    menu.findItem(R.id.set_time_machine).isVisible = false
+                }
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.refresh_timeline -> {
+                        mViewModel.loadInit(ignoreSavedScrollPosition = true)
+                        return true
+                    }
+                    R.id.set_time_machine -> {
+                        TimeMachineDialog().show(childFragmentManager, TimeMachineDialog.FRAGMENT_TAG)
+                        return true
+                    }
+                }
+                return false
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onResume() {
