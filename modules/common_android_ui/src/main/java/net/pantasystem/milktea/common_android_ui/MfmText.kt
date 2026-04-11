@@ -99,9 +99,11 @@ fun MfmText(
     // InlineTextContent は @Composable コンテンツを含むため remember 外で構築する
     val inlineContents = emojiEntries.entries.associate { (id, emoji) ->
         val url = emoji.url ?: emoji.uri
+        // aspectRatio (width/height) を幅に反映。極端に広い絵文字は 3x までキャップ。
+        val aspectRatio = (emoji.aspectRatio ?: 1f).coerceIn(0.1f, 3f)
         id to InlineTextContent(
             placeholder = Placeholder(
-                width = baseFontSize,
+                width = (baseFontSize.value * aspectRatio).sp,
                 height = baseFontSize,
                 placeholderVerticalAlign = PlaceholderVerticalAlign.AboveBaseline,
             )
@@ -109,7 +111,6 @@ fun MfmText(
             AsyncImage(
                 model = url,
                 contentDescription = null,
-                // TODO: emoji.aspectRatioを使って幅を広げたい
                 modifier = Modifier.fillMaxSize(),
             )
         }
