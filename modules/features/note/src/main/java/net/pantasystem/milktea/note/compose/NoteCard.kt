@@ -108,7 +108,7 @@ fun NoteCard(
                     )
                 }
             }
-            SimpleNoteCard(note = note, onAction = onAction)
+            SimpleNoteCardAsMain(note = note, onAction = onAction)
         }
     }
 }
@@ -185,6 +185,122 @@ fun SimpleNoteCard(
         }
     }
 }
+
+@Composable
+fun SimpleNoteCardAsMain(
+    note: PlaneNoteViewData,
+    onAction: (NoteCardAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val currentNote by note.currentNote.collectAsState()
+    val isFolding by note.contentFolding.collectAsState()
+    val mediaFiles by note.media.files.collectAsState()
+    val reactions by note.reactionCountsViewData.collectAsState()
+    val reactionCountsExpanded by note.reactionCountsExpanded.collectAsState()
+
+    val paddingH = 12.dp
+    val paddingV = 8.dp
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = paddingH, vertical = paddingV),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+//            horizontalArrangement = Arrangement.SpaceBetween,
+//            verticalAlignment = Alignment.Top,
+        ) {
+            // AvatarIcon
+            AsyncImage(
+                model = note.avatarUrl,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .clickable { onAction(NoteCardAction.OnUserClicked(note.toShowNote.user)) },
+                contentScale = ContentScale.Crop,
+            )
+
+            Spacer(Modifier.width(8.dp))
+            Column(
+
+            ) {
+                Row() {
+                    Text(
+                        text = note.name,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                    Text(
+                        text = note.userName,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        fontStyle = FontStyle.Italic,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier.weight(1f),
+                    )
+                    val createdAtMs = note.toShowNote.note.createdAt.toEpochMilliseconds()
+                    Text(
+
+                        text = remember(createdAtMs) {
+                            DateUtils.getRelativeTimeSpanString(
+                                createdAtMs,
+                                System.currentTimeMillis(),
+                                DateUtils.MINUTE_IN_MILLIS,
+                                DateUtils.FORMAT_ABBREV_RELATIVE,
+                            ).toString()
+                        },
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+
+                NoteBodySection(
+                    note = note,
+                    isFolding = isFolding,
+                    onToggleFolding = { note.changeContentFolding() },
+                )
+
+                if (!isFolding && mediaFiles.isNotEmpty() && !note.media.isOver4Files) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    NoteMediaGrid(
+                        mediaViewData = note.media,
+                        files = mediaFiles,
+                        onAction = onAction,
+                    )
+                }
+
+                if (note.subNote != null && !isFolding) {
+                    Spacer(modifier = Modifier.height(6.dp))
+                    SubNoteCard(note = note, onAction = onAction)
+                }
+
+                val channel = note.channelInfo
+                if (channel != null) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    NoteChannelChip(channel = channel, onAction = onAction)
+                }
+
+                if (reactions.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    NoteReactions(
+                        note = note,
+                        reactions = reactions,
+                        expanded = reactionCountsExpanded,
+                        onAction = onAction,
+                    )
+                }
+
+                NoteActionBar(note = note, currentNote = currentNote, onAction = onAction)
+            }
+        }
+    }
+}
+
 
 // ─────────────────────────────────────────────────
 // NoteHeader
