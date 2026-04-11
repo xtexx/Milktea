@@ -62,6 +62,7 @@ import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
 import kotlinx.datetime.Instant
 import net.pantasystem.milktea.common_android.resource.getString
+import net.pantasystem.milktea.common_android_ui.EmojiText
 import net.pantasystem.milktea.common_android_ui.MfmText
 import net.pantasystem.milktea.common_android_ui.TextType
 import net.pantasystem.milktea.model.emoji.CustomEmoji
@@ -238,7 +239,7 @@ fun SimpleNoteCardAsMain(
 
             Spacer(Modifier.width(8.dp))
             Column {
-                Header(name = note.name, userName = note.userName, timestamp = note.toShowNote.note.createdAt)
+                Header(note = note, userName = note.userName, timestamp = note.toShowNote.note.createdAt)
 
                 AutoCollapsingLayout(
                     expanded = isExpanded,
@@ -291,7 +292,7 @@ fun SimpleNoteCardAsMain(
 
 @Composable
 private fun Header(
-    name: String,
+    note: PlaneNoteViewData,
     userName: String,
     timestamp: Instant,
 ) {
@@ -300,8 +301,9 @@ private fun Header(
         verticalAlignment = Alignment.CenterVertically // 垂直方向の中央揃えも追加しておくと綺麗です
     ) {
         // 1. 名前（長すぎる場合は省略）
-        Text(
-            text = name,
+        EmojiText(
+            parsedResult = note.toShowNote.user.parsedResult,
+            accountHost = note.account.getHost(),
             style = MaterialTheme.typography.bodyMedium,
             fontWeight = FontWeight.Bold,
             maxLines = 1,
@@ -373,8 +375,9 @@ private fun NoteHeader(
         Spacer(modifier = Modifier.width(8.dp))
 
         Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = note.name,
+            EmojiText(
+                parsedResult = note.toShowNote.user.parsedResult,
+                accountHost = note.account.getHost(),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
