@@ -2,6 +2,7 @@ package net.pantasystem.milktea.note.compose
 
 import android.annotation.SuppressLint
 import android.text.format.DateUtils
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -51,6 +52,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -61,10 +63,12 @@ import androidx.compose.ui.unit.sp
 import androidx.core.text.HtmlCompat
 import coil.compose.AsyncImage
 import kotlinx.datetime.Instant
+import net.pantasystem.milktea.common_android.platform.isWifiConnected
 import net.pantasystem.milktea.common_android.resource.getString
 import net.pantasystem.milktea.common_android_ui.EmojiText
 import net.pantasystem.milktea.common_android_ui.MfmText
 import net.pantasystem.milktea.common_android_ui.TextType
+import net.pantasystem.milktea.common_compose.rememberBlurhashPainter
 import net.pantasystem.milktea.model.emoji.CustomEmoji
 import net.pantasystem.milktea.model.note.Note
 import net.pantasystem.milktea.model.note.reaction.Reaction
@@ -147,6 +151,7 @@ fun SimpleNoteCardAsMain(
             modifier = Modifier.fillMaxWidth(),
         ) {
             // AvatarIcon
+            val avatarPlaceholder = rememberBlurhashPainter(note.toShowNote.user.avatarBlurhash)
             AsyncImage(
                 model = note.avatarUrl,
                 contentDescription = null,
@@ -154,6 +159,7 @@ fun SimpleNoteCardAsMain(
                     .size(44.dp)
                     .clip(CircleShape)
                     .clickable { onAction(NoteCardAction.OnUserClicked(note.toShowNote.user)) },
+                placeholder = avatarPlaceholder,
                 contentScale = ContentScale.Crop,
             )
 
@@ -276,72 +282,6 @@ private fun Header(
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             maxLines = 1,
         )
-    }
-}
-
-// ─────────────────────────────────────────────────
-// NoteHeader
-// ─────────────────────────────────────────────────
-
-@Composable
-private fun NoteHeader(
-    note: PlaneNoteViewData,
-    onAction: (NoteCardAction) -> Unit,
-) {
-    val createdAtMs = note.toShowNote.note.createdAt.toEpochMilliseconds()
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top,
-    ) {
-        AsyncImage(
-            model = note.avatarUrl,
-            contentDescription = null,
-            modifier = Modifier
-                .size(44.dp)
-                .clip(CircleShape)
-                .clickable { onAction(NoteCardAction.OnUserClicked(note.toShowNote.user)) },
-            contentScale = ContentScale.Crop,
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column(modifier = Modifier.weight(1f)) {
-            EmojiText(
-                parsedResult = note.toShowNote.user.parsedResult,
-                accountHost = note.account.getHost(),
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = note.userName,
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontStyle = FontStyle.Italic,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f),
-                )
-                Text(
-                    text = remember(createdAtMs) {
-                        DateUtils.getRelativeTimeSpanString(
-                            createdAtMs,
-                            System.currentTimeMillis(),
-                            DateUtils.MINUTE_IN_MILLIS,
-                            DateUtils.FORMAT_ABBREV_RELATIVE,
-                        ).toString()
-                    },
-                    style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-        }
     }
 }
 
@@ -539,6 +479,12 @@ private fun MediaItem(
     onAction: (NoteCardAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val mediaDisplayMode = remember(mediaViewData.config) {
+        mediaViewData.config?.mediaDisplayMode
+            ?: net.pantasystem.milktea.model.setting.DefaultConfig.config.mediaDisplayMode
+    }
+
     Box(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
@@ -562,25 +508,41 @@ private fun MediaItem(
             },
         contentAlignment = Alignment.Center,
     ) {
-        // サムネイル（隠し状態でも薄く表示してブラー感を演出）
-        val thumbnailUrl = file.source.thumbnailUrl ?: file.source.path
-        if (thumbnailUrl != null) {
+        val blurhashPainter = rememberBlurhashPainter(
+            blurhash = file.source.blurhash,
+            width = 64,
+            height = 64,
+        )
+
+        if (file.isHiding && blurhashPainter != null) {
+            // 隠し状態 + blurhash あり → blurhash のみ表示（サムネイル読み込みなし）
+            Image(
+                painter = blurhashPainter,
+                contentDescription = file.source.comment,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+        } else {
+            // 通常表示 or blurhash なし → サムネイルを読み込む（隠し状態は薄く表示）
+            val thumbnailUrl = file.source.thumbnailUrl ?: file.source.path
             AsyncImage(
                 model = thumbnailUrl,
                 contentDescription = file.source.comment,
                 modifier = Modifier.fillMaxSize(),
+                placeholder = blurhashPainter,
                 contentScale = ContentScale.Crop,
                 alpha = if (file.isHiding) 0.25f else 1f,
             )
         }
 
         if (file.isHiding) {
-            // 半透明スクリム + アイコン + メッセージ
+            // 半透明スクリム
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface.copy(alpha = 0.55f)),
             )
+            // 中央: アイコン + メッセージ
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(horizontal = 8.dp),
@@ -620,6 +582,34 @@ private fun MediaItem(
                 )
             }
         }
+
+        // 右上: 表示 / 非表示トグルボタン
+        IconButton(
+            onClick = {
+                mediaViewData.toggleVisibility(
+                    index = index,
+                    isMobileNetwork = !context.isWifiConnected(),
+                    mediaDisplayMode = mediaDisplayMode,
+                )
+            },
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(16.dp)
+                .size(32.dp)
+                .background(Color.Black.copy(alpha = 0.4f), CircleShape),
+        ) {
+            Icon(
+                painter = painterResource(
+                    if (file.isHiding) R.drawable.ic_baseline_image_24
+                    else R.drawable.ic_baseline_hide_image_24
+                ),
+                contentDescription = stringResource(
+                    if (file.isHiding) R.string.show else R.string.hide
+                ),
+                tint = Color.White,
+                modifier = Modifier.size(18.dp),
+            )
+        }
     }
 }
 
@@ -646,12 +636,14 @@ private fun SubNoteCard(
     ) {
         Column(modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
+                val subAvatarPlaceholder = rememberBlurhashPainter(subNote.user.avatarBlurhash)
                 AsyncImage(
                     model = subNote.user.avatarUrl,
                     contentDescription = null,
                     modifier = Modifier
                         .size(20.dp)
                         .clip(CircleShape),
+                    placeholder = subAvatarPlaceholder,
                     contentScale = ContentScale.Crop,
                 )
                 Spacer(modifier = Modifier.width(4.dp))

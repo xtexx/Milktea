@@ -1,6 +1,5 @@
 package net.pantasystem.milktea.common_compose
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
@@ -14,7 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
+import coil.compose.AsyncImage
 
 
 @Composable
@@ -25,7 +24,8 @@ fun AvatarIcon(
     shape: Shape = Shape.Undefined,
     size: Dp = 50.dp,
     borderStrokeWidth: Dp = 0.dp,
-    borderStrokeColor: Color = Color.Transparent
+    borderStrokeColor: Color = Color.Transparent,
+    blurhash: String? = null,
 ) {
     val shapeLocal = LocalAvatarIconShape.current
     val clip = when(shape) {
@@ -37,17 +37,17 @@ fun AvatarIcon(
             Shape.Undefined -> CircleShape
         }
     }
-    Image(
+    val placeholder = rememberBlurhashPainter(blurhash)
+    AsyncImage(
+        model = url,
+        contentDescription = null,
         modifier = modifier
             .size(size)
             .clip(clip)
             .border(borderStrokeWidth, borderStrokeColor, clip)
-            .clickable {
-                onAvatarClick()
-            },
-        painter = rememberAsyncImagePainter(url),
-        contentDescription = null,
-        contentScale = ContentScale.Crop
+            .clickable { onAvatarClick() },
+        placeholder = placeholder,
+        contentScale = ContentScale.Crop,
     )
 }
 
@@ -58,7 +58,8 @@ fun AvatarIcon(
     shape: Shape = Shape.Undefined,
     size: Dp = 50.dp,
     borderStrokeWidth: Dp = 0.dp,
-    borderStrokeColor: Color = Color.Transparent
+    borderStrokeColor: Color = Color.Transparent,
+    blurhash: String? = null,
 ) {
     val shapeLocal = LocalAvatarIconShape.current
     val clip = when(shape) {
@@ -70,14 +71,16 @@ fun AvatarIcon(
             Shape.Undefined -> CircleShape
         }
     }
-    Image(
+    val placeholder = rememberBlurhashPainter(blurhash)
+    AsyncImage(
+        model = url,
+        contentDescription = null,
         modifier = modifier
             .size(size)
             .clip(clip)
             .border(borderStrokeWidth, borderStrokeColor, clip),
-        painter = rememberAsyncImagePainter(url),
-        contentDescription = null,
-        contentScale = ContentScale.Crop
+        placeholder = placeholder,
+        contentScale = ContentScale.Crop,
     )
 }
 enum class Shape {
