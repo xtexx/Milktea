@@ -987,7 +987,7 @@ private fun NoteActionBar(
 
         IconButton(
             onClick = { onAction(NoteCardAction.OnOptionButtonClicked(note)) },
-            modifier = Modifier.size(36.dp),
+            modifier = Modifier.size(36.dp).padding(6.dp),
         ) {
             Icon(
                 imageVector = Icons.Default.MoreVert,
@@ -1007,7 +1007,7 @@ private fun NoteActionButton(
     Row(verticalAlignment = Alignment.CenterVertically) {
         IconButton(
             onClick = onClick,
-            modifier = Modifier.size(36.dp),
+            modifier = Modifier.size(36.dp).padding(6.dp),
         ) {
             Box(contentAlignment = Alignment.Center) {
                 icon()
